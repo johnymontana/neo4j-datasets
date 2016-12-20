@@ -1,0 +1,46 @@
+<ul class="graph-diagram-markup" data-internal-scale="0.99" data-external-scale="1">
+      <li class="node" data-node-id="0" data-x="112.6391830444336" data-y="-249.21833086013794">
+              <span class="caption">Listing</span><dl class="properties"><dt>listing_id</dt><dd>string</dd></dl></li>
+        <li class="node" data-node-id="1" data-x="577.4309844970703" data-y="-320.37693786621094">
+                <span class="caption">Host</span><dl class="properties"><dt>host_id</dt><dd>string</dd></dl></li>
+          <li class="node" data-node-id="2" data-x="-314.5093078613281" data-y="-382.46539306640625">
+                  <span class="caption">Review</span>
+                    </li>
+                      <li class="node" data-node-id="3" data-x="-406.5633239746094" data-y="49.62111473083496">
+                              <span class="caption">User</span><dl class="properties"><dt>user_id</dt><dd>string</dd></dl></li>
+                        <li class="node" data-node-id="4" data-x="879.2824783325195" data-y="133.93169271945953">
+                                <span class="caption">Neighborhood</span><dl class="properties"><dt>neighborhood_id</dt><dd>string</dd></dl></li>
+                          <li class="node" data-node-id="5" data-x="1112.3024291992188" data-y="690.8645629882812">
+                                  <span class="caption">City</span><dl class="properties"><dt>name</dt><dd>string</dd></dl></li>
+                            <li class="node" data-node-id="6" data-x="843.2721862792969" data-y="1086.0452270507812">
+                                    <span class="caption">IN_STATE</span><dl class="properties"><dt>code</dt><dd>string</dd></dl></li>
+                              <li class="node" data-node-id="7" data-x="1112.3024291992188" data-y="1705.9303283691406">
+                                      <span class="caption">Country</span><dl class="properties"><dt>code</dt><dd>string</dd></dl></li>
+                                <li class="node" data-node-id="8" data-x="-75.54549503326416" data-y="162.39224243164062">
+                                        <span class="caption">Amenity</span>
+                                          </li>
+                                            <li class="relationship" data-from="1" data-to="0">
+                                                    <span class="type">HOSTS</span>
+                                                      </li>
+                                                        <li class="relationship" data-from="2" data-to="0">
+                                                                <span class="type">REVIEWS</span>
+                                                                  </li>
+                                                                    <li class="relationship" data-from="3" data-to="2">
+                                                                            <span class="type">WROTE</span>
+                                                                              </li>
+                                                                                <li class="relationship" data-from="0" data-to="4">
+                                                                                        <span class="type">IN_NEIGHBORHOOD</span>
+                                                                                          </li>
+                                                                                            <li class="relationship" data-from="4" data-to="5">
+                                                                                                    <span class="type">LOCATED_IN</span>
+                                                                                                      </li>
+                                                                                                        <li class="relationship" data-from="5" data-to="6">
+                                                                                                                <span class="type">IN_STATE</span>
+                                                                                                                  </li>
+                                                                                                                    <li class="relationship" data-from="6" data-to="7">
+                                                                                                                            <span class="type">IN_COUNTRY</span>
+                                                                                                                              </li>
+                                                                                                                                <li class="relationship" data-from="0" data-to="8">
+                                                                                                                                        <span class="type">HAS</span>
+                                                                                                                                          </li>
+                                                                                                                                          </ul></dl></span>
