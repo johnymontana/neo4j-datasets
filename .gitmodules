@@ -1,0 +1,3 @@
+[submodule "neo4j-guides"]
+	path = neo4j-guides
+	url = https://github.com/neo4j-contrib/neo4j-guides.git
