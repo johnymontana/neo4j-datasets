@@ -1,0 +1,1749 @@
+IP,Port,Banner,Timestamp,Hostnames,Country,City,Operating System,Organization
+80.229.8.213,81,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2017-01-03T19:03:09.200408,mcintoshuk.plus.com,United Kingdom,Bedford,,PlusNet Technologies Ltd
+125.199.127.114,83,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:538
+
+",2017-01-03T16:43:28.725735,dcm1-125-199-127-114.tky.mesh.ad.jp,Japan,Tokyo,,BIGLOBE Inc.
+151.24.85.207,81,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-03T14:58:28.210121,ppp-207-85.24-151.wind.it,Italy,Rome,,WIND Telecomunicazioni S.p.A
+178.36.244.41,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-03T14:04:46.489606,178-36-244-41.adsl.inetia.pl,Poland,,,Netia SA
+124.178.246.113,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-03T13:44:59.680647,CPE-124-178-246-113.static.sa.bigpond.net.au,Australia,Surrey Downs,,Telstra Internet
+151.9.149.155,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-03T13:00:26.579693,,Italy,Capaci,,Wind Telecomunicazioni SpA
+193.242.147.134,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-03T12:31:46.946947,193-242-147-134.pljtelecom.pl,Poland,Grodzisk Mazowiecki,,"PLJ TELECOM S.C. Pawel Kurpiewski, Anna Stec"
+123.230.166.40,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:944
+
+",2017-01-03T12:00:31.309995,123.230.166.40.er.eaccess.ne.jp,Japan,Tokyo,,Ymobile Corporation
+91.235.195.227,88,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:434
+
+",2017-01-03T11:44:01.240311,host-91-235-195-227.neti.gsm.pl,Poland,,,P.h.u. Neti Pawel Cisowski
+93.185.56.203,3001,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:556
+
+
+<html>
+<head>
+<meta HTTP-EQUIV=""Content-Type"" CONTENT=""text/html; charset=big5"">
+<link href=""template.css"" rel=""stylesheet"" type=""text/css"">
+<script language=""JavaScript""> 
+if (self.location.href != top.location.href) { 
+top.location.href = self.location.href; 
+} 
+</script>
+</head>
+<frameset border=0 framespacing=0 rows=""80,1%"" frameborder=0>
+  <frame name = ""LOGO"" target =""LOGO"" src= ""top.html"" scrolling =auto>
+<frame name = ""MAIN"" target =""MAIN"" src= ""logon.html"" scrolling =auto noresize>
+</frameset><noframes></noframes>
+</html>
+
+
+",2017-01-03T06:27:19.393559,,Czech Republic,,,Baron Computer
+89.134.145.165,82,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2017-01-03T05:46:59.845203,business-89-134-145-165.business.broadband.hu,Hungary,Budapest,,UPC Hungary
+87.216.161.58,8000,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-03T05:09:44.951620,58.161.216.87.static.jazztel.es,Spain,,,Jazz Telecom S.A.
+213.197.85.93,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:518
+
+",2017-01-03T04:14:00.962718,,Hungary,,,Invitel Tavkozlesi Zrt.
+87.154.62.108,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-03T02:16:54.384079,p579A3E6C.dip0.t-ipconnect.de,Germany,Meldorf,,Deutsche Telekom AG
+82.95.148.57,8081,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+
+<html><head><title>--- VIDEO WEB SERVER ---</title><meta http-equiv=""Content-Type"" content=""text/html; charset=iso-8859-1""><link rel=""stylesheet"" href=""css.css"" type=""text/css""><script language=""JavaScript"">w=screen.width-10;h=screen.height-29-28;
+function MM_openBrWindow(theURL,winName,features) { window.open(theURL,winName,features);}function MM_goToURL() {var i, args=MM_goToURL.arguments; document.MM_returnValue = false;for (i=0; i<(args.length-1); i+=2) eval(args[i]+"".location='""+args[i+1]+""'"");}</script></head>
+<body bgcolor=""#00AADA"" text=""#000000"" leftmargin=""0"" topmargin=""0"" marginwidth=""0"" marginheight=""0"" toolbar=no,location=no,menubar=no,scrollbars=no,resizable=no link=""#CC0000"" vlink=""#000000"" alink=""#000000""><table width=""100%"" border=""0"" cellspacing=""0"" cellpadding=""0"" align=""center"" height=""100%""><tr> <td align=""center"" valign=""middle""> <script language=""JavaScript"">document.write('<form name=""form1"" method=""post"" action=""home.htm"">');</script><br><br><table width=""520"" border=""0"" cellspacing=""0"" cellpadding=""0""><tr> <td align=""center""> <p><b><font size=""6"" color=""#000000"" face=""Arial"">Any time &amp; Any where</font><font size=""3"" color=""#FFFFFF""><br><br><font size=""2"">IP Surveillance New Generation</font> </font><font color=""#000000"" size=""2"">......Video Web Server</font></b></p><p>&nbsp;</p></",2017-01-03T01:49:16.870920,a82-95-148-57.adsl.xs4all.nl,Netherlands,Groningen,,XS4ALL Internet BV
+84.232.224.235,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2017-01-03T00:55:46.833808,,Romania,Giroc,,RCS & RDS Business
+94.248.130.66,7777,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2017-01-02T22:11:41.839389,host-94-248-130-66.kabelnet.hu,Hungary,,,VidaNet Cable Television Provider Ltd.
+67.91.195.43,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-02T21:44:04.162009,ip67-91-195-43.z195-91-67.customer.algx.net,United States,,,XO Communications
+89.135.122.141,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-02T20:57:59.525573,business-89-135-122-141.business.broadband.hu,Hungary,,,UPC Hungary
+83.208.68.123,82,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-02T20:08:12.441654,123.68.broadband2.iol.cz,Czech Republic,,,O2 Czech Republic
+46.23.51.232,82,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:556
+
+",2017-01-02T19:53:19.923323,host-46-23-51-232.maxtel.cz,Czech Republic,Susice,,MAXTEL s.r.o.
+95.17.109.108,83,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2747
+
+",2017-01-02T15:39:35.305272,108.109.17.95.dynamic.jazztel.es,Spain,,,Jazz Telecom S.A.
+88.2.0.170,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-02T11:21:01.050971,170.red-88-2-0.staticip.rima-tde.net,Spain,,,Telefonica de Espana
+118.140.169.158,83,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-02T08:09:18.250455,,Hong Kong,,,Hutchison Global Communications
+96.228.242.57,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-02T07:24:02.768066,static-96-228-242-57.tampfl.fios.frontiernet.net,United States,Brandon,,Verizon FiOS
+83.160.88.114,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-02T06:06:24.285013,a83-160-88-114.adsl.xs4all.nl,Netherlands,,,XS4ALL Internet BV
+151.24.54.44,81,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-02T05:04:04.403337,ppp-44-54.24-151.wind.it,Italy,Rome,,WIND Telecomunicazioni S.p.A
+190.200.211.152,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-02T02:57:16.119347,,Venezuela,Caracas,,CANTV
+86.89.7.116,88,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:873
+
+",2017-01-02T02:23:41.248132,ip56590774.speed.planet.nl,Netherlands,,,KPN
+104.8.217.60,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-01T23:14:39.404204,104-8-217-60.lightspeed.miamfl.sbcglobal.net,Poland,Warsaw,,AT&T Internet Services
+193.253.98.171,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2706
+
+",2017-01-01T22:35:02.191653,LReunion-656-1-12-171.w193-253.abo.wanadoo.fr,Reunion,,,Orange
+78.152.102.236,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2933
+
+",2017-01-01T17:18:25.151640,78-152-102-236.ip.welcomeitalia.it,Italy,,,Welcome Italia S.p.A
+79.129.114.51,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-01T17:13:35.470541,sdoukos1.static.otenet.gr,Greece,,,OTEnet S.A.
+195.117.104.17,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-01T15:47:04.891341,,Poland,,,Orange Polska
+85.83.82.228,8090,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:887
+
+",2017-01-01T15:31:55.485571,0x555352e4.adsl.cybercity.dk,Denmark,,,Telenor A/S
+188.80.166.47,81,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-01T12:23:40.906442,bl15-166-47.dsl.telepac.pt,Portugal,Ermesinde,,PT Comunicacoes
+159.205.140.119,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-01T11:10:50.212489,159-205-140-119.adsl.inetia.pl,Poland,Warta,,Netia SA
+86.121.12.38,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2017-01-01T09:25:47.368840,86-121-12-38.rdsnet.ro,Romania,Bucharest,,RCS & RDS Residential
+212.158.152.148,83,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:556
+
+",2017-01-01T09:02:20.046246,212-158-152-148.static.bluetone.cz,Czech Republic,Novy Jicin,,RADIOKOMUNIKACE a.s.
+206.248.5.105,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2017-01-01T08:35:14.716832,,United States,Medicine Lodge,,South Central Telephone Association
+62.148.158.81,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2935
+
+",2017-01-01T04:37:09.238734,,Russian Federation,,,Rostelecom
+83.149.155.230,9001,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:944
+
+
+<html>
+<head>
+<meta http-equiv=""Content-type"" CONTENT=""text/html; charset=iso-8859-1"">
+<meta http-equiv=""Content-language"" CONTENT=""en"">
+<link href=""template.css"" rel=""stylesheet"" type=""text/css"">
+<script language=""JavaScript""> 
+if (self.location.href != top.location.href) { 
+top.location.href = self.location.href; 
+} 
+</script>
+</head>
+
+<script>
+	var UserAuthFlag = 1;
+	var s;
+	if(UserAuthFlag == 1) {
+		s = '<frameset border=0 framespacing=0 rows=""90,1%"" frameborder=0>' +
+		    '<frame name = ""LOGO"" target =""LOGO"" src= ""top.html"" >' +
+		    '<frame name = ""MAIN"" target =""MAIN"" src= ""logon.html"" >' +
+		    '</frameset>';
+		
+	}else {
+		s = '<frameset border=0 framespacing=0 rows=""90,1%"" frameborder=0>' +
+		    '<frame name = ""LOGO"" target =""LOGO"" src= ""top.html"" >' +
+		    '<frame name = ""MAIN"" target =""MAIN"" src= ""LiveView.html"" >' +
+		    '</frameset>';
+		
+	}
+	document.write(s);
+	
+</script>
+</html>
+",2016-12-31T20:03:42.974001,host-static-155-230.consiagnet.it,Italy,Prato,,Estracom SpA
+74.214.176.18,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-31T18:43:12.384279,74.214.176.18.COALFLDS.dsl.dhcp.coalfields.net,United States,Harold,,Mikrotec Internet Services
+62.251.26.228,83,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-31T15:46:50.742819,62-251-26-228.ip.xs4all.nl,Netherlands,,,XS4ALL Internet BV
+117.248.11.79,5000,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-31T10:49:03.935788,,India,Thrissur,,BSNL
+124.190.27.219,82,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2747
+
+",2016-12-31T09:31:42.521265,CPE-124-190-27-219.obcz1.win.bigpond.net.au,Australia,,,Telstra Internet
+81.19.4.147,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:556
+
+",2016-12-31T07:33:41.391894,pcb.faster.cz,Czech Republic,Brno,,FASTER CZ spol. s r.o.
+219.19.190.210,82,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:944
+
+",2016-12-31T06:20:25.526632,softbank219019190210.bbtec.net,Japan,,,Softbank BB
+131.104.106.227,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:486
+
+",2016-12-31T00:08:42.934217,,Canada,Guelph,,University of Guelph
+151.24.119.10,81,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-30T22:34:31.359092,ppp-10-119.24-151.wind.it,Italy,Rome,,WIND Telecomunicazioni S.p.A
+79.189.4.14,81,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-30T20:45:09.001439,iae14.internetdsl.tpnet.pl,Poland,,,Orange Polska
+59.96.8.101,5000,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-30T14:54:56.216899,,India,Thrissur,,BSNL
+84.138.151.94,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-30T14:32:15.483336,p548A975E.dip0.t-ipconnect.de,Germany,Kaufungen,,Deutsche Telekom AG
+89.132.231.181,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-30T13:12:43.987179,catv-89-132-231-181.catv.broadband.hu,Hungary,Miskolc,,UPC Hungary
+88.101.110.169,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-30T12:32:25.527583,169.110.broadband6.iol.cz,Czech Republic,Prague,,O2 Czech Republic
+73.11.240.93,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2933
+
+",2016-12-30T09:37:58.541326,c-73-11-240-93.hsd1.wa.comcast.net,United States,Mercer Island,,Comcast Cable
+176.122.104.11,81,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:434
+
+",2016-12-30T08:39:52.326421,,Ukraine,Monastyryshche,,Ukraine telecommunication group Ltd.
+87.161.255.73,83,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:486
+
+",2016-12-30T08:24:32.796162,p57A1FF49.dip0.t-ipconnect.de,Germany,Offenburg,,Deutsche Telekom AG
+213.82.5.93,81,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2935
+
+",2016-12-30T07:04:35.515651,host93-5-static.82-213-b.business.telecomitalia.it,Italy,,,Telecom Italia
+91.219.98.173,8010,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-30T06:32:22.831432,,Russian Federation,Abakan,,Alfatel plus Ltd
+91.81.29.170,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-29T23:08:24.807689,net-91-81-29-170.cust.vodafonedsl.it,Italy,,,Vodafone Italia DSL
+68.91.85.164,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-29T22:14:29.538810,adsl-68-91-85-164.dsl.snantx.swbell.net,United States,,,AT&T Internet Services
+91.7.205.44,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-29T20:58:03.156518,p5B07CD2C.dip0.t-ipconnect.de,Germany,Duisburg,,Deutsche Telekom AG
+79.189.4.14,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-29T20:13:08.932368,iae14.internetdsl.tpnet.pl,Poland,,,Orange Polska
+212.96.164.136,5001,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:556
+
+
+<html>
+<head>
+<meta HTTP-EQUIV=""Content-Type"" CONTENT=""text/html; charset=big5"">
+<link href=""template.css"" rel=""stylesheet"" type=""text/css"">
+<script language=""JavaScript""> 
+if (self.location.href != top.location.href) { 
+top.location.href = self.location.href; 
+} 
+</script>
+</head>
+<frameset border=0 framespacing=0 rows=""80,1%"" frameborder=0>
+  <frame name = ""LOGO"" target =""LOGO"" src= ""top.html"" scrolling =auto>
+<frame name = ""MAIN"" target =""MAIN"" src= ""logon.html"" scrolling =auto noresize>
+</frameset><noframes></noframes>
+</html>
+
+
+",2016-12-29T19:46:51.830400,,Czech Republic,Znojmo,,itself s.r.o.
+89.153.251.189,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-29T17:29:58.768719,a89-153-251-189.cpe.netcabo.pt,Portugal,Porto,,ZON Tv Cabo
+176.63.77.160,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-29T17:21:10.586012,catv-176-63-77-160.catv.broadband.hu,Hungary,Budapest,,UPC Hungary
+151.74.124.254,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-29T12:42:39.330289,,Italy,Ragusa,,WIND Telecomunicazioni S.p.A
+79.18.116.34,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-29T12:28:22.592782,host34-116-dynamic.18-79-r.retail.telecomitalia.it,Italy,,,Telecom Italia
+169.0.183.237,8081,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:434
+
+
+<html>
+<head>
+<meta HTTP-EQUIV=""Content-Type"" CONTENT=""text/html; charset=UTF-8"">
+<link href=""template.css"" rel=""stylesheet"" type=""text/css"">
+</head>
+<frameset border=0 framespacing=0 rows=""75,1%"" frameborder=0>
+<frame name = ""LOGO"" target =""LOGO"" src= ""top.html"" MARGINHEIGHT=-10 scrolling =auto noresize>
+<frame name = ""MAIN"" target =""MAIN"" src= ""logon.html"" MARGINHEIGHT=-10 scrolling =auto noresize>
+</frameset>
+</html>
+",2016-12-29T01:35:35.545161,169-0-183-237.ip.afrihost.co.za,South Africa,Johannesburg,,Afrihost
+87.161.255.55,83,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:486
+
+",2016-12-29T01:16:57.885745,p57A1FF37.dip0.t-ipconnect.de,Germany,Offenburg,,Deutsche Telekom AG
+191.32.121.151,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-28T20:01:09.433449,191.32.121.151.dynamic.adsl.gvt.net.br,Brazil,Passo Fundo,,Global Village Telecom
+86.125.216.176,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-28T19:37:30.578620,86.125.216.176.bb.fo.static.rdsar.ro,Romania,Arad,,RCS & RDS Residential
+79.121.111.61,82,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-28T17:44:40.619268,,Hungary,Kalocsa,,KalocsaKOM
+84.147.26.126,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:518
+
+",2016-12-28T15:37:17.282476,p54931A7E.dip0.t-ipconnect.de,Germany,,,Deutsche Telekom AG
+47.196.194.95,88,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2748
+
+",2016-12-28T15:30:06.346639,,Canada,Ottawa,,Frontier Communications Corporation
+201.83.224.97,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-28T14:58:55.299451,c953e061.virtua.com.br,Brazil,,,NET Virtua
+59.127.173.5,8888,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2935
+
+",2016-12-28T12:52:03.638754,59-127-173-5.HINET-IP.hinet.net,Taiwan,Taipei,,HiNet
+176.145.237.147,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-28T09:59:12.519990,roa76-h03-176-145-237-147.dsl.sta.abo.bbox.fr,France,,,Bouygues Telecom
+83.170.202.74,84,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:538
+
+",2016-12-28T09:09:04.596857,mail.prostirco.kiev.ua,Ukraine,Kiev,,Service SvitOnline Internet in Kiev
+151.24.8.83,81,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-28T05:37:19.607841,ppp-83-8.24-151.wind.it,Italy,Rome,,WIND Telecomunicazioni S.p.A
+67.255.7.178,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-28T05:21:25.638786,cpe-67-255-7-178.twcny.res.rr.com,United States,Ithaca,,Time Warner Cable
+82.77.201.120,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-28T04:10:34.210717,82-77-201-120.rdsnet.ro,Romania,Targu-mures,,RCS & RDS Business
+109.199.35.54,8081,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+
+<html>
+<head>
+<meta HTTP-EQUIV=""Content-Type"" CONTENT=""text/html;>
+<link href=""template.css"" rel=""stylesheet"" type=""text/css"">
+</head>
+<body topmargin=5>
+<!--
+<frameset border=""0"" framespacing=""0"" rows=""50,1%"" frameborder=""0"">
+<frame name = ""LOGO"" target =""LOGO"" src= ""logo.html"" MARGINHEIGHT=-10 scrolling =auto noresize>
+<frame name = ""MAIN"" target =""MAIN"" src= ""logon.html"" MARGINHEIGHT=-10 scrolling =auto noresize>
+</frameset>
+-->
+		<iframe height=""45px""  width=""800px"" name = ""LOGO""   target =""LOGO""   src= ""top.html""   MARGINHEIGHT=""-10"" frameborder=""0"" align=""center"" scrolling =""auto"" noresize></iframe>
+		<iframe height=""535px"" width=""800px"" name = ""MAIN""   target =""MAIN""   src= ""logon.html""  MARGINHEIGHT=""-10"" frameborder=""0"" align=""center"" scrolling =""auto"" noresize></iframe>
+		<iframe height=""25px""  width=""800px"" name = ""BOTTOM"" target =""BOTTOM"" src= ""bottom.html"" MARGINHEIGHT=""-10"" frameborder=""0"" align=""center"" scrolling =""auto"" noresize></iframe>
+</body>
+</html>
+",2016-12-28T03:16:40.562506,host-109-199-35-54.wave-net.hu,Hungary,Gonyu,,Micro-Wave Network
+84.0.15.144,8081,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+
+<html>
+<head>
+<meta HTTP-EQUIV=""Content-Type"" CONTENT=""text/html;>
+<link href=""template.css"" rel=""stylesheet"" type=""text/css"">
+</head>
+<body topmargin=5>
+<!--
+<frameset border=""0"" framespacing=""0"" rows=""50,1%"" frameborder=""0"">
+<frame name = ""LOGO"" target =""LOGO"" src= ""logo.html"" MARGINHEIGHT=-10 scrolling =auto noresize>
+<frame name = ""MAIN"" target =""MAIN"" src= ""logon.html"" MARGINHEIGHT=-10 scrolling =auto noresize>
+</frameset>
+-->
+		<iframe height=""45px""  width=""800px"" name = ""LOGO""   target =""LOGO""   src= ""top.html""   MARGINHEIGHT=""-10"" frameborder=""0"" align=""center"" scrolling =""auto"" noresize></iframe>
+		<iframe height=""535px"" width=""800px"" name = ""MAIN""   target =""MAIN""   src= ""logon.html""  MARGINHEIGHT=""-10"" frameborder=""0"" align=""center"" scrolling =""auto"" noresize></iframe>
+		<iframe height=""25px""  width=""800px"" name = ""BOTTOM"" target =""BOTTOM"" src= ""bottom.html"" MARGINHEIGHT=""-10"" frameborder=""0"" align=""center"" scrolling =""auto"" noresize></iframe>
+</body>
+</html>
+",2016-12-28T01:36:14.923709,54000F90.dsl.pool.telekom.hu,Hungary,,,Magyar Telekom
+184.5.110.114,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-27T15:11:36.105018,tx-184-5-110-114.dhcp.embarqhsd.net,United States,Larue,,CenturyLink
+87.119.165.74,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2933
+
+",2016-12-27T14:58:15.771700,87-119-165-74.tll.elisa.ee,Estonia,Tallinn,,Elisa Eesti
+81.214.66.254,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-27T11:15:16.183741,81.214.66.254.dynamic.ttnet.com.tr,Turkey,,,Turk Telekom
+95.243.11.153,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2935
+
+",2016-12-27T09:56:00.119092,host153-11-static.243-95-b.business.telecomitalia.it,Italy,,,Telecom Italia
+77.177.6.87,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:518
+
+",2016-12-27T08:35:34.718456,x4db10657.dyn.telefonica.de,Germany,Liederbach,,Telefonica Germany
+81.107.129.89,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-27T07:41:53.320978,cpc88660-finc17-2-0-cust344.4-2.cable.virginm.net,United Kingdom,,,Virgin Media
+93.152.156.66,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:944
+
+",2016-12-27T06:59:25.017646,,Bulgaria,Sofia,,Online Direct Ltd
+79.18.116.18,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-26T23:58:59.243580,host18-116-dynamic.18-79-r.retail.telecomitalia.it,Italy,,,Telecom Italia
+151.45.241.1,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-26T23:22:17.822811,adsl-ull-1-241.45-151.wind.it,Italy,Bari,,WIND Telecomunicazioni S.p.A
+84.39.14.158,83,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-26T22:56:04.766306,54270e9e.ftth.concepts.nl,Netherlands,,,KPN
+151.73.22.152,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:556
+
+",2016-12-26T22:29:48.568155,,Italy,Sant'arpino,,WIND Telecomunicazioni S.p.A
+84.142.78.86,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:518
+
+",2016-12-26T21:00:35.241821,p548E4E56.dip0.t-ipconnect.de,Germany,Hallbergmoos,,Deutsche Telekom AG
+62.15.160.65,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-26T17:26:47.345474,65.160.15.62.static.jazztel.es,Spain,,,Jazz Telecom S.A.
+82.48.7.2,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-26T15:48:29.316259,host2-7-dynamic.48-82-r.retail.telecomitalia.it,Italy,Stresa,,Telecom Italia
+62.80.252.153,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-26T14:04:45.035782,hst-252-153.splius.lt,Lithuania,Siauliai,,UAB Telerena
+84.39.14.158,82,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-26T13:28:30.630901,54270e9e.ftth.concepts.nl,Netherlands,,,KPN
+91.32.35.133,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:518
+
+",2016-12-26T10:03:29.400347,p5B202385.dip0.t-ipconnect.de,Germany,Glauchau,,Deutsche Telekom AG
+88.116.200.138,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-26T08:01:49.742771,,Austria,,,Telekom Austria
+81.198.173.180,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:434
+
+",2016-12-26T07:18:45.988090,,Latvia,Tukums,,Kopideja Ltd
+120.29.242.133,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-26T06:17:22.622958,,Australia,Berriedale,,Tasmanet Pty
+84.222.205.82,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-26T04:28:13.175135,dynamic-adsl-84-222-205-82.clienti.tiscali.it,Italy,Vaprio D'adda,,Tiscali SpA
+24.76.96.13,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2933
+
+",2016-12-26T02:29:40.858356,S0106001a4b6f70d1.wp.shawcable.net,Canada,,,Shaw Communications
+79.248.79.161,81,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-25T22:36:13.974649,p4FF84FA1.dip0.t-ipconnect.de,Germany,,,Deutsche Telekom AG
+89.134.145.165,81,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-25T20:02:39.844177,business-89-134-145-165.business.broadband.hu,Hungary,Budapest,,UPC Hungary
+69.27.54.149,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-25T19:57:11.176933,ip-69-27-54-149.slm.blueriver.net,United States,Salem,,Blueriver Networking Services
+80.38.248.184,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2935
+
+",2016-12-25T18:53:04.290748,184.red-80-38-248.staticip.rima-tde.net,Spain,,,Telefonica de Espana
+46.102.95.7,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:556
+
+",2016-12-25T15:27:34.565234,,Romania,,,Digital Cable Systems SA
+37.6.100.55,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:518
+
+",2016-12-25T09:58:57.713279,adsl-55.37.6.100.tellas.gr,Greece,,,Evergy S.A.
+188.82.250.209,81,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-25T04:32:16.372989,bl17-250-209.dsl.telepac.pt,Portugal,Rio Tinto,,PT Comunicacoes
+93.239.189.181,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-25T00:15:45.153371,p5DEFBDB5.dip0.t-ipconnect.de,Germany,Meerbusch,,Deutsche Telekom AG
+95.224.130.250,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-24T23:59:59.265061,host250-130-static.224-95-b.business.telecomitalia.it,Italy,Ferrara,,Telecom Italia
+104.231.78.23,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-24T23:53:45.649632,cpe-104-231-78-23.neo.res.rr.com,United States,Mansfield,,Time Warner Cable
+46.107.89.169,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:556
+
+",2016-12-24T23:42:03.688207,2E6B59A9.dsl.pool.telekom.hu,Hungary,,,Magyar Telekom
+88.102.110.125,88,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-24T23:17:13.701297,125.110.broadband7.iol.cz,Czech Republic,Brno,,O2 Czech Republic
+179.26.58.9,8889,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:944
+
+
+<html>
+<head>
+<meta http-equiv=""Content-type"" CONTENT=""text/html; charset=iso-8859-1"">
+<meta http-equiv=""Content-language"" CONTENT=""en"">
+<link href=""template.css"" rel=""stylesheet"" type=""text/css"">
+<script language=""JavaScript""> 
+if (self.location.href != top.location.href) { 
+top.location.href = self.location.href; 
+} 
+</script>
+</head>
+
+<script>
+	var UserAuthFlag = 1;
+	var s;
+	if(UserAuthFlag == 1) {
+		s = '<frameset border=0 framespacing=0 rows=""90,1%"" frameborder=0>' +
+		    '<frame name = ""LOGO"" target =""LOGO"" src= ""top.html"" >' +
+		    '<frame name = ""MAIN"" target =""MAIN"" src= ""logon.html"" >' +
+		    '</frameset>';
+		
+	}else {
+		s = '<frameset border=0 framespacing=0 rows=""90,1%"" frameborder=0>' +
+		    '<frame name = ""LOGO"" target =""LOGO"" src= ""top.html"" >' +
+		    '<frame name = ""MAIN"" target =""MAIN"" src= ""LiveView.html"" >' +
+		    '</frameset>';
+		
+	}
+	document.write(s);
+	
+</script>
+</html>
+",2016-12-24T20:50:58.265564,r179-26-58-9.dialup.adsl.anteldata.net.uy,Uruguay,Montevideo,,Administracion Nacional de Telecomunicaciones
+2.237.88.156,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2933
+
+",2016-12-24T19:06:29.973382,,Italy,Loreto,,Fastweb
+188.143.1.228,88,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-24T19:04:52.569680,188-143-1-228.pool.digikabel.hu,Hungary,Budapest,,DIGI Tavkozlesi es Szolgaltato Kft.
+178.41.141.57,8081,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+
+<html>
+<head>
+<meta HTTP-EQUIV=""Content-Type"" CONTENT=""text/html;>
+<link href=""template.css"" rel=""stylesheet"" type=""text/css"">
+</head>
+<body topmargin=5>
+<!--
+<frameset border=""0"" framespacing=""0"" rows=""50,1%"" frameborder=""0"">
+<frame name = ""LOGO"" target =""LOGO"" src= ""logo.html"" MARGINHEIGHT=-10 scrolling =auto noresize>
+<frame name = ""MAIN"" target =""MAIN"" src= ""logon.html"" MARGINHEIGHT=-10 scrolling =auto noresize>
+</frameset>
+-->
+		<iframe height=""45px""  width=""800px"" name = ""LOGO""   target =""LOGO""   src= ""top.html""   MARGINHEIGHT=""-10"" frameborder=""0"" align=""center"" scrolling =""auto"" noresize></iframe>
+		<iframe height=""535px"" width=""800px"" name = ""MAIN""   target =""MAIN""   src= ""logon.html""  MARGINHEIGHT=""-10"" frameborder=""0"" align=""center"" scrolling =""auto"" noresize></iframe>
+		<iframe height=""25px""  width=""800px"" name = ""BOTTOM"" target =""BOTTOM"" src= ""bottom.html"" MARGINHEIGHT=""-10"" frameborder=""0"" align=""center"" scrolling =""auto"" noresize></iframe>
+</body>
+</html>
+",2016-12-24T16:05:26.409153,bband-dyn57.178-41-141.t-com.sk,Slovakia,,,Slovak Telekom
+90.20.165.3,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:518
+
+",2016-12-24T14:56:26.117611,AOrleans-651-1-230-3.w90-20.abo.wanadoo.fr,France,Blois,,Orange
+84.142.76.249,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:518
+
+",2016-12-24T14:19:39.778546,p548E4CF9.dip0.t-ipconnect.de,Germany,Neufahrn,,Deutsche Telekom AG
+65.64.147.87,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-24T13:50:08.954736,65-64-147-87.universalprintingco.com,United States,Saint Louis,,AT&T Internet Services
+193.27.70.88,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2747
+
+",2016-12-24T12:57:21.662654,,Romania,,,Data Tech SRL
+5.55.116.104,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-24T09:24:15.515873,ppp005055116104.access.hol.gr,Greece,,,hellas online Electronic Communications S.A.
+84.138.130.175,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-24T07:58:22.336266,p548A82AF.dip0.t-ipconnect.de,Germany,Kaufungen,,Deutsche Telekom AG
+79.168.102.9,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-24T06:41:44.902549,a79-168-102-9.cpe.netcabo.pt,Portugal,Queijas,,ZON Tv Cabo
+87.143.230.23,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:518
+
+",2016-12-24T05:12:25.348179,p578FE617.dip0.t-ipconnect.de,Germany,Auerbach,,Deutsche Telekom AG
+89.148.124.210,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-24T05:09:03.719134,89.148.124.210.static.dunaweb.hu,Hungary,,,Invitel Tavkozlesi Zrt.
+81.183.91.21,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-24T04:24:23.960140,51B75B15.dsl.pool.telekom.hu,Hungary,Szombathely,,Magyar Telekom
+210.240.24.151,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-24T01:35:03.252094,,Taiwan,,,Taiwan Academic Network
+123.202.13.102,5555,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:649
+
+",2016-12-23T23:28:54.429193,123202013102.ctinets.com,Hong Kong,Central District,,Hong Kong Broadband Network Ltd
+79.47.100.149,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-23T22:52:39.208636,host149-100-dynamic.47-79-r.retail.telecomitalia.it,Italy,Catania,,Telecom Italia
+173.62.255.209,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:486
+
+",2016-12-23T15:19:03.822424,pool-173-62-255-209.phlapa.fios.verizon.net,United States,West Chester,,Verizon FiOS
+95.17.62.81,84,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2747
+
+",2016-12-23T15:13:21.469949,81.62.17.95.dynamic.jazztel.es,Spain,Denia,,Jazz Telecom S.A.
+81.183.131.129,9000,"HTTP/1.0 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:53
+
+",2016-12-23T12:21:31.236949,51B78381.dsl.pool.telekom.hu,Hungary,,,Magyar Telekom
+87.17.25.222,83,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:556
+
+",2016-12-23T08:55:53.718141,host222-25-dynamic.17-87-r.retail.telecomitalia.it,Italy,Salerno,,Telecom Italia
+91.32.34.188,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:518
+
+",2016-12-23T08:20:00.026350,p5B2022BC.dip0.t-ipconnect.de,Germany,,,Deutsche Telekom AG
+169.0.178.116,8081,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:434
+
+
+<html>
+<head>
+<meta HTTP-EQUIV=""Content-Type"" CONTENT=""text/html; charset=UTF-8"">
+<link href=""template.css"" rel=""stylesheet"" type=""text/css"">
+</head>
+<frameset border=0 framespacing=0 rows=""75,1%"" frameborder=0>
+<frame name = ""LOGO"" target =""LOGO"" src= ""top.html"" MARGINHEIGHT=-10 scrolling =auto noresize>
+<frame name = ""MAIN"" target =""MAIN"" src= ""logon.html"" MARGINHEIGHT=-10 scrolling =auto noresize>
+</frameset>
+</html>
+",2016-12-23T06:10:45.504414,169-0-178-116.ip.afrihost.co.za,South Africa,Johannesburg,,Afrihost
+5.55.48.141,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2706
+
+",2016-12-23T05:19:55.894782,ppp005055048141.access.hol.gr,Greece,,,hellas online Electronic Communications S.A.
+204.195.32.240,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-22T20:47:11.048270,204-195-32-240.wavecable.com,United States,Sandy,,Wave Broadband
+171.0.185.91,10000,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:944
+
+
+<html>
+<head>
+<meta http-equiv=""Content-type"" CONTENT=""text/html; charset=iso-8859-1"">
+<meta http-equiv=""Content-language"" CONTENT=""en"">
+<link href=""template.css"" rel=""stylesheet"" type=""text/css"">
+<script language=""JavaScript""> 
+if (self.location.href != top.location.href) { 
+top.location.href = self.location.href; 
+} 
+</script>
+</head>
+
+<script>
+	var UserAuthFlag = 1;
+	var s;
+	if(UserAuthFlag == 1) {
+		s = '<frameset border=0 framespacing=0 rows=""90,1%"" frameborder=0>' +
+		    '<frame name = ""LOGO"" target =""LOGO"" src= ""top.html"" >' +
+		    '<frame name = ""MAIN"" target =""MAIN"" src= ""logon.html"" >' +
+		    '</frameset>';
+		
+	}else {
+		s = '<frameset border=0 framespacing=0 rows=""90,1%"" frameborder=0>' +
+		    '<frame name = ""LOGO"" target =""LOGO"" src= ""top.html"" >' +
+		    '<frame name = ""MAIN"" target =""MAIN"" src= ""LiveView.html"" >' +
+		    '</frameset>';
+		
+	}
+	document.write(s);
+	
+</script>
+</html>
+",2016-12-22T20:06:54.252504,,Singapore,,,Starhub Mobile Ltd
+84.236.21.212,88,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-22T19:24:58.423506,84-236-21-212.pool.digikabel.hu,Hungary,Budapest,,DIGI Tavkozlesi es Szolgaltato Kft.
+99.27.114.57,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2933
+
+",2016-12-22T18:18:22.565178,99-27-114-57.uvs.ltrkar.sbcglobal.net,United States,Mountain Pine,,AT&T Internet Services
+86.84.233.109,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-22T13:44:02.896767,ip5654e96d.adsl-surfen.hetnet.nl,Netherlands,,,KPN
+87.97.87.154,82,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-22T13:15:25.287276,87.97.87.154.pool.invitel.hu,Hungary,Isaszeg,,INVITEL Co.
+143.176.51.30,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-22T05:51:28.656416,ip30-51-176-143.adsl2.static.versatel.nl,Netherlands,Zwolle,,"WBA, regio Zl"
+61.126.182.66,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:537
+
+",2016-12-21T13:59:42.459554,p7066-ipbffx02aobadori.miyagi.ocn.ne.jp,Japan,,,NTT
+91.46.195.219,8090,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-21T07:03:32.328370,p5B2EC3DB.dip0.t-ipconnect.de,Germany,Zossen,,Deutsche Telekom AG
+59.96.13.226,5000,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-21T01:53:30.790950,,India,Thrissur,,BSNL
+90.178.199.171,8888,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-20T21:12:57.971742,171.199.broadband11.iol.cz,Czech Republic,,,O2 Czech Republic
+191.81.147.66,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-20T19:02:57.618834,191-81-147-66.speedy.com.ar,Argentina,,,Telefonica de Argentina
+93.62.248.214,5000,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-20T10:16:30.311341,93-62-248-214.ip25.fastwebnet.it,Italy,,Linux 2.4.x,Fastweb
+89.12.42.16,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:518
+Set-Cookie: webcamPWD=RootCookie00000
+
+",2016-12-20T09:59:29.427879,x590c2a10.dyn.telefonica.de,Germany,,,Telefonica Germany
+94.145.56.143,82,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:887
+
+",2016-12-20T07:53:58.197525,0x5e91388f.adsl.cybercity.dk,Denmark,,,Telenor A/S
+95.227.77.16,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-20T01:07:45.051591,host16-77-static.227-95-b.business.telecomitalia.it,Italy,Siracusa,,Telecom Italia
+212.227.189.176,443,"HTTP/1.1 200 OK
+Date: Mon, 19 Dec 2016 20:35:46 GMT
+Server: Apache
+Last-Modified: Wed, 11 Apr 2012 09:37:00 GMT
+ETag: ""3d3b-4bd63fb2f00ad""
+Accept-Ranges: bytes
+Content-Length: 15675
+Content-Type: text/html
+
+
+<!DOCTYPE HTML PUBLIC ""-//SQ//DTD HTML 2.0 + alle Erweiterungen//EN"" ""hmpro3.dtd"">
+<HTML><!-- #BeginTemplate ""/Templates/ettal-00.dwt"" -->
+<HEAD>
+<!-- #BeginEditable ""doctitle"" --> 
+<TITLE>Gemeinde Ettal mit Graswang und Linderhof</TITLE>
+<!-- #EndEditable --> 
+<LINK HREF=""mailto:webmaster@ettal.de"" REV=""made"">
+<META
+NAME=""keywords"" CONTENT=""Ettal, Skilanglauf, Schloss Linderhof, Oberbayern, Oberammergau, Passionsspiele, Kloster, Monastery, Luftkurort, Graswang"">
+<META NAME=""description"" CONTENT=""Gemeinde Ettal Online"">
+<META NAME=""ABSTRACT"" CONTENT=""Luftkurort Gemeinde Ettal mit Graswang und Linderhof"">
+<META NAME=""ROBOTS"" CONTENT=""ALL"">
+<link rel=""stylesheet"" href=""Templates/arial.css"" type=""text/css"">
+<style>a{text-decoration:none} a:hover{color:#333333; text-decoration:underline;
+} .IR{background-color:#FFFFCC}
+</style><script type=""text/javascript"">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-1945313-15']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</HEAD>
+<BODY BGCOLOR=""#CCCCCC"" leftmargin=""0"" topmargin=""0"" link=""#333333"" vlink=""#333333"" alink=""#333333"" marginwidth=""0"" marginheight=""0"">
+<CENTER>
+</CENTER>
+<table width=""970"" border=""0"" align=""center"">
+  <tr>
+    <td width=""144"" bgcolor=""#CC0000"" background=""bilder/hinter/kachel02.jpg"" align=""left"" valign=""top"">
+      <table border=""0"" align=""left"">
+        <tr> 
+          <td valign=""TOP"" align=""CENTER"" width=""5"">&nbsp;</td>
+          <td valign=""middle"" align=""CENTER"" bgcolor=""#CCCCCC"" height=""100""><a href=""Templates/index.htm"" target=""_parent""><img src=""pics0/ettallogo.gif"" width=""100"" height=""90"" border=""0"" align=""middle""></a></td>
+        </tr>
+        <tr> 
+          <td class=""arial"">&nbsp;</td>
+          <td class=""arial"" bgcolor=""#CCCCCC""><font size=""2""><a href=""http://www.ammergauer-alpen.de/de/ettal"" target=""_blank""><font color=""#000000""><b>Tourismus</b></font></a></font></td>
+        </tr>
+        <tr> 
+          <td class=""arial"">&nbsp;</td>
+          <td class=""arial"" bgcolor=""#CCCCCC""><a href=""webcam/index.htm""><font color=""#000000"" size=""2"">Aktuell</font></a></td>
+        </tr>
+        <tr> 
+          <td class=""arial"">&nbsp;</td>
+          <td class=""arial"" bgcolor=""#CCCCCC""><a href=""verwaltung/grusswort.htm""><font size=""2"" color=""#000000"">Verwaltung</font></a></td>
+        </tr>
+        <tr> 
+          <td class=""arial"">&nbsp;</td>
+          <td class=""arial"" bgcolor=""#CCCCCC""><a href=""ettal.htm""><font color=""#000000"" size=""2"">Ortsteile</font></a></td>
+        </tr>
+        <tr> 
+          <td class=""arial"">&nbsp;</td>
+          <td class=""arial"" bgcolor=""#CCCCCC""><a href=""geschichte.htm""><font color=""#000000"" size=""2"">Interessantes</font></a></td>
+        </tr>
+        <tr> 
+          <td class=""arial"">&nbsp;</td>
+          <td class=""arial"" bgcolor=""#CCCCCC""><a href=""vereine.htm""><font color=""#000000"" size=""2"">Vereine</font></a></td>
+        </tr>
+        <tr> 
+          <td class=""arial"">&nbsp;</td>
+          <td class=""arial"" bgcolor=""#CCCCCC""><a href=""natur.htm""><font color=""#000000"" size=""2"">Natur</font></a></td>
+        </tr>
+        <tr> 
+          <td class=""arial"">&nbsp;</td>
+          <td class=""arial"" bgcolor=""#CCCCCC""><a href=""anreise.htm""><font color=""#000000"" size=""2"">Anreise</font></a></td>
+        </tr>
+        <tr> 
+          <td valign=""MIDDLE"" align=""LEFT"" class=""arial"">&nbsp;</td>
+          <td valign=""MIDDLE"" align=""LEFT"" class=""arial"" bgcolor=""#CCCCCC""><a
+href=""mailto:info@ettal.de""><font size=""2""> <img
+src=""bilder/standard/email-ani.gif"" alt=""E-mail an die Gemeinde Ettal"" align=""ABSMIDDLE"" border=""0"" width=""13"" height=""14""><font color=""#000000""><img src=""pics0/platzhaltermini.gif"" width=""10"" height=""9"" border=""0"">E-Mail</font></font></a></td>
+        </tr>
+        <tr> 
+          <td class=""arial"">&nbsp;</td>
+          <td class=""arial"" bgcolor=""#CCCCCC""><a href=""links.htm""><font color=""#000000"" size=""2"">Links</font></a></td>
+        </tr>
+        <tr> 
+          <td class=""arial"">&nbsp;</td>
+          <td class=""arial"" bgcolor=""#CCCCCC""><a href=""impressum.htm""><font color=""#000000"" size=""1"">Impressum</font></a></td>
+        </tr>
+        <tr> 
+          <td class=""arial"">&nbsp;</td>
+          <td class=""arial"">&nbsp;</td>
+        </tr>
+        <tr> 
+          <td class=""arial"">&nbsp;</td>
+          <td class=""arial""><a href=""webcam/index.htm""><img src=""bilder/webcam/webcam-logo-mini.jpg"" width=""35"" height=""35"" border=""0""></a></td>
+        </tr>
+      </table>
+    </td>
+    <td align=""l",2016-12-19T20:35:48.954292,urlaubsspass-in-bayern.info,Germany,,,1&1 Internet AG
+122.100.190.60,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:887
+
+",2016-12-19T20:11:26.882238,nz190l60.bb122100.ctm.net,Macau,,,Companhia de Telecomunicacoes de Macau SARL
+151.26.26.208,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-19T19:39:47.022821,ppp-208-26.26-151.wind.it,Italy,Trepuzzi,,WIND Telecomunicazioni S.p.A
+82.67.50.2,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-19T11:25:05.757441,vil69-1-82-67-50-2.fbx.proxad.net,France,Villeurbanne,,Free SAS
+104.8.247.253,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-19T09:46:10.015964,104-8-247-253.lightspeed.ltrkar.sbcglobal.net,United States,,,AT&T U-verse
+160.218.189.38,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-19T09:45:19.224861,gprs189-38.eurotel.cz,Czech Republic,,,Address block of Eurotel Praha
+95.17.52.73,84,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2747
+
+",2016-12-19T06:10:33.917227,73.52.17.95.dynamic.jazztel.es,Spain,Villajoyosa,,Jazz Telecom S.A.
+94.52.72.249,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:556
+
+",2016-12-19T03:31:09.051928,94-52-72-249.next-gen.ro,Romania,,,SC NextGen Communications SRL
+70.239.139.244,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-19T03:11:29.582546,adsl-70-239-139-244.dsl.yntwoh.sbcglobal.net,United States,,,AT&T Internet Services
+190.93.61.122,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-18T22:25:47.425815,190-93-61-122.sanluisctv.com.ar,Argentina,San Luis,,Luis Ctv S.A.
+87.161.197.170,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-18T19:55:13.249269,p57A1C5AA.dip0.t-ipconnect.de,Germany,,,Deutsche Telekom AG
+195.228.230.115,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-18T18:27:54.398849,dslC3E4E673.fixip.t-online.hu,Hungary,,,Magyar Telekom
+151.24.26.168,81,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-18T14:34:57.044173,ppp-168-26.24-151.wind.it,Italy,Rome,,WIND Telecomunicazioni S.p.A
+110.142.229.180,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2935
+
+",2016-12-18T10:40:19.582016,mail.herveybayvet.com,Australia,Brisbane,,Telstra Internet
+62.98.233.167,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:556
+
+",2016-12-18T10:17:17.493779,ppp-167-233.98-62.wind.it,Italy,Naples,,Wind Telecomunicazioni
+99.58.126.74,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-18T01:56:15.852931,adsl-99-58-126-74.dsl.snantx.sbcglobal.net,United States,,,AT&T Internet Services
+78.195.117.7,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:944
+
+",2016-12-18T00:22:31.988386,mth25-1-78-195-117-7.fbx.proxad.net,France,,,Free SAS
+79.46.191.116,83,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:556
+
+",2016-12-17T23:01:17.132647,host116-191-dynamic.46-79-r.retail.telecomitalia.it,Italy,Somma Vesuviana,,Telecom Italia
+188.92.15.11,5000,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-16T09:08:56.090017,,Czech Republic,Usti Nad Labem,,"Speednet, s.r.o."
+84.166.87.217,81,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:518
+
+",2016-12-16T03:01:52.562244,p54A657D9.dip0.t-ipconnect.de,Germany,,,Deutsche Telekom AG
+82.131.139.198,82,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-15T21:51:50.309061,82-131-139-198.pool.invitel.hu,Hungary,Esztergom,,Invitel Tavkozlesi Zrt.
+5.187.151.102,81,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:944
+
+",2016-12-15T17:52:53.568843,05BB9766.catv.pool.telekom.hu,Hungary,,,Magyar Telekom
+87.139.85.51,81,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:885
+
+",2016-12-15T13:01:24.365175,p578b5533.dip0.t-ipconnect.de,Germany,,,Deutsche Telekom AG
+85.119.9.45,9000,"HTTP/1.0 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:54
+
+",2016-12-15T09:48:17.025768,public-b045.borsodweb.hu,Hungary,,,BorsodWeb Internet Szolgaltato Kft.
+71.159.32.1,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-15T08:06:37.559337,adsl-71-159-32-1.dsl.irvnca.sbcglobal.net,United States,,,AT&T Internet Services
+89.100.217.7,82,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-15T07:53:32.882436,089-100-217007.ntlworld.ie,Ireland,Bray,,UPC Ireland
+193.77.157.124,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-15T04:57:13.200020,BSN-77-157-124.static.siol.net,Slovenia,Maribor,,SiOL d.o.o. (Slovenia Online)
+87.205.72.1,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-15T04:12:17.249845,87-205-72-1.adsl.inetia.pl,Poland,Torun,,Netia Telekom SA
+201.153.33.226,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-14T20:56:24.935452,dsl-201-153-33-226-dyn.prod-infinitum.com.mx,Mexico,,,Telmex
+73.218.213.213,82,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-14T18:31:53.103213,c-73-218-213-213.hsd1.vt.comcast.net,United States,Milton,,Comcast Cable
+59.167.214.47,8888,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:434
+
+",2016-12-14T13:33:14.812753,ppp214-47.static.internode.on.net,Australia,Brisbane,,iiNet Limited
+78.83.109.110,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:434
+
+",2016-12-14T12:37:36.872806,78-83-109-110.spectrumnet.bg,Bulgaria,Sofia,,PON Services
+218.255.152.154,8086,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:627
+
+",2016-12-14T09:31:07.498785,static.reserve.wharfttidc.com,Hong Kong,Kowloon,,Wharf T&T
+171.1.177.83,10000,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:944
+
+
+<html>
+<head>
+<meta http-equiv=""Content-type"" CONTENT=""text/html; charset=iso-8859-1"">
+<meta http-equiv=""Content-language"" CONTENT=""en"">
+<link href=""template.css"" rel=""stylesheet"" type=""text/css"">
+<script language=""JavaScript""> 
+if (self.location.href != top.location.href) { 
+top.location.href = self.location.href; 
+} 
+</script>
+</head>
+
+<script>
+	var UserAuthFlag = 1;
+	var s;
+	if(UserAuthFlag == 1) {
+		s = '<frameset border=0 framespacing=0 rows=""90,1%"" frameborder=0>' +
+		    '<frame name = ""LOGO"" target =""LOGO"" src= ""top.html"" >' +
+		    '<frame name = ""MAIN"" target =""MAIN"" src= ""logon.html"" >' +
+		    '</frameset>';
+		
+	}else {
+		s = '<frameset border=0 framespacing=0 rows=""90,1%"" frameborder=0>' +
+		    '<frame name = ""LOGO"" target =""LOGO"" src= ""top.html"" >' +
+		    '<frame name = ""MAIN"" target =""MAIN"" src= ""LiveView.html"" >' +
+		    '</frameset>';
+		
+	}
+	document.write(s);
+	
+</script>
+</html>
+",2016-12-14T08:05:39.496391,,Singapore,,,Starhub Mobile Ltd
+83.160.68.218,8080,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-14T02:59:20.925253,a83-160-68-218.adsl.xs4all.nl,Netherlands,Breda,,XS4ALL Internet BV
+82.56.205.177,83,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:556
+
+",2016-12-13T12:07:43.990321,host177-205-dynamic.56-82-r.retail.telecomitalia.it,Italy,,,Telecom Italia
+120.63.200.137,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:2936
+
+",2016-12-13T09:46:45.628926,static-mum-120.63.200.137.mtnl.net.in,India,,,Mahanagar Telephone Nigam Ltd.
+31.46.91.13,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:556
+
+",2016-12-13T06:54:17.089661,1F2E5B0D.dsl.pool.telekom.hu,Hungary,,,Magyar Telekom
+188.25.214.9,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-13T06:19:50.279945,188-25-214-9.rdsnet.ro,Romania,Bucharest,,RCS & RDS Residential
+91.82.70.118,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:518
+
+",2016-12-13T03:04:55.222949,91-82-70-118.pool.invitel.hu,Hungary,,,INVITEL Co.
+79.248.109.125,80,"HTTP/1.1 200 OK
+Connection: close
+Cache-Control: no-cache
+Server: SQ-WEBCAM
+CONTENT-LENGTH:1002
+
+",2016-12-13T02:06:36.547216,p4FF86D7D.dip0.t-ipconnect.de,Germany,,,Deutsche Telekom AG
