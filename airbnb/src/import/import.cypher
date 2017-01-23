@@ -197,6 +197,7 @@ MERGE (h)-[:HOSTS]->(l);    // FIXME: what relationships to set on HOSTS relatio
 
 // reviews and users
 
+USING PERIODIC COMMIT 1000
 LOAD CSV WITH HEADERS FROM "file:///reviews.csv" AS row
 
 // User
