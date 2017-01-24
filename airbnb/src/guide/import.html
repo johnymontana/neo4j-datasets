@@ -1,0 +1,445 @@
+<style type="text/css" media="screen">
+/*
+.nodes-image {
+	margin:-100;
+}
+*/	
+@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css");
+
+.imageblock .content img, .image img {max-width: 900px;max-height: 300px;}
+.deck h3, .deck h4 {display: block !important;margin-bottom:8px;margin-top:5px;}
+.listingblock {margin:8px;}
+.pull-bottom {position:relative;bottom:1em;}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note:before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip:before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning:before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution:before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important:before{content:"\f06a";color:#bf0000}
+.admonitionblock.note.speaker { display:none; }
+</style>
+<style type="text/css" media="screen">
+/* #editor.maximize-editor .CodeMirror-code { font-size:24px; line-height:26px; } */
+</style>
+<article class="guide" ng-controller="AdLibDataController">
+  <carousel class="deck container-fluid">
+    <!--slide class="row-fluid">
+      <div class="col-sm-3">
+        <h3>Data Modeling And Import</h3>
+        <p class="lead">Information</p>
+			<!dl>
+				
+				
+				
+				
+				
+			</dl>
+		</div>
+      <div class="col-sm-9">
+        <figure>
+          <img style="width:300px" src=""/>
+        </figure>
+      </div>
+    </slide-->
+    
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Graph Data Modeling</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>This section will cover how to model data as a graph as well as how to import data into Neo4j using <code>LOAD CSV</code>.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s first identify the tools and concepts we&#8217;ll be using:</p>
+</div>
+<div class="ulist">
+<div class="title">Neo4j Tools</div>
+<ul>
+<li>
+<p><strong>Neo4j Browser</strong> - Neo4j Browser (this web application!) is a query workbench for querying Neo4j and visualizing the results.</p>
+</li>
+<li>
+<p><strong>Cypher</strong> - Cypher is the query language for graphs used to interact with Neo4j. Cypher is an expressive query language designed for graphs that allows the user to define graph queries defining a traversal.</p>
+</li>
+<li>
+<p><strong><code>LOAD CSV</code></strong> - functionality built into Cypher that allows for importing data into Neo4j from CSV / flat files.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Next, let&#8217;s introduce the dataset we&#8217;ll be using today.</p>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Short term housing rental data</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<div class="title">Inside Airbnb</div>
+<p><span class="image"><a class="image" href="//insideairbnb.com"><img src="http://guides.neo4j.com/listings/file/img/inside_airbnb.png" alt="Inside Airbnb" width="500"></a></span></p>
+</div>
+<div class="paragraph">
+<p>Inside Airbnb has collected data on listings, hosts and reviews. We will use this data as an example to see how we can model and import data into Neo4j. We will learn the Cypher query language</p>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>The Datamodel</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<div class="title">Listings, reviews, hosts</div>
+<p><span class="image"><a class="image" href="http://guides.neo4j.com/listings/file/img/datamodel.png"><img src="http://guides.neo4j.com/listings/file/img/datamodel.png" alt="Listings datamodel"></a></span></p>
+</div>
+<div class="paragraph">
+<p>This is the full data model that we will build out using data from Inside Airbnb.</p>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>The Labeled Property Graph Model</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Neo4j implements the labeled property graph data model. The components of the labeled property graph model are:</p>
+</div>
+<div class="paragraph">
+<div class="title">The Labeled Property Graph Model</div>
+<p><span class="image"><img src="http://guides.neo4j.com/listings/file/img/lpg.png" alt="lpg"></span></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Node</strong> - The node is the entity or object. Each node can have one or more labels.</p>
+</li>
+<li>
+<p><strong>Relationship</strong> - Relationships connect Nodes in the graph. Each relationship has a single type.</p>
+</li>
+<li>
+<p><strong>Properties</strong> - Key-values pairs stored on either Nodes or Relationships</p>
+</li>
+</ul>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>An Introduction to Cypher</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>When using Cypher, we will be defining graph patterns, expressed as ASCII-art like strings. For example:</p>
+</div>
+<div class="listingblock">
+<div class="title">A simple graph traversal</div>
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (l:Listing)-[:HAS]-&gt;(a:Amenity)
+RETURN l, COLLECT(a) AS amenities;<!--/code--></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Creating data with Cypher</div>
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CREATE (l:Listing {listing_id: "1234"})
+SET l.name  = "Spacious 2 bedroom",
+    l.price = 195
+CREATE (a1:Amenity {name: "wifi"})
+CREATE (a2:Amenity {name: "hot tub"})
+CREATE (l)-[:HAS]-&gt;(a1)
+CREATE (l)-[:HAS]-&gt;(a2);<!--/code--></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Deleting data</div>
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (a)
+DETACH DELETE a;<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Cypher keywords</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>In the previous example, we used the following Cypher keywords:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong><code>MATCH</code></strong> - Search the graph for a certain graph pattern</p>
+</li>
+<li>
+<p><strong><code>RETURN</code></strong> - Specify results to be returned from the query</p>
+</li>
+<li>
+<p><strong><code>COLLECT</code></strong> - An aggregation function, collect elements into a list.</p>
+</li>
+<li>
+<p><strong><code>SET</code></strong> - Set property values</p>
+</li>
+<li>
+<p><strong><code>CREATE</code></strong> - Create data in the graph. Takes a graph pattern.</p>
+</li>
+<li>
+<p><strong><code>DELETE</code></strong> - Delete data from the graph</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Next, we will learn how to import data into Neo4j using <code>LOAD CSV</code>;</p>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>LOAD CSV</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p><code>LOAD CSV</code> allows us to import data from CSV files, using Cypher to define the model we want to create.</p>
+</div>
+<div class="listingblock">
+<div class="title">Examine CSV file data, but don&#8217;t create any data</div>
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->LOAD CSV WITH HEADERS FROM "file:///listings.csv" AS row
+RETURN row LIMIT 10<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We see that by specifying <code>WITH HEADERS</code>, the <code>row</code> object becomes a map (or dictionary). <code>LOAD CSV</code> will allow us to iterate over each row in the file, creating data for each row. Let&#8217;s start by importing listings, amenities, and neighborhoods:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="http://guides.neo4j.com/listings/file/img/datamodel1.png" alt="datamodel1"></span></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->LOAD CSV WITH HEADERS FROM "file:///listings.csv" AS row
+WITH row WHERE row.id IS NOT NULL
+CREATE (l:Listing {listing_id: row.id})
+SET l.name = row.name,
+    l.price = toFloat(substring(row.price, 1)),
+    l.weekly_price = toFloat(substring(row.weekly_price, 1)),
+    l.cleaning_fee = toFloat(substring(row.cleaning_fee, 1)),
+    l.property_type = row.property_type,
+    l.accomodates = toInt(row.accomodates),
+    l.bedrooms = toInt(row.bedrooms),
+    l.bathrooms = toInt(row.bathrooms),
+    l.availabiliity_365 = toInt(row.availability_365)<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can verify that we&#8217;ve imported data with this query:</p>
+</div>
+<div class="listingblock">
+<div class="title">Count number of Listing nodes</div>
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (l:Listing) RETURN COUNT(l);<!--/code--></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Create index on :Listing(listing_id)</div>
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CREATE INDEX ON :Listing(listing_id);<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Adding Neighborhood and Amenity nodes</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Remember that this is the model we want to create initially:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="http://guides.neo4j.com/listings/file/img/datamodel1.png" alt="datamodel1"></span></p>
+</div>
+<div class="paragraph">
+<p>We&#8217;re missing amenities and neighborhoods so let&#8217;s add those.</p>
+</div>
+
+
+
+   <h4><code>MERGE</code> and constraints</h4>
+   <div class="paragraph">
+<p>Neo4j is "schema optional" - we can choose to define a schema to enfore some data integrity constraints. In this case we want to avoid creating <code>Amenity</code> nodes so we will define a constraint to enfore uniqueness:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CREATE CONSTRAINT ON (a:Amenity) ASSERT a.name IS UNIQUE;<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now that we&#8217;ve created a uniqueness constraint, we can use the <code>MERGE</code> keyword when creating data to check to see if data exists in the graph before creating. Think of <code>MEGE</code> as "get-or-create".</p>
+</div>
+<div class="listingblock">
+<div class="title">Add Amenity nodes, and relationships connecting them to the listings</div>
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->LOAD CSV WITH HEADERS FROM "file:///listings.csv" AS row
+WITH row WHERE row.id IS NOT NULL
+MATCH (l:Listing {listing_id: row.id})
+WITH l, split(replace(replace(replace(row.amenities, "{", ""), "}", ""), "\"", ""), ",") AS amenities
+UNWIND amenities AS amenity
+MERGE (a:Amenity {name: amenity})
+MERGE (l)-[:HAS]->(a);<!--/code--></pre>
+</div>
+</div>
+
+
+
+   <h4>Neighborhood</h4>
+   <div class="paragraph">
+<p>Let&#8217;s do the same with <code>Neighborhood</code> nodes now:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CREATE CONSTRAINT ON (n:Neighborhood) ASSERT n.neighborhood_id IS UNIQUE;<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Some neighborhoods lack an <code>id</code> so we&#8217;ll use a default value for these with the <code>coalesce</code> function.</p>
+</div>
+<div class="listingblock">
+<div class="title">Add Neighborhood nodes</div>
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->LOAD CSV WITH HEADERS FROM "file:///listings.csv" AS row
+WITH row WHERE row.id IS NOT NULL
+MATCH (l:Listing {listing_id: row.id})
+MERGE (n:Neighborhood {neighborhood_id: coalesce(row.neighbourhood_cleansed, "NA")})
+ON CREATE SET n.name = row.neighbourhood
+MERGE (l)-[:IN_NEIGHBORHOOD]->(n);<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Host</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p><span class="image"><img src="http://guides.neo4j.com/listings/file/img/datamodel2.png" alt="datamodel2"></span></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CREATE CONSTRAINT ON (h:Host) ASSERT h.host_id IS UNIQUE;<!--/code--></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->LOAD CSV WITH HEADERS FROM "file:///listings.csv" AS row
+WITH row WHERE row.host_id IS NOT NULL
+MERGE (h:Host {host_id: row.host_id})
+ON CREATE SET h.name      = row.host_name,
+              h.about     = row.host_abot,
+              h.superhost = CASE WHEN row.host_is_super_host = "t" THEN True ELSE False END,
+              h.location  = row.host_location,
+              h.image     = row.host_picture_url
+WITH row, h
+MATCH (l:Listing {listing_id: row.id})
+MERGE (h)-[:HOSTS]->(l);<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Reviews</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p><span class="image"><img src="http://guides.neo4j.com/listings/file/img/datamodel_full.png" alt="datamodel full"></span></p>
+</div>
+<div class="listingblock">
+<div class="title">Create constraint on User</div>
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CREATE CONSTRAINT ON (u:User) ASSERT u.user_id IS UNIQUE;<!--/code--></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->USING PERIODIC COMMIT 10000
+LOAD CSV WITH HEADERS FROM "file:///reviews.csv" AS row
+
+// User
+MERGE (u:User {user_id: row.reviewer_id})
+SET u.name = row.reviewer_name
+
+// Review
+CREATE (r:Review {review_id: row.id})
+SET r.date     = row.date,
+    r.comments = row.comments
+WITH row, u, r
+MATCH (l:Listing {listing_id: row.listing_id})
+MERGE (u)-[:WROTE]->(r)
+MERGE (r)-[:REVIEWS]->(l);<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Verify the data model</h3>
+    <br/>
+    <div>
+      <div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CALL db.schema();<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+  </carousel>
+</article>

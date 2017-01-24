@@ -1,0 +1,17 @@
+= Short Term Rental Listings
+:csv-url: file:///
+:GUIDES: http://localhost:8001/ddj/
+
+== Short Term Rental Listings
+
+
+. pass:a[<a play-topic='{GUIDES}/import.html'>IMPORT: Short Term Rental Listing Dataset</a>]
+. pass:a[<a play-topic='{GUIDES}/queries.html'>EXPLORE: Interesting Queries</a>]
+
+== Further Resources
+
+* http://neo4j.com/graphgists[Graph Gist Examples]
+* http://neo4j.com/docs/stable/cypher-refcard/[Cypher Reference Card]
+* http://neo4j.com/docs/developer-manual/current/#cypher-query-lang[Neo4j Developer Manual]
+* http://neo4j.com/developer/resources#_neo4j_cypher_resources[Cypher Resource Collection]
+* http://graphdatabases.com[e-book: Graph Databases (free)]

@@ -1,0 +1,248 @@
+= Data Modeling And Import
+
+== Graph Data Modeling
+
+This section will cover how to model data as a graph as well as how to import data into Neo4j using `LOAD CSV`.
+
+Let's first identify the tools and concepts we'll be using:
+
+.Neo4j Tools
+
+* *Neo4j Browser* - Neo4j Browser (this web application!) is a query workbench for querying Neo4j and visualizing the results.
+* *Cypher* - Cypher is the query language for graphs used to interact with Neo4j. Cypher is an expressive query language designed for graphs that allows the user to define graph queries defining a traversal. 
+* *`LOAD CSV`* - functionality built into Cypher that allows for importing data into Neo4j from CSV / flat files.  
+
+Next, let's introduce the dataset we'll be using today.
+
+== Short term housing rental data
+
+.Inside Airbnb
+image:{img}/inside_airbnb.png[
+"Inside Airbnb",width=500,
+link="//insideairbnb.com"]
+
+Inside Airbnb has collected data on listings, hosts and reviews. We will use this data as an example to see how we can model and import data into Neo4j. We will learn the Cypher query language 
+
+== The Datamodel
+
+.Listings, reviews, hosts
+image:{img}/datamodel.png[
+"Listings datamodel",
+link="{img}/datamodel.png"
+] 
+
+This is the full data model that we will build out using data from Inside Airbnb.
+
+== The Labeled Property Graph Model
+
+Neo4j implements the labeled property graph data model. The components of the labeled property graph model are:
+
+.The Labeled Property Graph Model
+image:{img}/lpg.png[]
+
+* *Node* - The node is the entity or object. Each node can have one or more labels.
+* *Relationship* - Relationships connect Nodes in the graph. Each relationship has a single type.
+* *Properties* - Key-values pairs stored on either Nodes or Relationships
+
+== An Introduction to Cypher
+
+When using Cypher, we will be defining graph patterns, expressed as ASCII-art like strings. For example:
+
+.A simple graph traversal
+[source,cypher]
+----
+MATCH (l:Listing)-[:HAS]->(a:Amenity)
+RETURN l, COLLECT(a) AS amenities;
+----
+
+.Creating data with Cypher
+[source,cypher]
+----
+CREATE (l:Listing {listing_id: "1234"})
+SET l.name  = "Spacious 2 bedroom",
+    l.price = 195
+CREATE (a1:Amenity {name: "wifi"})
+CREATE (a2:Amenity {name: "hot tub"})
+CREATE (l)-[:HAS]->(a1)
+CREATE (l)-[:HAS]->(a2)
+RETURN *;
+----
+
+.Deleting data
+[source,cypher]
+----
+MATCH (a)
+DETACH DELETE a;
+----
+
+== Cypher keywords
+
+In the previous example, we used the following Cypher keywords:
+
+* *`MATCH`* - Search the graph for a certain graph pattern
+* *`RETURN`* - Specify results to be returned from the query
+* *`COLLECT`* - An aggregation function, collect elements into a list.
+* *`SET`* - Set property values
+* *`CREATE`* - Create data in the graph. Takes a graph pattern.
+* *`DELETE`* - Delete data from the graph
+
+Next, we will learn how to import data into Neo4j using `LOAD CSV`;
+
+
+== LOAD CSV
+
+`LOAD CSV` allows us to import data from CSV files, using Cypher to define the model we want to create.
+
+.Examine CSV file data, but don't create any data
+[source,cypher,subs=attributes]
+----
+LOAD CSV WITH HEADERS FROM "{csv-url}listings.csv" AS row
+RETURN row LIMIT 10
+----
+
+We see that by specifying `WITH HEADERS`, the `row` object becomes a map (or dictionary). `LOAD CSV` will allow us to iterate over each row in the file, creating data for each row. Let's start by importing listings, amenities, and neighborhoods:
+
+image:{img}/datamodel1.png[]
+
+[source,cypher,subs=attributes]
+----
+LOAD CSV WITH HEADERS FROM "{csv-url}listings.csv" AS row
+WITH row WHERE row.id IS NOT NULL
+CREATE (l:Listing {listing_id: row.id})
+SET l.name = row.name,
+    l.price = toFloat(substring(row.price, 1)),
+    l.weekly_price = toFloat(substring(row.weekly_price, 1)),
+    l.cleaning_fee = toFloat(substring(row.cleaning_fee, 1)),
+    l.property_type = row.property_type,
+    l.accomodates = toInt(row.accomodates),
+    l.bedrooms = toInt(row.bedrooms),
+    l.bathrooms = toInt(row.bathrooms),
+    l.availabiliity_365 = toInt(row.availability_365)
+----
+
+We can verify that we've imported data with this query:
+
+.Count number of Listing nodes
+[source,cypher]
+----
+MATCH (l:Listing) RETURN COUNT(l);
+----
+
+.Create index on :Listing(listing_id)
+[source,cypher]
+----
+CREATE INDEX ON :Listing(listing_id);
+----
+
+== Adding Neighborhood and Amenity nodes
+
+Remember that this is the model we want to create initially:
+
+image:{img}/datamodel1.png[]
+
+We're missing amenities and neighborhoods so let's add those.
+
+=== `MERGE` and constraints
+
+Neo4j is "schema optional" - we can choose to define a schema to enfore some data integrity constraints. In this case we want to avoid creating `Amenity` nodes so we will define a constraint to enfore uniqueness:
+
+[source,cypher]
+----
+CREATE CONSTRAINT ON (a:Amenity) ASSERT a.name IS UNIQUE;
+----
+
+Now that we've created a uniqueness constraint, we can use the `MERGE` keyword when creating data to check to see if data exists in the graph before creating. Think of `MEGE` as "get-or-create".
+
+.Add Amenity nodes, and relationships connecting them to the listings
+[source,cypher,subs=attributes]
+----
+LOAD CSV WITH HEADERS FROM "{csv-url}listings.csv" AS row
+WITH row WHERE row.id IS NOT NULL
+MATCH (l:Listing {listing_id: row.id})
+WITH l, split(replace(replace(replace(row.amenities, "{", ""), "}", ""), "\"", ""), ",") AS amenities
+UNWIND amenities AS amenity
+MERGE (a:Amenity {name: amenity})
+MERGE (l)-[:HAS]->(a);
+----
+
+=== Neighborhood
+
+Let's do the same with `Neighborhood` nodes now:
+
+[source,cypher]
+----
+CREATE CONSTRAINT ON (n:Neighborhood) ASSERT n.neighborhood_id IS UNIQUE;
+----
+
+Some neighborhoods lack an `id` so we'll use a default value for these with the `coalesce` function.
+
+.Add Neighborhood nodes
+[source,cypher,subs=attributes]
+----
+LOAD CSV WITH HEADERS FROM "{csv-url}listings.csv" AS row
+WITH row WHERE row.id IS NOT NULL
+MATCH (l:Listing {listing_id: row.id})
+MERGE (n:Neighborhood {neighborhood_id: coalesce(row.neighbourhood_cleansed, "NA")})
+ON CREATE SET n.name = row.neighbourhood
+MERGE (l)-[:IN_NEIGHBORHOOD]->(n);
+----
+
+== Host
+
+image:{img}/datamodel2.png[]
+
+[source,cypher]
+----
+CREATE CONSTRAINT ON (h:Host) ASSERT h.host_id IS UNIQUE;
+----
+
+[source,cypher,subs=attributes]
+----
+LOAD CSV WITH HEADERS FROM "{csv-url}listings.csv" AS row
+WITH row WHERE row.host_id IS NOT NULL
+MERGE (h:Host {host_id: row.host_id})
+ON CREATE SET h.name      = row.host_name,
+              h.about     = row.host_abot,
+              h.superhost = CASE WHEN row.host_is_super_host = "t" THEN True ELSE False END,
+              h.location  = row.host_location,
+              h.image     = row.host_picture_url
+WITH row, h
+MATCH (l:Listing {listing_id: row.id})
+MERGE (h)-[:HOSTS]->(l);
+----
+
+== Reviews
+
+image:{img}/datamodel_full.png[]
+
+.Create constraint on User
+[source,cypher]
+----
+CREATE CONSTRAINT ON (u:User) ASSERT u.user_id IS UNIQUE;
+----
+
+[source,cypher,subs=attributes]
+----
+USING PERIODIC COMMIT 10000
+LOAD CSV WITH HEADERS FROM "{csv-url}reviews.csv" AS row
+
+// User
+MERGE (u:User {user_id: row.reviewer_id})
+SET u.name = row.reviewer_name
+
+// Review
+CREATE (r:Review {review_id: row.id})
+SET r.date     = row.date,
+    r.comments = row.comments
+WITH row, u, r
+MATCH (l:Listing {listing_id: row.listing_id})
+MERGE (u)-[:WROTE]->(r)
+MERGE (r)-[:REVIEWS]->(l);
+----
+
+== Verify the data model
+
+[source,cypher]
+----
+CALL db.schema();
+----

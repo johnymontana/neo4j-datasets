@@ -1,0 +1,80 @@
+= Interesting Queries
+
+== Explore the data
+
+[source,cypher]
+----
+CALL db.schema();
+---- 
+
+.William's Reviews
+[source,cypher]
+----
+MATCH (u:User {name: "William"})-[:WROTE]->(r:Review)
+RETURN u,r LIMIT 5
+----
+
+.Who has written the most reviews?
+[source,cypher]
+----
+MATCH (u:User)-[:WROTE]->(r:Review)
+WITH u, count(r) AS num
+RETURN u.name, u.user_id, num ORDER BY num DESC LIMIT 100
+----
+
+.What listings has Julie reviewed? 
+[source,cypher]
+----
+MATCH (u:User {user_id: "2011754"})-[:WROTE]->(r:Review)
+RETURN *
+----
+
+
+== Personalized Recommendations
+
+Generating personalized recommendations is a common use case for graph. So let's use Julie's reviews to generate personalized recommendations for her.  There are two basic appraoches used when generating recommendations:
+
+=== Content Based Filtering
+
+
+[source,cypher]
+----
+MATCH (u:User {user_id: "2011754"})-[:WROTE]->(r:Review)-[:REVIEWS]->(l:Listing)-[:HAS]->(a:Amenity)
+MATCH (a)<-[:HAS]-(rec:Listing)
+RETURN rec, COUNT(DISTINCT a) AS score ORDER BY score DESC LIMIT 10
+----
+
+We can also take neighborhood into account:
+
+.Only recommend listings that are in a neighborhood that Julie has stayed in previously
+[source,cypher]
+----
+MATCH (u:User {user_id: "2011754"})-[:WROTE]->(r:Review)-[:REVIEWS]->(l:Listing)-[:IN_NEIGHBORHOOD]->(n:Neighborhood)
+WITH u, l, COLLECT(DISTINCT n) AS neighborhoods
+MATCH (u:User {user_id: "2011754"})-[:WROTE]->(r:Review)-[:REVIEWS]->(l:Listing)-[:HAS]->(a:Amenity)
+MATCH (rec)-[:IN_NEIGHBORHOOD]->(n:Neighborhood)
+WITH rec, n, neighborhoods, COUNT(DISTINCT a) AS score WHERE n IN neighborhoods
+RETURN rec, score ORDER BY score DESC LIMIT 10
+----
+
+
+
+=== Collaborative Filtering
+
+Find similar users in the network. What listings are the reviewing? Recommend these to Julie:
+
+[source,cypher]
+----
+MATCH (u:User {user_id: "2011754"})-[:WROTE]->(r:Review)-[:REVIEWS]->(l:Listing)
+MATCH (l)<-[:REVIEWS]-(:Review)<-[:WROTE]-(other:User)-[:WROTE]-(:Review)-[:REVIEWS]->(rec:Listing)
+RETURN rec, COUNT(*) AS score ORDER BY score DESC LIMIT 10
+----
+
+Of course these are only the most basic of recommendation queries, we can enhance recommendation queries by normalizing.
+
+== Exercise
+
+Let's take a few minutes to write some queries. Try to answer the following questions:
+
+* What amenities occur together most frequently?
+

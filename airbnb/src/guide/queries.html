@@ -1,0 +1,160 @@
+<style type="text/css" media="screen">
+/*
+.nodes-image {
+	margin:-100;
+}
+*/	
+@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css");
+
+.imageblock .content img, .image img {max-width: 900px;max-height: 300px;}
+.deck h3, .deck h4 {display: block !important;margin-bottom:8px;margin-top:5px;}
+.listingblock {margin:8px;}
+.pull-bottom {position:relative;bottom:1em;}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note:before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip:before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning:before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution:before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important:before{content:"\f06a";color:#bf0000}
+.admonitionblock.note.speaker { display:none; }
+</style>
+<style type="text/css" media="screen">
+/* #editor.maximize-editor .CodeMirror-code { font-size:24px; line-height:26px; } */
+</style>
+<article class="guide" ng-controller="AdLibDataController">
+  <carousel class="deck container-fluid">
+    <!--slide class="row-fluid">
+      <div class="col-sm-3">
+        <h3>Interesting Queries</h3>
+        <p class="lead">Information</p>
+			<!dl>
+				
+				
+				
+				
+				
+			</dl>
+		</div>
+      <div class="col-sm-9">
+        <figure>
+          <img style="width:300px" src=""/>
+        </figure>
+      </div>
+    </slide-->
+    
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Explore the data</h3>
+    <br/>
+    <div>
+      <div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CALL db.schema();<!--/code--></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">William&#8217;s Reviews</div>
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (u:User {name: "William"})-[:WROTE]-&gt;(r:Review)
+RETURN u,r LIMIT 5<!--/code--></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Who has written the most reviews?</div>
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (u:User)-[:WROTE]-&gt;(r:Review)
+WITH u, count(r) AS num
+RETURN u.name, u.user_id, num ORDER BY num DESC LIMIT 100<!--/code--></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">What listings has Julie reviewed?</div>
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (u:User {user_id: "2011754"})-[:WROTE]-&gt;(r:Review)
+RETURN *<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Personalized Recommendations</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Generating personalized recommendations is a common use case for graph. So let&#8217;s use Julie&#8217;s reviews to generate personalized recommendations for her.  There are two basic appraoches used when generating recommendations:</p>
+</div>
+
+
+
+   <h4>Content Based Filtering</h4>
+   <div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (u:User {user_id: "2011754"})-[:WROTE]-&gt;(r:Review)-[:REVIEWS]-&gt;(l:Listing)-[:HAS]-&gt;(a:Amenity)
+MATCH (a)&lt;-[:HAS]-(rec:Listing)
+RETURN rec, COUNT(DISTINCT a) AS score ORDER BY score DESC LIMIT 10<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can also take neighborhood into account:</p>
+</div>
+<div class="listingblock">
+<div class="title">Only recommend listings that are in a neighborhood that Julie has stayed in previously</div>
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (u:User {user_id: "2011754"})-[:WROTE]-&gt;(r:Review)-[:REVIEWS]-&gt;(l:Listing)-[:IN_NEIGHBORHOOD]-&gt;(n:Neighborhood)
+WITH u, l, COLLECT(DISTINCT n) AS neighborhoods
+MATCH (u:User {user_id: "2011754"})-[:WROTE]-&gt;(r:Review)-[:REVIEWS]-&gt;(l:Listing)-[:HAS]-&gt;(a:Amenity)
+MATCH (rec)-[:IN_NEIGHBORHOOD]-&gt;(n:Neighborhood)
+WITH rec, n, neighborhoods, COUNT(DISTINCT a) AS score WHERE n IN neighborhoods
+RETURN rec, score ORDER BY score DESC LIMIT 10<!--/code--></pre>
+</div>
+</div>
+
+
+
+   <h4>Collaborative Filtering</h4>
+   <div class="paragraph">
+<p>Find similar users in the network. What listings are the reviewing? Recommend these to Julie:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (u:User {user_id: "2011754"})-[:WROTE]-&gt;(r:Review)-[:REVIEWS]-&gt;(l:Listing)
+MATCH (l)&lt;-[:REVIEWS]-(:Review)&lt;-[:WROTE]-(other:User)-[:WROTE]-(:Review)-[:REVIEWS]-&gt;(rec:Listing)
+RETURN rec, COUNT(*) AS score ORDER BY score DESC LIMIT 10<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Of course these are only the most basic of recommendation queries, we can enhance recommendation queries by normalizing.</p>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Exercise</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Let&#8217;s take a few minutes to write some queries. Try to answer the following questions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>What amenities occur together most frequently?</p>
+</li>
+</ul>
+</div>
+	</div>
+  </div>
+</slide>
+  </carousel>
+</article>
