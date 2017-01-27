@@ -1,0 +1,17 @@
+= Trumpworld
+:csv-url: file:///
+:GUIDES: http://localhost:8001/trupworld/
+
+== Exploring The Trumpworld Graph
+
+. pass:a[<a play-topic='{GUIDES}/import.html'>IMPORT: Loading The Trumpworld Graph</a>]
+. pass:a[<a play-topic='{GUIDES}/intro.html'>Overview: Introducing The Trumpworld Graph and Neo4j</a>]
+. pass:a[<a play-topic='{GUIDES}/sna.html'>Network Analysis: Applying Social Network Analysis to Trumpworld</a>]
+
+== Further Resources
+
+* http://neo4j.com/graphgists[Graph Gist Examples]
+* http://neo4j.com/docs/stable/cypher-refcard/[Cypher Reference Card]
+* http://neo4j.com/docs/developer-manual/current/#cypher-query-lang[Neo4j Developer Manual]
+* http://neo4j.com/developer/resources#_neo4j_cypher_resources[Cypher Resource Collection]
+* http://graphdatabases.com[e-book: Graph Databases (free)]

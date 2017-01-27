@@ -1,0 +1,238 @@
+= Graph of Thrones
+:icons: font
+
+== The Graph of Thrones
+
+image::https://dl.dropboxusercontent.com/u/67572426/graph_of_thrones/got_header.png[float=left]
+image::http://www.lyonwj.com/public/img/graphs-are-coming.jpg[float=right]
+//image::https://upload.wikimedia.org/wikipedia/en/2/24/AStormOfSwords.jpg[float=left]
+
+== The Graph of Thrones
+
+image::https://upload.wikimedia.org/wikipedia/en/2/24/AStormOfSwords.jpg[float=right]
+
+=== Analyzing Text
+
+Most of this demo is based on work done by Dr. Andrew Beveridge, based on his "Network of Thrones" research:
+
+https://www.macalester.edu/~abeverid/index.html[Beveridge, Andrew, Shan, Jie. Network of Thrones. Math Horizons Magazine, Vol. 23, No. 4 (2016) pp. 18-22.]
+
+=== Graph of Character Interactions
+
+//image::http://www.lyonwj.com/public/img/got-graph-full.png[float=right]
+
+Build a graph where each character is a node and the relationships represent character interactions.
+
+
+== Graph of Character Interactions
+
+//image::https://upload.wikimedia.org/wikipedia/en/2/24/AStormOfSwords.jpg[]
+image::https://dl.dropboxusercontent.com/u/67572426/graph_of_thrones/char_cooccurence.png[]
+
+== Character cooccurences
+
+[source]
+----
+Source,Target,Weight
+Aemon,Grenn,5
+Aemon,Samwell,31
+Aerys,Jaime,18
+...
+----
+
+
+Source: https://www.macalester.edu/~abeverid/data/stormofswords.csv[Andrew Beveridge]
+
+== Import
+
+[source,cypher]
+----
+CREATE CONSTRAINT ON (c:Character) ASSERT c.name IS UNIQUE;
+----
+
+[source,cypher]
+----
+LOAD CSV WITH HEADERS FROM "https://www.macalester.edu/~abeverid/data/stormofswords.csv" AS row
+MERGE (src:Character {name: row.Source})
+MERGE (tgt:Character {name: row.Target})
+MERGE (src)-[r:INTERACTS]->(tgt)
+ON CREATE SET r.weight = toInt(row.Weight)
+----
+
+== The data model
+
+[source,cypher]
+----
+CALL apoc.meta.graph()
+----
+
+
+== The Graph of Thrones
+
+[source,cypher]
+----
+MATCH p=(:Character)-[:INTERACTS]-(:Character)
+RETURN p
+----
+
+== Analyzing The Network
+
+=== Number of characters
+
+[source,cypher]
+----
+MATCH (c:Character) RETURN count(c)
+----
+
+=== Summary statistics
+
+[source, cypher]
+----
+MATCH (c:Character)-[:INTERACTS]->()
+WITH c, count(*) AS num
+RETURN min(num) AS min, max(num) AS max, avg(num) AS avg_characters, stdev(num) AS stdev
+----
+
+=== Diameter of the network
+
+The diameter (or geodesic) of a network is defined as the longest shortest path in the network.
+
+[source,cypher]
+----
+// Find maximum diameter of network
+// maximum shortest path between two nodes
+MATCH (a:Character), (b:Character) WHERE id(a) > id(b)
+MATCH p=shortestPath((a)-[:INTERACTS*]-(b))
+RETURN length(p) AS len, extract(x IN nodes(p) | x.name) AS path
+ORDER BY len DESC LIMIT 4
+----
+
+== Shortest Path
+
+We can use the shortestPath function in Cypher to find the shortest path between any two characters in the graph. Let’s find the shortest path from Catelyn Stark to Kahl Drogo:
+
+[source,cypher]
+----
+// Shortest path from Catelyn Stark to Khal Drogo
+MATCH (catelyn:Character {name: "Catelyn"}), (drogo:Character {name: "Drogo"})
+MATCH p=shortestPath((catelyn)-[INTERACTS*]-(drogo))
+RETURN p
+----
+
+=== All shortest paths
+
+There might be other paths of the same length connecting Catelyn and Drogo. We can find these with the allShortestPaths Cypher function:
+
+[source,cypher]
+----
+// All shortest paths from Catelyn Stark to Khal Drogo
+MATCH (catelyn:Character {name: "Catelyn"}), (drogo:Character {name: "Drogo"})
+MATCH p=allShortestPaths((catelyn)-[INTERACTS*]-(drogo))
+RETURN p
+----
+
+
+== Pivotal Nodes
+
+A node is said to be pivotal if it lies on all shortest paths between two other nodes in the network. We can find all pivotal nodes in the network.
+
+.Source: https://www.cs.cornell.edu/home/kleinber/networks-book/[Networks, Crowds, Markets]
+
+[source,cypher]
+----
+// Find all pivotal nodes in network
+MATCH (a:Character), (b:Character)
+MATCH p=allShortestPaths((a)-[:INTERACTS*]-(b)) WITH collect(p) AS paths, a, b
+MATCH (c:Character) WHERE all(x IN paths WHERE c IN nodes(x)) AND NOT c IN [a,b]
+RETURN a.name, b.name, c.name AS PivotalNode SKIP 490 LIMIT 10
+----
+
+
+[source,cypher]
+----
+MATCH (a:Character {name: "Drogo"}), (b:Character {name: "Ramsay"})
+MATCH p=allShortestPaths((a)-[:INTERACTS*]-(b))
+RETURN p
+----
+
+== Centrality measures
+
+In graph theory and network analysis, indicators of centrality identify the most important vertices within a graph. Applications include identifying the most influential person(s) in a social network, key infrastructure nodes in the Internet or urban networks, and super-spreaders of disease.
+
+=== Degree Centrality
+
+[source,cypher]
+----
+MATCH (c:Character)
+RETURN c.name AS character, size( (c)-[:INTERACTS]-() ) AS degree ORDER BY degree DESC
+----
+
+=== Weighted Degree Centrality
+
+[source,cypher]
+----
+MATCH (c:Character)-[r:INTERACTS]-()
+RETURN c.name AS character, sum(r.weight) AS weightedDegree ORDER BY weightedDegree DESC
+----
+
+== Apoc Procedures
+
+image::https://dl.dropboxusercontent.com/u/67572426/graph_of_thrones/apoc_proc.png[float=right]
+
+=== User Defined Procedures
+
+User defined procedures are written in Java, deployed to the database and callable from Cypher.
+
+=== https://github.com/neo4j-contrib/neo4j-apoc-procedures[Apoc library]
+
+Library of procedures for many common Neo4j tasks, including graph algorithsm, data import, refactoring, indexing, system monitoring, ...
+
+
+== Betweenness Centrality
+
+The betweenness centrality of a node in a network is the number of shortest paths between two other members in the network on which a given node appears.
+
+Betweenness centality is an important metric because it can be used to identify “brokers of information” in the network or nodes that connect disparate clusters.
+
+image::http://www.lyonwj.com/public/img/betweenness-centrality.png[]
+
+.The red nodes have a high betweenness centrality and are connectors of clusters.
+
+[source,cypher]
+----
+MATCH (c:Character)
+WITH collect(c) AS characters
+CALL apoc.algo.betweenness(['INTERACTS'], characters, 'BOTH') YIELD node, score
+SET node.betweenness = score
+RETURN node.name AS name, score ORDER BY score DESC
+----
+
+== Closeness Centrality
+
+Nodes with high closeness centality are often highly connected within clusters in the graph, but not necessarily highly connected outside of the cluster.
+
+Closeness centrality is the inverse of the average distance to all other characters in the network.
+
+image::http://www.lyonwj.com/public/img/closeness-centrality.png[]
+
+.Nodes with high closeness centrality are connected to many other nodes in a network.
+
+[source,cypher]
+----
+MATCH (c:Character)
+WITH collect(c) AS characters
+CALL apoc.algo.closeness(['INTERACTS'], characters, 'BOTH') YIELD node, score
+RETURN node.name AS name, score ORDER BY score DESC
+----
+
+== Using python igraph
+
+We can use Neo4j with Python data science tools as well...
+
+Continue with this https://github.com/johnymontana/graph-of-thrones/blob/master/network-of-thrones.ipynb[iPython Notebook]
+
+== Visualization
+
+image::http://www.lyonwj.com/public/img/graph-of-thrones.png[]
+
+Generated with https://github.com/johnymontana/neovis.js[neovis.js]

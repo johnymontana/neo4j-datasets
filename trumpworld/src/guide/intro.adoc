@@ -1,0 +1,19 @@
+= Trumpworld
+
+== The Trumpworld Graph
+
+== Graph Data Modeling
+
+This section will cover how to model data as a graph as well as how to import data into Neo4j using `LOAD CSV`.
+
+Let's first identify the tools and concepts we'll be using:
+
+.Neo4j Tools
+
+* *Neo4j Browser* - Neo4j Browser (this web application!) is a query workbench for querying Neo4j and visualizing the results.
+* *Cypher* - Cypher is the query language for graphs used to interact with Neo4j. Cypher is an expressive query language designed for graphs that allows the user to define graph queries defining a traversal.
+* *`LOAD CSV`* - functionality built into Cypher that allows for importing data into Neo4j from CSV / flat files.
+
+Next, let's introduce the dataset we'll be using today.
+
+
