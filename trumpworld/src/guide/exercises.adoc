@@ -1,0 +1,103 @@
+= Exploring tehe TrumpWorld Graph
+
+== Exercises
+
+image::https://raw.githubusercontent.com/legis-graph/legis-graph/master/img/datamodel.png[float=right]
+
+The following slides contain some questions to help guide us as we explore the dataset. Keep in mind the data model to the right as you write the graph patterns necessary to answer the questions.
+
+Consult the http://neo4j.com/docs/stable/cypher-refcard/[Cypher Reference Card] to help find the syntax / commands for constructing your query.
+
+The typical format for writing each query will be:
+
+[source,cypher]
+----
+MATCH ...some graph pattern...
+RETURN ...
+----
+
+== Get familiar with the data... basic lookups
+
+image::https://raw.githubusercontent.com/legis-graph/legis-graph/master/img/datamodel.png[float=right]
+
+=== Looking for exact matches
+
+[source,cypher]
+----
+MATCH (o:Organization) 
+WHERE o.name = 'AFRICA-ISRAEL INVESTMENTS' 
+RETURN o
+----
+
+or a more compact version:
+
+[source,cypher]
+----
+MATCH (o:Organization { name : 'AFRICA-ISRAEL INVESTMENTS' } ) 
+RETURN o
+----
+
+* Try to find the UCLA Hospital
+* Not a person called Scott Walker
+
+
+=== Looking for approximate matches
+
+Legislator name starting with...
+
+[source,cypher]
+----
+MATCH (o:Organization)
+WHERE o.name STARTS WITH "CA"
+RETURN o
+----
+
+you have other approximate match functions: 'ENDS WITH', 'CONTAINS', '~'. Check the Cypher refcard for more.
+Filters can be combined logically with AND & OR
+
+[source,cypher]
+----
+MATCH (x:Person)
+WHERE x.name CONTAINS 'BI' AND ...
+RETURN x
+----
+
+* Find organizations containing the word Mexico in their name
+
+== Get familiar with the data... let's start building graph patterns with Cypher
+
+You can build a pattern incrementally by adding new queries
+
+[source,cypher]
+----
+MATCH (p:Person)
+WHERE p.name CONTAINS "ROSS"
+MATCH (p)-[:DIRECTOR]-(o)
+WHERE o.name CONTAINS "MEXICO"
+RETURN p, o
+----
+
+or compact all patterns first patterns first:
+
+[source,cypher]
+----
+MATCH (p:Person)-[:DIRECTOR]-(o)
+WHERE p.name CONTAINS "ROSS" AND o.name CONTAINS "MEXICO"
+RETURN *
+----
+
+* Find the organizations that have the word Chicago in their name and have DJT as president
+
+
+
+== Explore by Organization
+
+* 
+
+
+
+== Explore by type of relationship
+
+*
+
+====

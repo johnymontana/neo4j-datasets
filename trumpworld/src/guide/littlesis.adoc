@@ -1,0 +1,89 @@
+= Extending The Data Model - LittleSis 
+
+== Extending The Network - LittleSis People and organizations
+
+One of the benefits of the graph data model is the ability to combine datasets and query across them. Next we will look at how we can extend the graph by adding new entities from the LittleSis data set. The model will not change as we will only bring people and organizations.
+
+
+== LittleSis.org
+
+Data can be explored online at https://littlesis.org/lists[littlesis.org] 
+
+image:{img}/littlesis.png[]
+
+== The Data
+
+We are going to use a small portion of the data. You can find them as CSV files at https://github.com/johnymontana/neo4j-datasets/tree/master/trumpworld/data[https://github.com/johnymontana/neo4j-datasets/tree/master/trumpworld/data]
+
+
+== Extending The Datamodel
+
+Load connections between people and organizations
+
+[source,cypher]
+----
+WITH "https://raw.githubusercontent.com/johnymontana/neo4j-datasets/master/trumpworld/data/littlesis-trump-pers.csv" AS url 
+LOAD CSV WITH HEADERS FROM url AS row 
+WITH row WHERE row.relatedEntytyType = 'Org' 
+MATCH (p:Person { name : row.name })  
+MERGE (o:Organization { name : row.relatedEntityName })  
+ON CREATE SET o.source = 'LittleSis'
+WITH p, o, row  
+CALL apoc.create.relationship(p,upper(row.reltype), {source:'LittleSis',reldesc : row.reldesc},o) YIELD rel 
+RETURN COUNT(rel)
+----
+
+Now between people 
+
+[source,cypher]
+----
+WITH "https://raw.githubusercontent.com/johnymontana/neo4j-datasets/master/trumpworld/data/littlesis-trump-pers.csv" AS url 
+LOAD CSV WITH HEADERS FROM url AS row 
+WITH row WHERE row.relatedEntytyType = 'Person' 
+MATCH (p:Person { name : row.name })  
+MERGE (o:Person { name : row.relatedEntityName })  
+ON CREATE SET o.source = 'LittleSis'
+WITH p, o, row  
+CALL apoc.create.relationship(p,upper(row.reltype), {source:'LittleSis',reldesc : row.reldesc},o) YIELD rel 
+RETURN COUNT(rel)
+----
+
+Organizations and people
+
+[source,cypher]
+----
+WITH "https://raw.githubusercontent.com/johnymontana/neo4j-datasets/master/trumpworld/data/littlesis-trump-org.csv" AS url 
+LOAD CSV WITH HEADERS FROM url AS row 
+WITH row WHERE row.relatedEntytyType = 'Person' 
+MATCH (p:Organization { name : row.name })  
+MERGE (o:Person { name : row.relatedEntityName })  
+ON CREATE SET o.source = 'LittleSis'
+WITH p, o, row  
+CALL apoc.create.relationship(p,upper(row.reltype), {source:'LittleSis',reldesc : row.reldesc},o) YIELD rel 
+RETURN COUNT(rel)
+----
+
+
+And finally Organizations 
+
+[source,cypher]
+----
+WITH "https://raw.githubusercontent.com/johnymontana/neo4j-datasets/master/trumpworld/data/littlesis-trump-org.csv" AS url 
+LOAD CSV WITH HEADERS FROM url AS row 
+WITH row WHERE row.relatedEntytyType = 'Org' 
+MATCH (p:Organization { name : row.name })  
+MERGE (o:Organization { name : row.relatedEntityName })  
+ON CREATE SET o.source = 'LittleSis'
+WITH p, o, row  
+CALL apoc.create.relationship(p,upper(row.reltype), {source:'LittleSis',reldesc : row.reldesc},o) YIELD rel 
+RETURN COUNT(rel)
+----
+
+Let's have a quick look at the LittleSis graph:
+
+[source,cypher]
+----
+MATCH (a)-[r {source: 'LittleSis' }]-(b)
+RETURN * 
+LIMIT 500
+----
