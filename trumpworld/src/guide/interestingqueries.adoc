@@ -1,0 +1,37 @@
+= Interesting queries in the TrumpWorld graph
+
+
+== What are the most connected organizations? What about the least?
+
+[source,cypher]
+----
+MATCH (o:Organization)-[r]-()
+RETURN o.name, count(*), collect(distinct type(r)) AS types
+ORDER BY count(*) DESC
+LIMIT 5
+----
+
+== What does people in Trump's network share with other people
+
+[source,cypher]
+----
+MATCH (p:Person) WITH p LIMIT 10
+MATCH (p)-[r1]-(o:Organization)-[r2]-(someoneElse:Person)
+WHERE NOT (p)--(someoneElse) AND p <> someoneElse
+RETURN p.name, someoneElse.name, count(distinct o) AS ct, collect(distinct o.name) AS orgs
+ORDER BY ct desc
+----
+
+== Social Network recommendation style query
+
+[source,cypher]
+----
+MATCH (p:Person) WITH p LIMIT 200
+MATCH (p)-[r1]-(o:Organization)-[r2]-(someoneElse:Person)-[r3]-(otherorg:Organization)
+WHERE NOT (p)--(someoneElse) AND NOT (p)--(otherorg) AND p <> someoneElse AND o <> otherorg
+RETURN p.name, count(distinct someoneElse) AS ct, otherorg.name
+ORDER BY ct desc
+---
+
+
+
