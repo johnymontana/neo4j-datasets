@@ -8,6 +8,7 @@ $GUIDES/run.sh import.adoc import.html +1 "$@"
 $GUIDES/run.sh sna.adoc sna.html +1 "$@"
 $GUIDES/run.sh contracts.adoc contracts.html +1 "$@"
 $GUIDES/run.sh exploratory.adoc exploratory.html +1 "$@"
+$GUIDES/run.sh exercises.adoc exercises.html +1 "$@"
 }
 
 if [ "$1" == "publish" ]; then

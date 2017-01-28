@@ -2,7 +2,7 @@
 
 == Exercises
 
-image::https://raw.githubusercontent.com/legis-graph/legis-graph/master/img/datamodel.png[float=right]
+image::{img}/datamodel.png[float=right]
 
 The following slides contain some questions to help guide us as we explore the dataset. Keep in mind the data model to the right as you write the graph patterns necessary to answer the questions.
 
@@ -18,7 +18,7 @@ RETURN ...
 
 == Get familiar with the data... basic lookups
 
-image::https://raw.githubusercontent.com/legis-graph/legis-graph/master/img/datamodel.png[float=right]
+image::{img}/datamodel.png[float=right]
 
 === Looking for exact matches
 
@@ -92,12 +92,16 @@ RETURN *
 
 == Explore by Organization
 
-* 
-
-
+* Can you find banks in the network?
+* Who are the people connected to these banks?
 
 == Explore by type of relationship
 
-*
+[source,cypher]
+----
+MATCH (p:Person)-[r]-(other)
+WHERE r.connection CONTAINS "Nominee"
+RETURN *
+----
 
-====
+* Find connections about loans? Nominees? 
