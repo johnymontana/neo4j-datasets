@@ -8,6 +8,7 @@ image:https://img.buzzfeed.com/buzzfeed-static/static/2017-01/13/13/asset/buzzfe
 
 . pass:a[<a play-topic='{GUIDES}/intro.html'>Overview: Introducing The Trumpworld Graph and Neo4j</a>]
 . pass:a[<a play-topic='{GUIDES}/import.html'>IMPORT: Loading The Trumpworld Graph</a>]
+. pass:a[<a play-topic='{GUIDES}/interesting.html'>EXPLORE: Interesting Queries</a>]
 . pass:a[<a play-topic='{GUIDES}/exercises.html'>EXERCISE: Trumpworld Graph Query Exercises</a>]
 . pass:a[<a play-topic='{GUIDES}/sna.html'>Network Analysis: Applying Social Network Analysis to Trumpworld</a>]
 . pass:a[<a play-topic='{GUIDES}/contracts.html'>Extending the data: US Government Contracts</a>]
