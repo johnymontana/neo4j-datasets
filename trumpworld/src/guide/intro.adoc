@@ -19,6 +19,8 @@ image::https://img.buzzfeed.com/buzzfeed-static/static/2017-01/13/13/asset/buzzf
 
 The https://www.buzzfeed.com/johntemplon/help-us-map-trumpworld[Buzzfeed article] linked int he tweet points to a Google Spreadsheet with collected and verified/researched data of relationships of Trump organizations to other organizations, in total we have 770 organizations (as of today) with 611 relationships.
 
+There is a great blog post covering modeling, importing, and querying this data in Neo4j https://neo4j.com/blog/buzzfeed-trumpworld-dataset-neo4j/[here].
+
 The data is fortunately available as a public google doc, so we can use our old trick of loading the CSV-Download URL with `LOAD CSV` into Neo4j.
 
 Let's have a look at the data first, here as a sample:
@@ -61,10 +63,20 @@ RETURN row.Connection AS type, count(*)
 ORDER BY count(*) DESC
 ----
 
+== The Labeled Property Graph Model
 
-== Graph Data Modeling
+image::{img}/datamodel.png[]
 
-This section will cover how to model data as a graph as well as how to import data into Neo4j using `LOAD CSV`.
+*How could we model this data as a graph?*
+
+The data model we work with in Neo4j is called the labeled property graph. The main elements of the model are: 
+
+* *Nodes* - these are the entities or objects in the graph.
+* *Labels* - nodes can have one or more labels. Labels define the type or class of the node (such as `Person` or `Organization`)
+* *Relationships* - relationships connect nodes. Relationships have a single type and direction.
+* *Properties* - we can store key-value pair properties on nodes and relationships.
+
+== Working With Neo4j
 
 Let's first identify the tools and concepts we'll be using:
 
