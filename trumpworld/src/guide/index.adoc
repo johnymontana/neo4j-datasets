@@ -12,6 +12,7 @@ image:https://img.buzzfeed.com/buzzfeed-static/static/2017-01/13/13/asset/buzzfe
 . pass:a[<a play-topic='{GUIDES}/exercises.html'>EXERCISE: Trumpworld Graph Query Exercises</a>]
 . pass:a[<a play-topic='{GUIDES}/sna.html'>Network Analysis: Applying Social Network Analysis to Trumpworld</a>]
 . pass:a[<a play-topic='{GUIDES}/contracts.html'>Extending the data: US Government Contracts</a>]
+. pass:a[<a play-topic='{GUIDES}/littlesis.html'>Extending the data: Littlesis</a>]
 . pass:a[<a play-topic='{GUIDES}/exploratory.html'>EXERCISE: Exploratory</a>]
 
 == Further Resources
