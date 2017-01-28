@@ -77,7 +77,7 @@ MATCH (p)-[r1]-(o:Organization)-[r2]-(someoneElse:Person)-[r3]-(otherorg:Organiz
 WHERE NOT (p)--(someoneElse) AND NOT (p)--(otherorg) AND p <> someoneElse AND o <> otherorg
 RETURN p.name, count(distinct someoneElse) AS ct, otherorg.name
 ORDER BY ct desc
----
+----
 
 
 
