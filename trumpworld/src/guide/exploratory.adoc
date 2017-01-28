@@ -24,3 +24,30 @@ RETURN p
 * Combine with related data from littlesis.org, "the involuntary registry of the 1%"
 * Add people involved with the election campaign
 * Add more detailed information on the organizations and their setup (location, leadership, deals), e.g. by querying APIs like OpenCorporates or by integrating with the data from Aleph the OCCRP data portal  
+
+*Can we use centrality algorithms to find "influencers" in the network?*
+
+For example, we can examine the connections of the people with the highest PageRank score in the network:
+
+[source,cypher]
+----
+// Find the first degree connections of the people with the highest PageRank score
+MATCH (c:Person)
+WITH collect(c) AS people
+CALL apoc.algo.pageRank(people) YIELD node, score
+WITH node, score ORDER BY score LIMIT 5
+MATCH p=(node)-[]-()
+RETURN p
+----
+
+*What are areas you're interested in exploring?*
+
+By filtering on names and connection types we can explore the networks around key people and organizations. For example:
+
+[source,cypher]
+----
+// Find the second degree network of Goldman Sachs
+MATCH (o:Organization) WHERE o.name CONTAINS "GOLDMAN SACHS"
+MATCH p=(o)-[*2]-()
+RETURN p
+----

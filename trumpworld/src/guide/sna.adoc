@@ -158,10 +158,11 @@ RETURN node.name AS name, score ORDER BY score DESC
 
 == PageRank
 
-PgeRank is an algorithm originally used by Google to rank the importance of web pages and is a type of eigenvector centrality
+PageRank is an algorithm originally used by Google to rank the importance of web pages and is a type of eigenvector centrality
 
 image:http://www.lyonwj.com/public/img/page-rank.png[]
 
+.Most central Person nodes by PageRank
 [source,cypher]
 ----
 MATCH (c:Person)
@@ -170,3 +171,13 @@ CALL apoc.algo.pageRank(people) YIELD node, score
 RETURN node.name AS name, score ORDER BY score DESC
 ----
 
+.Direct connections of the most central Person nodes, by PageRank
+[source,cypher]
+----
+MATCH (c:Person)
+WITH collect(c) AS people
+CALL apoc.algo.pageRank(people) YIELD node, score
+WITH node, score ORDER BY score LIMIT 5
+MATCH p=(node)-[]-()
+RETURN p
+----
