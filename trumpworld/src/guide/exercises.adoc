@@ -89,6 +89,32 @@ RETURN *
 * Find the organizations that have the word Chicago in their name and have DJT as president
 
 
+== Aggregation, stats...
+
+Number of organizations a person is connected to:
+
+[source,cypher]
+----
+MATCH (n:Person)-[:INVOLVED_WITH]->(o:Organization) 
+RETURN n.name AS personName, COUNT(o) AS orgCount
+ORDER BY orgCount DESC LIMIT 10
+----
+
+* Find the number of board members in organizations ( relationship name is BOARD )
+
+Now we can build more complex queries by 'chaining' them using the WITH clause in Cypher
+
+What's the average/max/min number of organizations a person is connected to:
+
+[source,cypher]
+----
+MATCH (n:Person)-[:INVOLVED_WITH]->(o:Organization) 
+WITH n.name as personName, COUNT(o) AS numberOrgs
+RETURN AVG(numberOrgs) AS averageNumOrgs, MAX(numberOrgs) AS maxNumOrgs, MIN(numberOrgs) AS minNumOrgs
+----
+
+* Can you find organizations that have more than three people connected to them (INVOLVED_WITH relationship)
+
 
 == Explore by Organization
 
