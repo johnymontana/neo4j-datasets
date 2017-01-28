@@ -11,6 +11,52 @@ ORDER BY count(*) DESC
 LIMIT 5
 ----
 
+== Second degree Kushner network
+
+[source,cypher]
+----
+MATCH network = (:Person {name:"JARED KUSHNER"})-[*..2]-()
+RETURN network
+----
+
+
+== What role do banks play in the Trump ecosystem
+
+[source,cypher]
+----
+MATCH (bank:Organization)--(other)
+WHERE bank.name contains "BANK"
+RETURN *
+----
+
+
+== What's the connection between Donald Trump and Vladimir Putin
+
+[source,cypher]
+----
+MATCH (vp:Person {name:"VLADIMIR PUTIN"}),(dt:Person {name:"DONALD J. TRUMP"})
+MATCH path = allShortestPaths( (vp)-[*]-(dt) )
+RETURN path
+----
+
+== Nominees in Trump's cabinet
+
+[source,cypher]
+----
+MATCH (p:Person)-[n:NOMINEE]->()
+RETURN p.name, n.connection
+ORDER BY split(p.name," ")[-1] DESC LIMIT 5
+----
+
+A nominee's graph of influence
+
+[source,cypher]
+----
+MATCH path = (o:Organization)<-[:INVOLVED_WITH]-(p:Person)-[n:NOMINEE]->(djt)
+RETURN path
+----
+
+
 == What does people in Trump's network share with other people
 
 [source,cypher]
