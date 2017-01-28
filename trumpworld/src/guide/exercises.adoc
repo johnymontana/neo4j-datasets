@@ -113,7 +113,8 @@ WITH n.name as personName, COUNT(o) AS numberOrgs
 RETURN AVG(numberOrgs) AS averageNumOrgs, MAX(numberOrgs) AS maxNumOrgs, MIN(numberOrgs) AS minNumOrgs
 ----
 
-* Can you find organizations that have more than three people connected to them (INVOLVED_WITH relationship)
+* Can you find organizations that have more than three people connected to them through the INVOLVED_WITH relationship
+* Build similar queries with other types of relationships and using different limits and try to understand what the results mean
 
 
 == Explore by Organization
