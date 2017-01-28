@@ -1,0 +1,26 @@
+= Exploratory Exercise
+
+== Exploratory Exercise
+
+Given the data and our newly developed graph querying skills, let's spend some time querying the data to find possible interesting stories.
+
+Break into groups, decide on an area of research and query the data to find potential stories. Each group will have the opportunity to present their results.
+
+=== Suggested areas for research
+
+*What can we learn about cabinet appointees and their connections?*
+
+[source,cypher]
+----
+MATCH p=(a)-[r]-(b)
+WHERE r.connection CONTAINS "Nominee"
+RETURN p
+----
+
+*Extending the dataset. What other data sources could we include in the graph to enhance our understanding?*
+
+* Campaign contributions from the FEC
+* Nonprofit and foundation disclosure data
+* Combine with related data from littlesis.org, "the involuntary registry of the 1%"
+* Add people involved with the election campaign
+* Add more detailed information on the organizations and their setup (location, leadership, deals), e.g. by querying APIs like OpenCorporates or by integrating with the data from Aleph the OCCRP data portal  

@@ -1,96 +1,34 @@
-= Graph of Thrones
+= Trumpworld Network Analysis
 :icons: font
-
-== The Graph of Thrones
-
-image::https://dl.dropboxusercontent.com/u/67572426/graph_of_thrones/got_header.png[float=left]
-image::http://www.lyonwj.com/public/img/graphs-are-coming.jpg[float=right]
-//image::https://upload.wikimedia.org/wikipedia/en/2/24/AStormOfSwords.jpg[float=left]
-
-== The Graph of Thrones
-
-image::https://upload.wikimedia.org/wikipedia/en/2/24/AStormOfSwords.jpg[float=right]
-
-=== Analyzing Text
-
-Most of this demo is based on work done by Dr. Andrew Beveridge, based on his "Network of Thrones" research:
-
-https://www.macalester.edu/~abeverid/index.html[Beveridge, Andrew, Shan, Jie. Network of Thrones. Math Horizons Magazine, Vol. 23, No. 4 (2016) pp. 18-22.]
-
-=== Graph of Character Interactions
-
-//image::http://www.lyonwj.com/public/img/got-graph-full.png[float=right]
-
-Build a graph where each character is a node and the relationships represent character interactions.
-
-
-== Graph of Character Interactions
-
-//image::https://upload.wikimedia.org/wikipedia/en/2/24/AStormOfSwords.jpg[]
-image::https://dl.dropboxusercontent.com/u/67572426/graph_of_thrones/char_cooccurence.png[]
-
-== Character cooccurences
-
-[source]
-----
-Source,Target,Weight
-Aemon,Grenn,5
-Aemon,Samwell,31
-Aerys,Jaime,18
-...
-----
-
-
-Source: https://www.macalester.edu/~abeverid/data/stormofswords.csv[Andrew Beveridge]
-
-== Import
-
-[source,cypher]
-----
-CREATE CONSTRAINT ON (c:Character) ASSERT c.name IS UNIQUE;
-----
-
-[source,cypher]
-----
-LOAD CSV WITH HEADERS FROM "https://www.macalester.edu/~abeverid/data/stormofswords.csv" AS row
-MERGE (src:Character {name: row.Source})
-MERGE (tgt:Character {name: row.Target})
-MERGE (src)-[r:INTERACTS]->(tgt)
-ON CREATE SET r.weight = toInt(row.Weight)
-----
-
-== The data model
-
-[source,cypher]
-----
-CALL apoc.meta.graph()
-----
-
-
-== The Graph of Thrones
-
-[source,cypher]
-----
-MATCH p=(:Character)-[:INTERACTS]-(:Character)
-RETURN p
-----
 
 == Analyzing The Network
 
-=== Number of characters
+=== Number of nodes
 
 [source,cypher]
 ----
-MATCH (c:Character) RETURN count(c)
+MATCH (c) RETURN count(c)
+----
+
+.How many people?
+[source,cypher]
+----
+MATCH (p:Person) RETURN count(p);
+----
+
+.How many organizations?
+[source,cypher]
+----
+MATCH (o:Organization) RETURN count(o);
 ----
 
 === Summary statistics
 
 [source, cypher]
 ----
-MATCH (c:Character)-[:INTERACTS]->()
-WITH c, count(*) AS num
-RETURN min(num) AS min, max(num) AS max, avg(num) AS avg_characters, stdev(num) AS stdev
+MATCH (p:Person)-[]-()
+WITH p, COUNT(*) AS num
+RETURN min(num) AS min, max(num) AS max, avg(num) AS avg, stdev(num) AS stdev
 ----
 
 === Diameter of the network
@@ -101,8 +39,8 @@ The diameter (or geodesic) of a network is defined as the longest shortest path 
 ----
 // Find maximum diameter of network
 // maximum shortest path between two nodes
-MATCH (a:Character), (b:Character) WHERE id(a) > id(b)
-MATCH p=shortestPath((a)-[:INTERACTS*]-(b))
+MATCH (a:Person), (b:Person) WHERE id(a) > id(b)
+MATCH p=shortestPath((a)-[*]-(b))
 RETURN length(p) AS len, extract(x IN nodes(p) | x.name) AS path
 ORDER BY len DESC LIMIT 4
 ----
@@ -113,9 +51,9 @@ We can use the shortestPath function in Cypher to find the shortest path between
 
 [source,cypher]
 ----
-// Shortest path from Catelyn Stark to Khal Drogo
-MATCH (catelyn:Character {name: "Catelyn"}), (drogo:Character {name: "Drogo"})
-MATCH p=shortestPath((catelyn)-[INTERACTS*]-(drogo))
+// Shortest path
+MATCH (donald:Person {name: "DONALD J. TRUMP"}), (prince:Person {name: "ERIK PRINCE"})
+MATCH p=shortestPath((donald)-[*]-(prince))
 RETURN p
 ----
 
@@ -125,12 +63,19 @@ There might be other paths of the same length connecting Catelyn and Drogo. We c
 
 [source,cypher]
 ----
-// All shortest paths from Catelyn Stark to Khal Drogo
-MATCH (catelyn:Character {name: "Catelyn"}), (drogo:Character {name: "Drogo"})
-MATCH p=allShortestPaths((catelyn)-[INTERACTS*]-(drogo))
+// All shortest paths
+MATCH (donald:Person {name: "DONALD J. TRUMP"}), (prince:Person {name: "ERIK PRINCE"})
+MATCH p=allShortestPaths((donald)-[*]-(prince))
 RETURN p
 ----
 
+[source,cypher]
+----
+// All shortest paths
+MATCH (donald:Person {name: "ERIK PRINCE"}), (prince:Person {name: "VLADIMIR PUTIN"})
+MATCH p=allShortestPaths((donald)-[*]-(prince))
+RETURN p
+----
 
 == Pivotal Nodes
 
@@ -140,18 +85,17 @@ A node is said to be pivotal if it lies on all shortest paths between two other 
 
 [source,cypher]
 ----
-// Find all pivotal nodes in network
-MATCH (a:Character), (b:Character)
-MATCH p=allShortestPaths((a)-[:INTERACTS*]-(b)) WITH collect(p) AS paths, a, b
-MATCH (c:Character) WHERE all(x IN paths WHERE c IN nodes(x)) AND NOT c IN [a,b]
-RETURN a.name, b.name, c.name AS PivotalNode SKIP 490 LIMIT 10
+MATCH (a:Person), (b:Person)
+MATCH p=allShortestPaths((a)-[*]-(b)) WITH collect(p) AS paths, a, b
+MATCH (c:Person) WHERE all(x IN paths WHERE c IN nodes(x)) AND NOT c IN [a,b]
+RETURN a.name, b.name, c.name AS PivotalNode LIMIT 10
 ----
 
 
 [source,cypher]
 ----
-MATCH (a:Character {name: "Drogo"}), (b:Character {name: "Ramsay"})
-MATCH p=allShortestPaths((a)-[:INTERACTS*]-(b))
+MATCH (a:Person {name: "DOUGLAS DURBANO"}), (b:Person {name: "JOSHUA KUSHNER"})
+MATCH p=allShortestPaths((a)-[*]-(b))
 RETURN p
 ----
 
@@ -161,32 +105,19 @@ In graph theory and network analysis, indicators of centrality identify the most
 
 === Degree Centrality
 
+.Person degree centrality
 [source,cypher]
 ----
-MATCH (c:Character)
-RETURN c.name AS character, size( (c)-[:INTERACTS]-() ) AS degree ORDER BY degree DESC
+MATCH (c:Person)
+RETURN c.name AS person, size( (c)-[]-() ) AS degree ORDER BY degree DESC LIMIT 100
 ----
 
-=== Weighted Degree Centrality
-
+.Organization degree centrality
 [source,cypher]
 ----
-MATCH (c:Character)-[r:INTERACTS]-()
-RETURN c.name AS character, sum(r.weight) AS weightedDegree ORDER BY weightedDegree DESC
+MATCH (o:Organization)
+RETURN o.name AS org, size( (o)-[]-() ) AS degree ORDER BY degree DESC LIMIT 25
 ----
-
-== Apoc Procedures
-
-image::https://dl.dropboxusercontent.com/u/67572426/graph_of_thrones/apoc_proc.png[float=right]
-
-=== User Defined Procedures
-
-User defined procedures are written in Java, deployed to the database and callable from Cypher.
-
-=== https://github.com/neo4j-contrib/neo4j-apoc-procedures[Apoc library]
-
-Library of procedures for many common Neo4j tasks, including graph algorithsm, data import, refactoring, indexing, system monitoring, ...
-
 
 == Betweenness Centrality
 
@@ -200,10 +131,10 @@ image::http://www.lyonwj.com/public/img/betweenness-centrality.png[]
 
 [source,cypher]
 ----
-MATCH (c:Character)
-WITH collect(c) AS characters
-CALL apoc.algo.betweenness(['INTERACTS'], characters, 'BOTH') YIELD node, score
-SET node.betweenness = score
+MATCH (c:Person)
+WITH collect(c) AS people
+CALL apoc.algo.betweenness([], people, 'OUTGOING') YIELD node, score
+//SET node.betweenness = score
 RETURN node.name AS name, score ORDER BY score DESC
 ----
 
@@ -219,20 +150,23 @@ image::http://www.lyonwj.com/public/img/closeness-centrality.png[]
 
 [source,cypher]
 ----
-MATCH (c:Character)
-WITH collect(c) AS characters
-CALL apoc.algo.closeness(['INTERACTS'], characters, 'BOTH') YIELD node, score
+MATCH (c:Person)
+WITH collect(c) AS people
+CALL apoc.algo.closeness([], people, 'OUTGOING') YIELD node, score
 RETURN node.name AS name, score ORDER BY score DESC
 ----
 
-== Using python igraph
+== PageRank
 
-We can use Neo4j with Python data science tools as well...
+PgeRank is an algorithm originally used by Google to rank the importance of web pages and is a type of eigenvector centrality
 
-Continue with this https://github.com/johnymontana/graph-of-thrones/blob/master/network-of-thrones.ipynb[iPython Notebook]
+image:http://www.lyonwj.com/public/img/page-rank.png[]
 
-== Visualization
+[source,cypher]
+----
+MATCH (c:Person)
+WITH collect(c) AS people
+CALL apoc.algo.pageRank(people) YIELD node, score
+RETURN node.name AS name, score ORDER BY score DESC
+----
 
-image::http://www.lyonwj.com/public/img/graph-of-thrones.png[]
-
-Generated with https://github.com/johnymontana/neovis.js[neovis.js]
