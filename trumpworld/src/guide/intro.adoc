@@ -1,6 +1,66 @@
 = Trumpworld
+:org_org_url: 'https://docs.google.com/spreadsheets/u/1/d/1Z5Vo5pbvxKJ5XpfALZXvCzW26Cl4we3OaN73K9Ae5Ss/export?format=csv&gid=634968401'
+:person_org_url: 'https://docs.google.com/spreadsheets/u/1/d/1Z5Vo5pbvxKJ5XpfALZXvCzW26Cl4we3OaN73K9Ae5Ss/export?format=csv&gid=1368567920'
+:person_person_url: 'https://docs.google.com/spreadsheets/u/1/d/1Z5Vo5pbvxKJ5XpfALZXvCzW26Cl4we3OaN73K9Ae5Ss/export?format=csv&gid=905294723'
 
 == The Trumpworld Graph
+
+As part of the Buzzfeed article https://www.buzzfeed.com/johntemplon/help-us-map-trumpworld?utm_term=.kd5QM0z1q#.ekLzoZ316[Help Us Map TrumpWorld], the four investigative journalists, John Templon, Alex Campbell, Anthony Cormier, and Jeremy Singer-Vine asked the public to help them map and analyze the data that they investigated, confirmed and published:
+
+
+____
+Now we are asking the public to use our data to find connections we may have missed, and to give us context we don’t currently understand. 
+We hope you will help us — and the public — learn more about TrumpWorld and how this unprecedented array of businesses might affect public policy.
+____
+
+image::https://img.buzzfeed.com/buzzfeed-static/static/2017-01/13/13/asset/buzzfeed-prod-fastlane-01/sub-buzz-31493-1484333437-1.jpg?no-auto[]
+
+== Looking at the Data
+
+The https://www.buzzfeed.com/johntemplon/help-us-map-trumpworld[Buzzfeed article] linked int he tweet points to a Google Spreadsheet with collected and verified/researched data of relationships of Trump organizations to other organizations, in total we have 770 organizations (as of today) with 611 relationships.
+
+The data is fortunately available as a public google doc, so we can use our old trick of loading the CSV-Download URL with `LOAD CSV` into Neo4j.
+
+Let's have a look at the data first, here as a sample:
+
+[source,cypher,subs=attributes]
+----
+WITH 
+{org_org_url} AS url
+LOAD CSV WITH HEADERS FROM url AS row
+RETURN row.`Organization A`,row.`Organization B`,row.Connection, row.`Source(s)`
+LIMIT 5
+----
+
+== Most Connected Organizations
+
+The most frequently mentioned organizations found by this query:
+
+[source,cypher,subs=attributes]
+----
+WITH 
+{org_org_url} AS url
+LOAD CSV FROM url AS row
+WITH row
+UNWIND  row[0..1] AS org
+RETURN org, count(*)
+ORDER BY count(*) DESC LIMIT 10
+----
+
+== What kind of connections exist in the data?
+
+What kind of relationships exist in the data:
+
+
+[source,cypher,subs=attributes]
+----
+WITH 
+{org_org_url} AS url
+LOAD CSV WITH HEADERS FROM url AS row
+RETURN row.Connection AS type, count(*)
+ORDER BY count(*) DESC
+----
+
 
 == Graph Data Modeling
 

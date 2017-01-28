@@ -1,0 +1,129 @@
+= Extending The Data - US Government Contracts
+
+== Extending The Network - US Government Contracts
+
+One of the benefits of the graph data model is the ability to combine datasets and query across them. Next we will look at how we can add data on recipients of US Government contracts.
+
+
+== USASpending.gov
+
+Data on recipients of federal government contracts are available online, at https://www.usaspending.gov/Pages/Default.aspx[USASpending.gov] 
+
+image:{img}/usaspending.png[]
+
+== The Data
+
+
+We may need to reference the https://www.usaspending.gov/DownloadCenter/Documents/USAspending.govDownloadsDataDictionary.pdf[data dictionary for USASpending.gov].
+
+== Extending The Datamodel
+
+
+== The Datamodel
+
+How might we model this contract data as a graph? Consider this example:
+
+.Contract data model
+image:{img}/contract_datamodel.png[
+"Contract data model",width=500,
+link="{img}/datamodel.png"]
+
+The entities we want to model are `Organization`, `Contract`, and government `Agency`. 
+
+Note that we have an overlap on `Organization`, which allows us to combine these two datasets and query across them.
+
+== Loading The Data
+
+We can use `LOAD CSV` again with Cypher to load data from USASpending:
+
+[source,cypher]
+----
+LOAD CSV WITH HEADERS FROM "file:///2016_All_Contracts_Full_20170115.csv" AS row 
+WITH row LIMIT 10
+RETURN row;
+----
+
+== `MATCH`ing On Trumpworld Organizations
+
+We only want to import contracts where the vendor is an organization in the graph. We can do this by filtering on rows that match an existing organization in the graph:
+
+[source,cypher]
+----
+LOAD CSV WITH HEADERS FROM "file:///2016_All_Contracts_Full_20170115.csv" AS row 
+WITH row LIMIT 500000
+MATCH (o:Organization) WHERE o.name = row.vendorname
+RETURN COUNT(*)
+----
+
+We can see that we've found 436 contracts awarded to organizations found in Trumpworld. Note that we're only searching the first 500,000 contracts, so there are almost certainly more overlapping contracts to be found.
+
+== Importing The Data
+
+Now we can add the data to the graph:
+
+[source,cypher]
+----
+LOAD CSV WITH HEADERS FROM "file:///2016_All_Contracts_Full_20170115.csv" AS row 
+WITH row LIMIT 500000
+MATCH (o:Organization) WHERE o.name = row.vendorname
+MERGE (a:Agency {name: substring(row.mod_agency, 5)})
+MERGE (c:Contract {piid: row.piid})
+SET c.amount = toFloat(row.dollarsobligated),
+    c.description = row.descriptionofcontractrequirement,
+    c.date = row.ultimatecompletiondate
+MERGE (a)-[:ISSUED_CONTRACT]->(c)
+MERGE (c)<-[:AWARDED_CONTRACT]-(o)
+----
+
+== Querying Agencies
+
+What government agencies are involved in the data?
+
+[source,cypher]
+----
+MATCH (n:Agency) RETURN n
+----
+
+== What Organizations have received contracts?
+
+.Find organizations with contracts, order by number of contracts awarded
+[source,cypher]
+----
+MATCH (n:Agency)-[:ISSUED_CONTRACT]->(c:Contract)<-[:AWARDED_CONTRACT]-(o:Organization)
+RETURN o, COUNT(*) AS num ORDER BY num DESC
+----
+
+.Find organizations with contracts, order by dollar amount of contracts
+[source,cypher]
+----
+MATCH (n:Agency)-[:ISSUED_CONTRACT]->(c:Contract)<-[:AWARDED_CONTRACT]-(o:Organization)
+RETURN o, SUM(c.amount) AS total ORDER BY total DESC
+----
+
+== Connections to Trump
+
+For theese organizations, what are their connections to Trump?
+
+Let's pick one of the top organizations receiving government contracts with connections to Trumpworld and find the connections to Trump:
+
+.Shortest path connecting Donald Trump to Centerra Group, LLC
+[source,cypher]
+----
+MATCH (p:Person) WHERE p.name CONTAINS "DONALD J. TRUMP"
+MATCH (o:Organization {name: "CENTERRA GROUP, LLC"})
+MATCH path=shortestPath((p)-[*]-(o))
+RETURN path
+----
+
+
+== Direct Connections
+
+.Are there any direct connections from Trump to Organizations receiving government contracts?
+[source,cypher]
+----
+MATCH (p:Person) WHERE p.name CONTAINS "DONALD J. TRUMP"
+MATCH (p)-[]-(o:Organization)-[:AWARDED_CONTRACT]->(c:Contract),
+      (c)<-[:ISSUED_CONTRACT]-(a:Agency)
+RETURN *
+----
+

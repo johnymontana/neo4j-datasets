@@ -4,9 +4,12 @@
 
 == Exploring The Trumpworld Graph
 
-. pass:a[<a play-topic='{GUIDES}/import.html'>IMPORT: Loading The Trumpworld Graph</a>]
+image:https://img.buzzfeed.com/buzzfeed-static/static/2017-01/13/13/asset/buzzfeed-prod-fastlane-01/sub-buzz-31493-1484333437-1.jpg?no-auto[pull=right]
+
 . pass:a[<a play-topic='{GUIDES}/intro.html'>Overview: Introducing The Trumpworld Graph and Neo4j</a>]
+. pass:a[<a play-topic='{GUIDES}/import.html'>IMPORT: Loading The Trumpworld Graph</a>]
 . pass:a[<a play-topic='{GUIDES}/sna.html'>Network Analysis: Applying Social Network Analysis to Trumpworld</a>]
+. pass:a[<a play-topic='{GUIDES}/contracts.html'>Extending the data: US Government Contracts</a>]
 
 == Further Resources
 

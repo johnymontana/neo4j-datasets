@@ -1,4 +1,7 @@
 = Importing The Trumpworld Graph
+:org_org_url: 'https://docs.google.com/spreadsheets/u/1/d/1Z5Vo5pbvxKJ5XpfALZXvCzW26Cl4we3OaN73K9Ae5Ss/export?format=csv&gid=634968401'
+:person_org_url: 'https://docs.google.com/spreadsheets/u/1/d/1Z5Vo5pbvxKJ5XpfALZXvCzW26Cl4we3OaN73K9Ae5Ss/export?format=csv&gid=1368567920'
+:person_person_url: 'https://docs.google.com/spreadsheets/u/1/d/1Z5Vo5pbvxKJ5XpfALZXvCzW26Cl4we3OaN73K9Ae5Ss/export?format=csv&gid=905294723'
 
 == Importing The Trumpworld Graph
 
@@ -24,8 +27,344 @@ link="{img}/datamodel.png"
 
 == LOAD CSV Import Script
 
-.Importing Trumpworld
+We want to map those relationship types to fewer, more distinct ones.
+
+== Cleaning Relationship-Types
+
 [source,cypher,subs=attributes]
 ----
-LOAD CSV ...
+WITH 
+{org_org_url} AS url, 
+['LOAN','LOBBIED','SALE','SUPPLIER','SHAREHOLDER','LICENSES','AFFILIATED','TIES','NEGOTIATION','INVOLVED','PARTNER'] AS terms
+LOAD CSV WITH HEADERS FROM url AS row
+WITH apoc.text.regreplace(toUpper(row.Connection),'\\W+','_') AS type, row, terms
+WITH head(filter(term IN terms WHERE type CONTAINS term)) AS found, type, row
+RETURN coalesce(found,type) AS type, count(*), collect(distinct row.Connection) AS connections
+ORDER BY count(*) DESC
 ----
+
+//table
+
+ifndef::env-graphgist[]
+----
+╒══════════════════════════╤══════════╤════════════════════════════════════════════════════════════════════════════════════════════════════╕
+│"type"                    │"count(*)"│"connections"                                                                                       │
+╞══════════════════════════╪══════════╪════════════════════════════════════════════════════════════════════════════════════════════════════╡
+│"OWNERSHIP"               │309       │["Ownership"]                                                                                       │
+├──────────────────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"INVESTOR"                │90        │["Investor"]                                                                                        │
+├──────────────────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"OWNS_COLLATERALIZED_DEBT"│54        │["Owns collateralized debt"]                                                                        │
+├──────────────────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"SUBSIDIARY"              │41        │["Subsidiary"]                                                                                      │
+├──────────────────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"NKA_FKA"                 │28        │["NKA/FKA"]                                                                                         │
+├──────────────────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"PARTNER"                 │19        │["Anbang would become one of the equity partners in the [666 Fifth Avenue] redevelopment if an agree│
+│                          │          │ment is finalized, per New York Times","Real-estate partner","Partners on Trump Hotel Rio de Janeiro│
+│                          │          │","Partners on The Apprentice, Seasons 1–13","Partners on The Apprentice, Seasons 15–","Partnership"│
+│                          │          │,"Partnership on Trump Tower Century City","Business partnership","Partners on Trump Towers Pune","d│
+│                          │          │evelopment partner in India, per New York Times","Partners on The Apprentice, Season 14"]           │
+├──────────────────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"DBA"                     │16        │["DBA"]                                                                                             │
+├──────────────────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"LOAN"                    │15        │["Loaned money","Loan","springing loan","Term loan and mortgage"]                                   │
+├──────────────────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"BOUGHT_BUILDING"         │3         │["Bought building"]                                                                                 │
+├──────────────────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"LICENSES"                │3         │["Licenses \"Trump\" name for Trump Tower Punta del Este","Licenses \"Trump\" name for Trump Towers │
+│                          │          │Rio"]                                                                                               │
+├──────────────────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+....
+├──────────────────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"ACQUIRED"                │1         │["Acquired"]                                                                                        │
+├──────────────────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"BUSINESS_RELATIONSHIP"   │1         │["Business relationship"]                                                                           │
+└──────────────────────────┴──────────┴────────────────────────────────────────────────────────────────────────────────────────────────────┘
+----
+endif::env-graphgist[]
+
+This looks much better now, so that we can start importing the data.
+
+== Import Organization Relationships
+
+Setting up an constraint on organzation.
+
+//setup
+[source,cypher]
+----
+CREATE CONSTRAINT ON (o:Organization) ASSERT o.name IS UNIQUE;
+----
+
+Most of the work here is clearing up the relationship-type:
+
+//setup
+[source,cypher,subs=attributes]
+----
+WITH
+{org_org_url} AS url, 
+['LOAN','LOBBIED','SALE','SUPPLIER','SHAREHOLDER','LICENSES','AFFILIATED','TIES','NEGOTIATION','INVOLVED','PARTNER'] AS terms
+LOAD CSV WITH HEADERS FROM url AS row
+
+WITH apoc.text.regreplace(toUpper(row.Connection),'\\W+','_') AS type, row, terms
+WITH coalesce(head(filter(term IN terms WHERE type CONTAINS term)), type) AS type, row
+
+MERGE (o1:Organization {name:row.`Organization A`})
+MERGE (o2:Organization {name:row.`Organization B`})
+WITH o1,o2,type,row
+CALL apoc.create.relationship(o1,type, {source:row.`Source(s)`, connection:row.Connection},o2) YIELD rel
+RETURN type(rel), count(*) 
+ORDER BY count(*) desc
+----
+
+This statement creates 770 nodes, 611 relationships with 33 different types.
+
+// Added 770 labels, created 770 nodes, set 770 properties, returned 33 records in 1609 ms.
+
+Which looks like this:
+
+image::https://dl.dropboxusercontent.com/u/14493611/trumpworld.jpg[]
+
+Now we could enrich the graph by also labeling organizations, e.g. AS "Trump", "Bank".
+
+//setup
+[source,cypher,subs=attributes]
+----
+MATCH (o:Organization)
+WHERE o.name CONTAINS "BANK" SET o:Bank
+----
+
+We find 8 banks (there are certainly more).
+
+
+//setup
+[source,cypher,subs=attributes]
+----
+MATCH (o:Organization)
+WHERE o.name CONTAINS "HOTEL" SET o:Hotel
+----
+
+We find 30 hotels (there are certainly more).
+
+
+//setup
+[source,cypher,subs=attributes]
+----
+MATCH (o:Organization)
+WHERE any(term in ["TRUMP","DT","DJT"] WHERE o.name CONTAINS (term + " ")) 
+SET o:Trump
+----
+
+We find 333 "Trump" organizations (there are certainly more).
+
+There should be more labeling, but we leave that for later.
+
+== Query Organizations
+
+Now we can start running some queries:
+
+E.g. what relationships do banks have to which other organizations in our dataset:
+
+[source,cypher]
+----
+MATCH (n:Bank)--(o) RETURN *
+----
+
+Which YIELDs this interesting graph:
+
+//graph_result
+
+ifndef::env-graphgist[]
+image::https://dl.dropboxusercontent.com/u/14493611/trump-banks.png[]
+endif::env-graphgist[]
+
+
+== Import Person Organization Relationships
+
+[source,cypher,subs=attributes]
+----
+WITH 
+{person_org_url} AS url
+LOAD CSV WITH HEADERS FROM url AS row
+RETURN row.Organization,row.Person,row.Connection, row.`Source(s)`
+LIMIT 5
+----
+
+[source,cypher,subs=attributes]
+----
+WITH 
+{person_org_url} AS url
+LOAD CSV WITH HEADERS FROM url AS row
+RETURN row.Connection AS type, count(*)
+ORDER BY count(*) DESC LIMIT 5
+----
+
+Here we have 212 different relationship-types.
+
+[source,cypher,subs=attributes]
+----
+WITH 
+{person_org_url} AS url,
+['BOARD','DIRECTOR','INCOME','PRESIDENT','CHAIR','CEO','PARTNER','OWNER','INVESTOR','FOUNDER','STAFF','DEVELOPER','EXECUTIVE_COMITTEE','EXECUTIVE','FELLOW','BANKER','COUNSEL','ADVISOR','SHAREHOLDER','LIASON','SPEECH','CONNECTED','HIRED','CONSULTED','INVOLVED','APPOINTEE','MANAGER','TRUSTEE','AMBASSADOR','PUBLISHER','LAWYER'] AS terms
+LOAD CSV WITH HEADERS FROM url AS row
+WITH apoc.text.regreplace(toUpper(row.Connection),'\\W+','_') AS type, row, terms
+WITH head(filter(term IN terms WHERE type CONTAINS term)) AS found, type, row
+RETURN coalesce(found,type) AS type, count(*), collect(distinct row.Connection) AS connections
+ORDER BY count(*) DESC
+----
+
+We got it down to 92, a slight improvement.
+
+ifndef::env-graphgist[]
+----
+╒═══════════╤══════════╤════════════════════════════════════════════════════════════════════════════════════════════════════╕
+│"type"     │"count(*)"│"connections"                                                                                       │
+╞═══════════╪══════════╪════════════════════════════════════════════════════════════════════════════════════════════════════╡
+│"PRESIDENT"│519       │["President","Former president","President and CEO","Founder and president","Former vice president",│
+...
+├───────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"DIRECTOR" │120       │["Director","Non-executive director","Executive Director of Global Branding and Networking","Managin│
+...
+├───────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"BOARD"    │75        │["Investor / board member","Board observer","Board member","Advisory board member","Member, board of│
+...
+├───────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"MEMBER"   │74        │["Member"]                                                                                          │
+├───────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"CHAIR"    │61        │["Chairman","Chairwoman","Former chairwoman","Member and former chairman","Vice chairman","Former ex│
+...
+├───────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"PARTNER"  │33        │["Business partner","Founder and partner","Former partner","Partner","Business partners","Former man│
+│           │          │aging partner","Associate / partner","General Partner"]                                             │
+├───────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"INVESTOR" │31        │["Investor","Indirect investor","Founding investor"]                                                │
+├───────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"FOUNDER"  │30        │["Founder","Co-founder","Founder of company that helped build Trump Soho, per Financial Times"]     │
+├───────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"TRUSTEE"  │21        │["Trustee","Honorary trustee","Former trustee","Honorary member, Council of Trustees"]              │
+├───────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"OWNER"    │16        │["Owner","Ownership stake","Former co-owner","Former owner/operator","Former owner","Co-owner"]     │
+...
+----
+endif::env-graphgist[]
+
+For the import we will this time turn all non-matched ones into `INVOLVED_WITH` and put the detail into a `connection` property.
+
+
+//setup
+[source,cypher,subs=attributes]
+----
+CREATE CONSTRAINT ON (p:Person) ASSERT p.name IS UNIQUE;
+----
+
+//setup
+[source,cypher,subs=attributes]
+----
+WITH 
+{person_org_url} AS url, 
+['BOARD','DIRECTOR','INCOME','PRESIDENT','CHAIR','CEO','PARTNER','OWNER','INVESTOR','FOUNDER','STAFF','DEVELOPER','EXECUTIVE_COMITTEE','EXECUTIVE','FELLOW','BANKER','COUNSEL','ADVISOR','SHAREHOLDER','LIASON','SPEECH','CONNECTED','HIRED','CONSULTED','INVOLVED','APPOINTEE','MANAGER','TRUSTEE','AMBASSADOR','PUBLISHER','LAWYER'] AS terms
+LOAD CSV WITH HEADERS FROM url AS row
+
+WITH apoc.text.regreplace(toUpper(row.Connection),'\\W+','_') AS type, row, terms
+WITH coalesce(head(filter(term IN terms WHERE type CONTAINS term)), 'INVOLVED_WITH') AS type, row
+
+MERGE (o:Organization {name:row.Organization})
+MERGE (p:Person {name:row.Person})
+WITH o,p,type,row
+CALL apoc.create.relationship(p,type, {source:row.`Source(s)`, connection:row.Connection},o) YIELD rel
+RETURN type(rel), count(*) 
+ORDER BY count(*) desc
+----
+
+This created 700 new nodes, and 1139 relationships.
+
+== Import Person-Person Relationships
+
+
+[source,cypher,subs=attributes]
+----
+WITH 
+{person_person_url} AS url, 
+['WHITE_HOUSE','REPRESENTATIVE','FRIEND','DIRECTOR','ADVISOR','WORKED','MET','LUNCHED','NOMINEE','COUNSELOR','AIDED','CAMPAIGN','PARTNER','MARRIED','CLOSE','APPEARANCE','BOUGHT','SAT_IN','CONSULTED','CO_CHAIR','GAVE'] AS terms
+LOAD CSV WITH HEADERS FROM url AS row
+WITH apoc.text.regreplace(toUpper(row.Connection),'\\W+','_') AS type, row, terms
+WITH head(filter(term IN terms WHERE type CONTAINS term)) AS found, type, row
+RETURN coalesce(found,type) AS type, count(*), collect(distinct row.Connection) AS connections
+ORDER BY count(*) DESC
+----
+
+//table
+
+ifndef::env-graphgist[]
+----
+╒══════════════╤══════════╤════════════════════════════════════════════════════════════════════════════════════════════════════╕
+│"type"        │"count(*)"│"connections"                                                                                       │
+╞══════════════╪══════════╪════════════════════════════════════════════════════════════════════════════════════════════════════╡
+│"NOMINEE"     │15        │["Nominee for Secretary of Labor","Nominee for Secretary of HUD","Nominee for Secretary of Education│
+...
+│              │          │uman Services","Nominee for Secretary of Commerce"]                                                 │
+├──────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"MARRIED"     │11        │["Married","Married. (Zhuo is the granddaughter of Deng Xiaoping, the former leader of the People's │
+│              │          │Republic of China. Wu is the chairman of the Anbang Insurance Group, which has been in business disc│
+│              │          │ussions with the Kushners.)"]                                                                       │
+├──────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"FRIEND"      │10        │["The billionaire real estate developer says he befriended Trump, and also has served as a liaison b│
+...
+│              │          │end\"","Awarded Order of Friendship"]                                                               │
+├──────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"PARTNER"     │10        │["Trump’s primary partner for his lucrative business in Canada, per Newsweek","Business partners","T│
+│              │          │old Russian buyers he was a partner in Trump project in Sunny Isles, Fla.","Partnered with Kushner i│
+│              │          │n Brooklyn projects","business partner of the Kushners, per New York Magazine"]                     │
+├──────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"ADVISOR"     │7         │["Policy advisor and counsel on nominations","Domestic policy advisor","Deputy National Security Adv│
+│              │          │isor","National Security Advisor","Senior Advisor to the President for Policy","Homeland Security Ad│
+│              │          │visor","Privatization advisor when Giuliani was mayor"]                                             │
+├──────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"DIRECTOR"    │7         │["Policy director for Walker's campaign","Christie and Wildstein went to high school together, and C│
+...
+│              │          │A","Nominee for Director of Office of Management and Budget","Assistant to the President and Directo│
+│              │          │r of Communications for the Office of Public Liaison"]                                              │
+├──────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"PARENT_CHILD"│6         │["Parent/child"]                                                                                    │
+├──────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"MET"         │5         │["Erdogan, the president of Turkey and a vocal Trump supporter, met him during the ribbon-cutting of│
+│              │          │ a Trump property","Met in 2006, when Zaika was head of the Ukrainian Construction Consortium","Met │
+│              │          │in 2006, when Tkachuk was an adviser to the Ukrainian president"]                                   │
+├──────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"WHITE_HOUSE" │5         │["White House Counsel","White House Counselor","White House Chief of Staff","White House Press Secre│
+│              │          │tary","White House Chief Strategist and Senior Advisor"]                                            │
+├──────────────┼──────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│"WORKED"      │4         │["Worked together on deal to turn around debts of Carl's Jr. founder, which was a major success in P│
+│              │          │uzder's career","has long worked with Kushner, per New York Magazine","Mnuchin worked for Soros' fun│
+│              │          │d","Worked on 2008 presidential campaign"]                                                          │
+...
+----
+endif::env-graphgist[]
+
+//setup
+[source,cypher,subs=attributes]
+----
+WITH 
+{person_person_url} AS url, 
+['WHITE_HOUSE','REPRESENTATIVE','FRIEND','DIRECTOR','ADVISOR','WORKED','MET','LUNCHED','NOMINEE','COUNSELOR','AIDED','CAMPAIGN','PARTNER','MARRIED','CLOSE','APPEARANCE','BOUGHT','SAT_IN','CONSULTED','CO_CHAIR','GAVE'] AS terms
+LOAD CSV WITH HEADERS FROM url AS row
+
+WITH apoc.text.regreplace(toUpper(row.Connection),'\\W+','_') AS type, row, terms
+WITH coalesce(head(filter(term IN terms WHERE type CONTAINS term)), type) AS type, row
+
+MERGE (p1:Person {name:row.`Person A`})
+MERGE (p2:Person {name:row.`Person B`})
+WITH p1,p2,type,row
+CALL apoc.create.relationship(p2,type, {source:row.`Source(s)`, connection:row.Connection},p1) YIELD rel
+RETURN type(rel), count(*) 
+ORDER BY count(*) desc
+----
+
+This created 44 new nodes, and 107 relationships.
+
+Now we have all data of the https://docs.google.com/spreadsheets/d/1Z5Vo5pbvxKJ5XpfALZXvCzW26Cl4we3OaN73K9Ae5Ss/edit#gid=1368567920[Buzzfeed spreadsheet] imported and can start asking some interesting questions.
+
+This is what TrumpWorld looks like.
+
+image::https://dl.dropboxusercontent.com/u/14493611/trumpworld-full-annotated.jpg[]
+
