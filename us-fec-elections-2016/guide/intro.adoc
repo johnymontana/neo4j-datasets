@@ -1,0 +1,267 @@
+= NICAR 2017
+
+== Campaign Finance Data With Neo4j
+++++
+<div class="col-lg-4 ng-scope">
+++++
+
+
+=== The Property Graph Model
+The data model of graph databases is called the labeled property graph model.
+
+*Nodes*: The entities in the data.
+
+*Labels*: Each node can have one or more *label* that specifies the type of the node.
+
+*Relationships*: Connect two nodes. They have a single direction and type.
+
+*Properties*: Key-value pair properties can be stored on both nodes and relationships.
+
+Inspect the existing "schema" using this statement:
+
+[source,cypher]
+----
+CALL db.schema
+----
+
+++++
+</div>
+++++
+
+++++
+<div class="col-lg-8 ng-scope">
+++++
+
+[subs=attributes]
+++++
+<img src="{img}/datamodel.png" class="img-responsive">
+++++
+
+++++
+<div class="col-lg-4 ng-scope">
+++++
+
+=== Nodes
+
+`Contributor`, `Employer`, `Occupation`, `State`, `FECCommittee`, `Candidate`, `Organization`, `Contribution` are the labels used in this example.
+
+++++
+</div>
+++++
+
+++++
+<div class="col-lg-4 ng-scope">
+++++
+
+=== Relationships
+
+`WORKS_FOR`, `MADE_CONTRIBUTION`, `FUNDS`, `CONNECTED_ORG` are some of the relationships used in this example.
+
+++++
+</div>
+++++
+
+++++
+<div class="col-lg-4 ng-scope">
+++++
+
+=== Properties
+
+`fecID`, `amount`, `code`, `party` are some of the properties used in this example.
+
+++++
+</div>
+++++
+
+
+++++
+</div>
+++++
+
+== Intro To Cypher
+
+In order to work with our labeled property graph, we need a query language for graphs.
+
+
+++++
+<div class="col-lg-3 ng-scope">
+++++
+=== Graph Patterns
+
+Cypher is the query language for graphs and is centered around *graph patterns*. Graph patterns are expressed in Cypher using ASCII-art like syntax.
+
+*Nodes*
+
+Nodes are defined within parentheses `()`. Optionally, we can specify node label(s): `(:Contribution)`
+
+*Relationships*
+
+Relationships are defined within square brackets `[]`. Optionally we can specify type and direction:
+
+`(:Contribution)**+-[:MADE_TO]->+**(:FECCommittee)`
+
+*Aliases*
+
+Graph elements can be bound to aliases that can be referred to later in the query:
+
+`(**con**:Contribution)+-[**r**:MADE_TO]->+(**c**:FECCommittee)`
+
+=== Predicates
+
+Filters can be applied to these graph patterns to limit the matching paths. Boolean logic operators, regular expressions and string comparison operators can be used here.
+
+=== Aggregations
+
+There is an implicit group when using aggregation functions such as `COUNT`.
+
+Be sure to use the link:https://neo4j.com/docs/cypher-refcard/current/?ref=browser-guide[Cypher Refcard] as a reference for learning Cypher syntax.
+
+
+++++
+</div>
+++++
+
+++++
+<div class="col-lg-9 ng-scope">
+++++
+
+=== Dissecting a Cypher Statement
+Let's look at a Cypher query that answers the question "What are the total amount of contributions to presidential campaign committtees by political party?". Don't worry if this seems complex, we'll build up our understanding of Cypher as we move along.
+
+.What are the total amount of contributions to presidential campaign committees by political party? Click on the block to put the query in the top-most window on the query editor. Hit the triangular icon:play-circle[] button or press kbd:[Ctrl+Enter] to run it and see the resulting visualization.
+
+
+
+[source,cypher]
+----
+MATCH (con:Contribution)-[:MADE_TO]->(c:FECCommittee)
+WHERE c.committee_type = "P"
+WITH c.committee_party AS party, SUM(con.amount) AS total
+RETURN party, total
+ORDER BY total DESC
+LIMIT 10;
+----
+
+[width=100,cols="1,3,2"]
+|===
+| find      | `+MATCH (con:Contribution)-[:MADE_TO]->(c:FECCommittee)+`         | Search for an existing graph pattern
+| filter    | `WHERE c.committee_type = "P"`                                    | Filter matching paths to only those matching a predicate
+| aggregate | `WITH c.committee_party AS party, SUM(con.amount) AS total`       | Count total contribution amounts, grouped by party
+| return    | `RETURN party, total`                                             | Specify columns to be returned by the statement
+| order     | `ORDER BY total DESC`                                             | Order by number of reviews, in descending order
+| limit     | `LIMIT 10;`                                                       | Only return first 10 records
+|===
+
+
+
+++++
+</div>
+++++
+
+
+== Querying with Cypher
+
+Remember that querying with Cypher is all about pattern matching. Define the graph pattern your want to find using Cypher's ASCII-art like syntax. Let's start with a simple pattern.
+
+.Find the Mayday PAC
+[source,cypher]
+----
+MATCH (c:FECCommittee) 
+WHERE c.name CONTAINS "MAYDAY"
+RETURN c
+----
+
+We can define more complex graph patterns to match against:
+
+.Find a single contribution made to MAYDAY PAC
+[source,cypher]
+----
+MATCH (c:FECCommittee)<-[:MADE_TO]-(con:Contribution)<-[:MADE_CONTRIBUTION]-(person:Contributor)
+WHERE c.name CONTAINS "MAYDAY"
+RETURN * LIMIT 1
+----
+
+We can use multiple `MATCH` statements to build up a query, referring to any aliases we've defined along the way:
+
+[source,cypher]
+----
+MATCH (c:FECCommittee)<-[:MADE_TO]-(con:Contribution)<-[:MADE_CONTRIBUTION]-(person:Contributor)
+WHERE c.name CONTAINS "MAYDAY"
+MATCH (person)-[:WORKS_FOR]->(e:Employer)
+MATCH (o:Occupation)<-[:HAS_OCCUPATION]-(person)-[:LIVES_IN]->(s:State)
+RETURN * LIMIT 1
+----
+
+== Using Aggregations
+
+So far we've been filtering on just one **path**, however we often want to use aggregations to answer the questions we're interested in:
+
+.What are the most common employers of those who donate to the MAYDAY PAC?
+[source,cypher]
+----
+MATCH (c:FECCommittee)<-[:MADE_TO]-(con:Contribution)<-[:MADE_CONTRIBUTION]-(person:Contributor)
+WHERE c.name CONTAINS "MAYDAY"
+MATCH (person)-[:WORKS_FOR]->(e:Employer)
+MATCH (o:Occupation)<-[:HAS_OCCUPATION]-(person)-[:LIVES_IN]->(s:State)
+WITH e.name AS company, SUM(con.amount) AS total
+RETURN company, total ORDER BY total DESC LIMIT 25
+----
+
+.For those who contribute to MAYDAY PAC, what other FEC Committees do they give money to?
+[source,cypher]
+----
+MATCH (c:FECCommittee)<-[:MADE_TO]-(con:Contribution)<-[:MADE_CONTRIBUTION]-(person:Contributor)
+WHERE c.name CONTAINS "MAYDAY"
+MATCH (person)-[:MADE_CONTRIBUTION]->(:Contribution)-[:MADE_TO]->(c2:FECCommittee)
+RETURN c2.name, COUNT(*) AS num
+ORDER BY num DESC LIMIT 25
+----
+
+== Contributions for a certain occupation by party
+
+[source,cypher]
+----
+// FEC - Contributions for a certain occupation by party
+MATCH (o:Occupation) WHERE o.name CONTAINS "JOURNALIST"
+MATCH (o)-[:HAS_OCCUPATION]-(con:Contributor)-[:MADE_CONTRIBUTION]->(cont:Contribution)-[:MADE_TO]->(com:FECCommittee)-[:FUNDS]->(cand:Candidate)
+RETURN sum(cont.amount) AS total, cand.party ORDER BY total DESC
+----
+
+== What companies' empoyees made the most contributions?
+
+[source,cypher]
+----
+// FEC - What companies' employees made most contributions
+MATCH (e:Employer)<-[:WORKS_FOR]-(:Contributor)-[:MADE_CONTRIBUTION]-(cont:Contribution)
+WITH sum(cont.amount) AS total, e
+RETURN e.name, total ORDER BY total DESC LIMIT 100
+----
+
+.What FEC committees received contributions from employee's of a specific company?
+[source,cypher]
+----
+MATCH (e:Employer) WHERE e.name CONTAINS "TRUMP"
+MATCH (e)<-[:WORKS_FOR]-(person:Contributor)-[:MADE_CONTRIBUTION]->(c:Contribution)-[:MADE_TO]->(com:FECCommittee)
+RETURN com.name, SUM(c.amount) AS total ORDER BY total DESC LIMIT 50
+----
+
+.Who works for a Trump organization but donated to Clinton's campaign?
+[source,cypher]
+----
+MATCH (e:Employer) WHERE e.name CONTAINS "TRUMP"
+MATCH (e)<-[:WORKS_FOR]-(person:Contributor)-[:MADE_CONTRIBUTION]->(c:Contribution)-[:MADE_TO]->(com:FECCommittee)
+WHERE com.name CONTAINS "HILLARY"
+RETURN *
+----
+
+== Contributions to Trump's campaign committee by state
+
+[source,cypher]
+----
+MATCH (trump:Candidate)<-[:FUNDS]-(com:FECCommittee)<-[:MADE_TO]-(c:Contribution)<-[:MADE_CONTRIBUTION]-(:Contributor)-[:LIVES_IN]->(s:State)
+WHERE trump.name CONTAINS "TRUMP, DONALD J." AND com.committee_type = "P"
+WITH s.code AS state, SUM(c.amount) AS total
+RETURN state, total
+ORDER BY total DESC
+LIMIT 25
+----

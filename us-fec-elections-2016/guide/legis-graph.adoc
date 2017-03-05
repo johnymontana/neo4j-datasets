@@ -1,0 +1,282 @@
+= Legis-graph - Importing US Congress into a graph
+//:csv-url: https://dl.dropboxusercontent.com/u/67572426/
+:csv-url: file:///
+
+
+== The Data Model
+
+++++
+<div class="col-lg-6 ng-scope">
+++++
+This guide will walk us through importing data from govtrack.us into Neo4j. We'll build the graph model to the right. As we go through we'll learn about `LOAD CSV` functionality to import data into Neo4j from CSV files, how to define schema constraints and a bit about graph data modeling.
+
+Let's get started!
+
+++++
+</div>
+++++
+
+++++
+<div class="col-lg-6 ng-scope">
+++++
+
+++++
+<img src="https://raw.githubusercontent.com/legis-graph/legis-graph/master/img/datamodel.png" class="img-responsive">
+++++
+
+++++
+</div>
+++++
+
+== Importing Legislators
+
+We'll start by importing legislators. Let's first examine the data that we have available:
+
+[source,cypher,subs=attributes]
+----
+LOAD CSV WITH HEADERS
+FROM '{csv-url}legislators-current.csv' AS row
+RETURN row LIMIT 10;
+----
+
+When we run this query we're loading data from a CSV file, using the headers in the CSV file to define key-value pairs for each row and returing the resulting map/dictionary for the first 10 rows in the file.
+
+The standard approach when using `LOAD CSV` to import data is:
+
+. Create constraints
+. Create nodes
+. Create relationships
+
+Looking at the data from the previous query we can make a few observations:
+
+. We have a list of FEC identifiers for each legislator, `fecIDs`
+. We also have the congressional body to which they were elected (Senate, House)
+. We have the State they represent
+. We have a number of other properties for each legislator (religion, party, birthday, etc)
+
+How should we model this data? Let's consider:
+
+. What nodes should be create?
+. What are the relationships?
+. What are the properties we want to store?
+. Do we have any unique ids? How should we treat these differently from other properties?
+
+== Import Legislators - Schema Constraints
+
+Based on the concepts we discussed previously, lets use this data model:
+
+image::http://guides.neo4j.com/legisgraph/img/lg-datamodel1.png[]
+
+We have three node labels here, each with a property that uniquely identifies that node.
+
+//First we need to create uniqueness constraints for each label, property pair:
+//
+//[source,cypher]
+//----
+//CREATE CONSTRAINT ON (l:Legislator) ASSERT l.thomasID IS UNIQUE;
+//
+//----
+//
+//[source,cypher]
+//----
+//CREATE CONSTRAINT ON (s:State) ASSERT s.code IS UNIQUE;
+//----
+//
+//[source,cypher]
+//----
+//CREATE CONSTRAINT ON (b:Body) ASSERT b.type IS UNIQUE;
+//----
+
+
+//We can verify we've created the correct constraints / indexes by inspecting the schema in the browser:
+//
+//[source,cypher]
+//----
+//:schema
+//----
+
+== Import Legislators - LOAD CSV
+
+We'll use `LOAD CSV` now to lookup our existing `Candidate` nodes by fecID, adding the properties from the `legislator-current` file and the lable `Legislator` to the `Candidate` nodes:
+
+[source,cypher,subs=attributes]
+----
+LOAD CSV WITH HEADERS
+FROM 'file:///legislators-current.csv' AS row
+
+MATCH (c:Candidate) WHERE row.fecIDs CONTAINS c.fecID
+SET c += row
+SET c:Legislator
+RETURN c
+----
+
+We can verify that we've created our `Legislator` nodes:
+
+[source,cypher]
+----
+MATCH (l:Legislator) RETURN l;
+----
+
+We still need to create our `State`, `Body`, and `Party` nodes. We can do this by iterating through the CSV file one more time:
+
+[source,cypher,subs=attributes]
+----
+LOAD CSV WITH HEADERS
+FROM '{csv-url}legislators-current.csv' AS row
+MATCH (l:Legislator {thomasID: row.thomasID})
+MERGE (s:State {code: row.state})
+CREATE UNIQUE (l)-[:REPRESENTS]->(s)
+MERGE (p:Party {name: row.currentParty})
+CREATE UNIQUE (l)-[:IS_MEMBER_OF]->(p)
+MERGE (b:Body {type: row.type})
+CREATE UNIQUE (l)-[:ELECTED_TO]->(b);
+----
+
+== Import Bills
+
+We also have information about every bill proposed during this congressional session:
+
+[source,cypher,subs=attributes]
+----
+LOAD CSV WITH HEADERS
+FROM '{csv-url}bills.csv' AS row
+RETURN row LIMIT 10
+----
+
+We'll use the `billID` property to uniquely identify bills:
+
+image::http://guides.neo4j.com/legisgraph/img/lg-bill.png[]
+
+First we extend our schema by defining a uniqueness constraint:
+
+[source,cypher]
+----
+CREATE CONSTRAINT ON (b:Bill) ASSERT b.billID IS UNIQUE;
+----
+
+Let's add these bills to the dataset:
+
+[source,cypher,subs=attributes]
+----
+USING PERIODIC COMMIT
+LOAD CSV WITH HEADERS
+FROM '{csv-url}bills.csv' AS row
+MERGE (b:Bill {billID: row.billID})
+ON CREATE SET b = row
+----
+
+Note that we used a new Cypher keyword above, `USING PERIODIC COMMIT`. Adding this keyword allows us to commit our import in batches of several transactions, increasing performance and reducing the memory footprint of the overall import. You can read more about periodic commit here.
+
+
+== Subjects
+
+Next we'll add subjects to our data model:
+
+image::http://guides.neo4j.com/legisgraph/img/lg-subject.png[]
+
+
+Each bill can have one or more subjects:
+
+
+[source, cypher,subs=attributes]
+----
+LOAD CSV WITH HEADERS
+FROM '{csv-url}subjects.csv' AS row
+RETURN row LIMIT 10;
+----
+
+Again, we create a uniqueness constraint:
+
+[source,cypher]
+----
+CREATE CONSTRAINT ON (s:Subject) ASSERT s.title IS UNIQUE;
+----
+
+[source,cypher,subs=attributes]
+----
+LOAD CSV WITH HEADERS
+FROM '{csv-url}subjects.csv' AS row
+MERGE (s:Subject {title: row.title})
+----
+
+== Connecting Bills and Subjects
+
+image::http://guides.neo4j.com/legisgraph/img/lg-dealswith.png[]
+
+Now we'll connect Bills to the Subjects that they deal with.
+
+[source,cypher,subs=attributes]
+----
+USING PERIODIC COMMIT
+LOAD CSV WITH HEADERS
+FROM '{csv-url}bill_subjects.csv' AS row
+MATCH (bill:Bill { billID: row.billID }), (subject:Subject { title: row.title })
+MERGE (bill)-[r:DEALS_WITH]->(subject);
+----
+
+
+== Bill Sponsorships
+
+image::http://guides.neo4j.com/legisgraph/img/lg-sponsoredby.png[]
+
+[source,cypher]
+----
+CREATE INDEX ON :Legislator(bioguideID);
+----
+
+
+[source,cypher,subs=attributes]
+----
+USING PERIODIC COMMIT 10000
+LOAD CSV WITH HEADERS
+FROM 'file:///sponsors.csv' AS row
+
+MATCH (bill:Bill { billID: row.billID }), (legislator:Legislator { bioguideID: row.bioguideID })
+MERGE (bill)-[r:SPONSORED_BY]->(legislator)
+    ON CREATE SET r.cosponsor = CASE WHEN row.cosponsor = "0" THEN False ELSE True END ;
+----
+
+== Committees
+
+In the final step we'll add Committees and connect `Committee` nodes to bills if the bill was referred to that committee and to legislators if they serve on that committee:
+
+
+
+image::http://guides.neo4j.com/legisgraph/img/lg-committee.png[]
+
+Note that committees have a `thomasID` property that uniquely identifies them. So we'll create a constraint on this property:
+
+[source,cypher,subs=attributes]
+----
+CREATE CONSTRAINT ON (c:Committee) ASSERT c.thomasID IS UNIQUE;
+----
+
+[source,cypher,subs=attributes]
+----
+// Create Committee nodes
+LOAD CSV WITH HEADERS
+FROM '{csv-url}committees-current.csv' AS row
+MERGE (c:Committee {thomasID: row.thomasID})
+  ON CREATE SET c = row;
+----
+
+[source,cyper,subs=attributes]
+----
+// Connect bills to committees
+LOAD CSV WITH HEADERS
+FROM '{csv-url}bill_committees.csv' AS row
+MATCH (b:Bill {billID: row.billID})
+MATCH (c:Committee {thomasID: row.committeeID})
+MERGE (b)-[:REFERRED_TO]->(c);
+----
+
+[source,cypher,subs=attributes]
+----
+LOAD CSV WITH HEADERS
+FROM 'file:///committee-members.csv' AS row
+MATCH (c:Committee {thomasID: row.committeeID})
+MATCH (l:Legislator {bioguideID: row.legislatorID})
+CREATE UNIQUE (l)-[r:SERVES_ON]->(c)
+SET r.rank = toInt(row.rank);
+----
+

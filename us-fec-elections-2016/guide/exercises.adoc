@@ -1,0 +1,118 @@
+= Interesting queries / exercises
+
+== Interesting queries / exercises
+
+* What organizations are connected to multiple FEC Committees?
+* What candidates are funded by the most FEC Committees?
+* What candidates share FEC Committees (inferred connections)?
+* The biggest givers in your community?
+* Where is your lawmaker getting her money?
+* Who are the tech firms giving money to?
+* Who donated to both winners and losers for a position?
+* Florida specific PACs. Oranges anyone?
+* Examine a profile around a PAC (Lessig's Mayday PAC)
+
+== Where is your lawmaker getting her money?
+
+An aside, we can use link:http://legis-graph.github.io/legis-graph-spatial/[legis-graph spatial] to find lawmakers by district.
+
+Note that we haven't imported "Contributions to candidates from committees" filings, so we are limited to individual contributors.
+
+[source,cypher]
+----
+MATCH (cand:Candidate)
+WHERE cand.name ...
+MATCH ...
+WITH ...
+RETURN lawmaker, contributor, total
+ORDER BY total DESC LIMIT 50
+----
+
+== What organiations are connected to multiple FEC Committees?
+
+[source,cypher]
+---- 
+// What organizations are connected to multiple FEC Committees?
+MATCH (n:Organization) WHERE size((n)--()) > 1
+RETURN n, size((n)--()) AS pacs ORDER BY pacs DESC LIMIT 100;
+----
+
+== What candidates have the most FECCommittees?
+
+[source,cypher]
+----
+MATCH (c:Candidate)<-[:FUNDS]-(com:FECCommittee)
+WITH ...
+RETURN ...
+ORDER BY ...
+LIMIT ...
+----
+
+
+== What candidates share FECCommittees (inferred connection)?
+
+[source,cypher]
+----
+MATCH (c1:Candidate)<-[:FUNDS]-(com:FECCommittee)-[:FUNDS]->(c2:Candidate)
+WITH ...
+RETURN ...
+ORDER BY ...
+LIMIT ...
+----
+
+== The biggest givers in your community
+
+[source,cypher]
+----
+MATCH (person:Contributor) 
+WHERE person.zip_code CONTAINS "59802"
+MATCH ...
+WITH ...
+RETURN ...
+ORDER BY ...
+LIMIT ...
+----
+
+
+== Who are tech firms giving money to?
+
+[source,cypher]
+----
+
+----
+
+// FROM IRE TIPSHEET:
+
+// The biggest givers in your community. Search the FEC database by state, locality, or zip code. Add totals per person (people appear several versions of same name)
+
+
+// Where is your lawmaker getting his or her money from? Download indiv contributors then sort by state or locality.
+
+// Committee assignments. Which industries give the most money to your lawmakers. Don't be surprised if those industries are the ones affected by legislation moving through the committee your lawmaker sits on.
+
+// Industry: who are the tech firms giving money to? Google, Apple, Facebook?
+
+// Switching sides. Who donated to both winners and losers for a positon.
+
+
+// Local PACs. PAC contributions from industries in your area.
+// Dive into Florida specific. Agriculture, real estate, oranges (search pac names for "Organge", geriatiric healthcare / nursing home industry (what are the keywords), what are retired people donating to?
+
+
+// Votes. On a controversial issue, find out how much money your lawmakers received from the main lobbying groups. Don't be surprised if there's a correlation between money and votes.
+
+// Interest groups. When a major issues comes to the forefont, see if PAC contributions to your lawmakers have started to increase.
+
+// No PACs. Several lawmakers have refused to take contributions from PACs. Download their most generous individual contributors. Many of them represent the same interests that the PACs do.
+
+== Examine a profile around a PAC
+
+What about contributions around Lessig's PAC?
+* Can we build a "profile" for this PAC? (job title / employer / location, etc) - compare to other DEM committes, how is Mayday different?
+* Of the people who donate to MayDay PAC, what other campaign do they donate to?
+
+[source,cypher]
+----
+// Larry Lessig's "pac to end all pacs"
+MATCH (n:FECCommittee) WHERE n.name CONTAINS "MAYDAY" RETURN n
+----
