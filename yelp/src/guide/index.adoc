@@ -1,0 +1,39 @@
+= NICAR 2017
+:csv-url: file:///
+:GUIDES: http://localhost:8001/nicar2017
+
+== Finding Insights in Campaign Finance Data With Graphs
+
+++++
+<div class="col-lg-4 ng-scope">
+++++
+
+++++
+<img src="http://ire.org/media/uploads/images/conferences/ire17/ire17_logo.jpg" class="img-responsive">
+++++
+
+
+++++
+</div>
+++++
+
+
+++++
+<div class="col-lg-8 ng-scope">
+++++
+
+. pass:a[<a play-topic='{GUIDES}/intro.html'>Overview: FEC Campaign Finance Data and Neo4j</a>]
+. pass:a[<a play-topic='{GUIDES}/exercises.html'>EXERCISE: Answering Interesting Questions</a>]
+. pass:a[<a play-topic='{GUIDES}/legisgraph.html'>IMPORT: Adding US Congress Data</a>]
+
+++++
+</div>
+++++
+
+== Further Resources
+
+* http://neo4j.com/graphgists[Graph Gist Examples]
+* http://neo4j.com/docs/stable/cypher-refcard/[Cypher Reference Card]
+* http://neo4j.com/docs/developer-manual/current/#cypher-query-lang[Neo4j Developer Manual]
+* http://neo4j.com/developer/resources#_neo4j_cypher_resources[Cypher Resource Collection]
+* http://graphdatabases.com[e-book: Graph Databases (free)]
