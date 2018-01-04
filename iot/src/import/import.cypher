@@ -28,4 +28,4 @@ FOREACH (_ IN CASE WHEN row.City IS NOT NULL AND row.Country IS NOT NULL THEN [1
 FOREACH (_ IN CASE WHEN row.Country IS NOT NULL AND row.City IS NULL THEN [1] ELSE [] END |
     MERGE (country:Country {name: row.Country})
     MERGE (ip)-[:IN_COUNTRY]->(country)
-)
+);
