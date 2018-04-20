@@ -155,13 +155,13 @@ ON MATCH SET l.count = coalesce(l.count, 0) + 1
 // Location hierarchy
 MERGE (n:Neighborhood {neighborhood_id: coalesce(row.neighbourhood_cleansed, "NA")})
 SET n.name = row.neighbourhood
-MERGE (c:City {citystate: row.city + "-" + row.state})
+MERGE (c:City {citystate: coalesce(row.city + "-" + row.state, "NA")})
 ON CREATE SET c.name = row.city
 MERGE (l)-[:IN_NEIGHBORHOOD]->(n)
 MERGE (n)-[:LOCATED_IN]->(c)
-MERGE (s:State {code: row.state})
+MERGE (s:State {code: coalesce(row.state, "NA")})
 MERGE (c)-[:IN_STATE]->(s)
-MERGE (country:Country {code: row.country_code})
+MERGE (country:Country {code: coalesce(row.country_code, "NA")})
 SET country.name = row.country
 MERGE (s)-[:IN_COUNTRY]->(country)
 
