@@ -29,6 +29,7 @@ MATCH (u:User {user_id: "2011754"})-[:WROTE]->(r:Review)
 RETURN *
 ----
 
+* **EXERCISE:** For these listings, what are the most common amenities?
 
 == Personalized Recommendations
 
@@ -76,5 +77,6 @@ Of course these are only the most basic of recommendation queries, we can enhanc
 
 Let's take a few minutes to write some queries. Try to answer the following questions:
 
+* What are the most popular neighborhoods?
+* What hosts list more than one listing?
 * What amenities occur together most frequently?
-

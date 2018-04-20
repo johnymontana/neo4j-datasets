@@ -44,6 +44,10 @@
     
 
 
+   <h4>Interesting Queries</h4>
+   
+
+
 <slide class="row-fluid">
   <div class="col-sm-12">
     <h3>Explore the data</h3>
@@ -75,6 +79,13 @@ RETURN u.name, u.user_id, num ORDER BY num DESC LIMIT 100<!--/code--></pre>
 <pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (u:User {user_id: "2011754"})-[:WROTE]-&gt;(r:Review)
 RETURN *<!--/code--></pre>
 </div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>EXERCISE:</strong> For these listings, what are the most common amenities?</p>
+</li>
+</ul>
 </div>
 	</div>
   </div>
@@ -148,6 +159,12 @@ RETURN rec, COUNT(*) AS score ORDER BY score DESC LIMIT 10<!--/code--></pre>
 </div>
 <div class="ulist">
 <ul>
+<li>
+<p>What are the most popular neighborhoods?</p>
+</li>
+<li>
+<p>What hosts list more than one listing?</p>
+</li>
 <li>
 <p>What amenities occur together most frequently?</p>
 </li>

@@ -44,6 +44,10 @@
     
 
 
+   <h4>Data Modeling And Import</h4>
+   
+
+
 <slide class="row-fluid">
   <div class="col-sm-12">
     <h3>Graph Data Modeling</h3>
@@ -83,12 +87,13 @@
     <h3>Short term housing rental data</h3>
     <br/>
     <div>
-      <div class="paragraph">
-<div class="title">Inside Airbnb</div>
-<p><span class="image"><a class="image" href="//insideairbnb.com"><img src="http://guides.neo4j.com/listings/file/img/inside_airbnb.png" alt="Inside Airbnb" width="500"></a></span></p>
+      <div class="col-lg-6"
+<img src="http://guides.neo4j.com/listings/img/inside_airbnb.png" class="img-responsive">
 </div>
+<div class="col-lg-6">
 <div class="paragraph">
-<p>Inside Airbnb has collected data on listings, hosts and reviews. We will use this data as an example to see how we can model and import data into Neo4j. We will learn the Cypher query language</p>
+<p>Inside Airbnb has collected data on listings, hosts and reviews. We will use this data as an example to see how we can model and import data into Neo4j. Along the way We will learn the Cypher query language.</p>
+</div>
 </div>
 	</div>
   </div>
@@ -101,10 +106,7 @@
     <h3>The Datamodel</h3>
     <br/>
     <div>
-      <div class="paragraph">
-<div class="title">Listings, reviews, hosts</div>
-<p><span class="image"><a class="image" href="http://guides.neo4j.com/listings/file/img/datamodel.png"><img src="http://guides.neo4j.com/listings/file/img/datamodel.png" alt="Listings datamodel"></a></span></p>
-</div>
+      <img src="http://guides.neo4j.com/listings/img/datamodel.png" class="img-responsive">
 <div class="paragraph">
 <p>This is the full data model that we will build out using data from Inside Airbnb.</p>
 </div>
@@ -119,12 +121,12 @@
     <h3>The Labeled Property Graph Model</h3>
     <br/>
     <div>
-      <div class="paragraph">
-<p>Neo4j implements the labeled property graph data model. The components of the labeled property graph model are:</p>
+      <div class="col-lg-6">
+<img src="http://guides.neo4j.com/listings/img/lpg.png" class="img-responsive">
 </div>
+<div class="col-lg-6">
 <div class="paragraph">
-<div class="title">The Labeled Property Graph Model</div>
-<p><span class="image"><img src="http://guides.neo4j.com/listings/file/img/lpg.png" alt="lpg"></span></p>
+<p>Neo4j implements the labeled property graph data model. The components of the labeled property graph model are:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -138,6 +140,7 @@
 <p><strong>Properties</strong> - Key-values pairs stored on either Nodes or Relationships</p>
 </li>
 </ul>
+</div>
 </div>
 	</div>
   </div>
@@ -169,7 +172,8 @@ SET l.name  = "Spacious 2 bedroom",
 CREATE (a1:Amenity {name: "wifi"})
 CREATE (a2:Amenity {name: "hot tub"})
 CREATE (l)-[:HAS]-&gt;(a1)
-CREATE (l)-[:HAS]-&gt;(a2);<!--/code--></pre>
+CREATE (l)-[:HAS]-&gt;(a2)
+RETURN *;<!--/code--></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -235,19 +239,17 @@ DETACH DELETE a;<!--/code--></pre>
 <div class="listingblock">
 <div class="title">Examine CSV file data, but don&#8217;t create any data</div>
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->LOAD CSV WITH HEADERS FROM "file:///listings.csv" AS row
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->LOAD CSV WITH HEADERS FROM "http://guides.neo4j.com/listings/data/listings.csv" AS row
 RETURN row LIMIT 10<!--/code--></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>We see that by specifying <code>WITH HEADERS</code>, the <code>row</code> object becomes a map (or dictionary). <code>LOAD CSV</code> will allow us to iterate over each row in the file, creating data for each row. Let&#8217;s start by importing listings, amenities, and neighborhoods:</p>
 </div>
-<div class="paragraph">
-<p><span class="image"><img src="http://guides.neo4j.com/listings/file/img/datamodel1.png" alt="datamodel1"></span></p>
-</div>
+<img src="http://guides.neo4j.com/listings/img/datamodel1.png" class="img-responsive">
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->LOAD CSV WITH HEADERS FROM "file:///listings.csv" AS row
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->LOAD CSV WITH HEADERS FROM "http://guides.neo4j.com/listings/data/listings.csv" AS row
 WITH row WHERE row.id IS NOT NULL
 CREATE (l:Listing {listing_id: row.id})
 SET l.name = row.name,
@@ -255,7 +257,7 @@ SET l.name = row.name,
     l.weekly_price = toFloat(substring(row.weekly_price, 1)),
     l.cleaning_fee = toFloat(substring(row.cleaning_fee, 1)),
     l.property_type = row.property_type,
-    l.accomodates = toInt(row.accomodates),
+    l.accommodates = toInt(row.accommodates),
     l.bedrooms = toInt(row.bedrooms),
     l.bathrooms = toInt(row.bathrooms),
     l.availabiliity_365 = toInt(row.availability_365)<!--/code--></pre>
@@ -290,9 +292,7 @@ SET l.name = row.name,
       <div class="paragraph">
 <p>Remember that this is the model we want to create initially:</p>
 </div>
-<div class="paragraph">
-<p><span class="image"><img src="http://guides.neo4j.com/listings/file/img/datamodel1.png" alt="datamodel1"></span></p>
-</div>
+<img src="http://guides.neo4j.com/listings/img/datamodel1.png" class="img-responsive">
 <div class="paragraph">
 <p>We&#8217;re missing amenities and neighborhoods so let&#8217;s add those.</p>
 </div>
@@ -314,7 +314,7 @@ SET l.name = row.name,
 <div class="listingblock">
 <div class="title">Add Amenity nodes, and relationships connecting them to the listings</div>
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->LOAD CSV WITH HEADERS FROM "file:///listings.csv" AS row
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->LOAD CSV WITH HEADERS FROM "http://guides.neo4j.com/listings/data/listings.csv" AS row
 WITH row WHERE row.id IS NOT NULL
 MATCH (l:Listing {listing_id: row.id})
 WITH l, split(replace(replace(replace(row.amenities, "{", ""), "}", ""), "\"", ""), ",") AS amenities
@@ -341,7 +341,7 @@ MERGE (l)-[:HAS]->(a);<!--/code--></pre>
 <div class="listingblock">
 <div class="title">Add Neighborhood nodes</div>
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->LOAD CSV WITH HEADERS FROM "file:///listings.csv" AS row
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->LOAD CSV WITH HEADERS FROM "http://guides.neo4j.com/listings/data/listings.csv" AS row
 WITH row WHERE row.id IS NOT NULL
 MATCH (l:Listing {listing_id: row.id})
 MERGE (n:Neighborhood {neighborhood_id: coalesce(row.neighbourhood_cleansed, "NA")})
@@ -360,9 +360,7 @@ MERGE (l)-[:IN_NEIGHBORHOOD]->(n);<!--/code--></pre>
     <h3>Host</h3>
     <br/>
     <div>
-      <div class="paragraph">
-<p><span class="image"><img src="http://guides.neo4j.com/listings/file/img/datamodel2.png" alt="datamodel2"></span></p>
-</div>
+      <img src="http://guides.neo4j.com/listings/img/datamodel2.png" class="img-responsive">
 <div class="listingblock">
 <div class="content">
 <pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CREATE CONSTRAINT ON (h:Host) ASSERT h.host_id IS UNIQUE;<!--/code--></pre>
@@ -370,7 +368,7 @@ MERGE (l)-[:IN_NEIGHBORHOOD]->(n);<!--/code--></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->LOAD CSV WITH HEADERS FROM "file:///listings.csv" AS row
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->LOAD CSV WITH HEADERS FROM "http://guides.neo4j.com/listings/data/listings.csv" AS row
 WITH row WHERE row.host_id IS NOT NULL
 MERGE (h:Host {host_id: row.host_id})
 ON CREATE SET h.name      = row.host_name,
@@ -394,9 +392,7 @@ MERGE (h)-[:HOSTS]->(l);<!--/code--></pre>
     <h3>Reviews</h3>
     <br/>
     <div>
-      <div class="paragraph">
-<p><span class="image"><img src="http://guides.neo4j.com/listings/file/img/datamodel_full.png" alt="datamodel full"></span></p>
-</div>
+      <img src="http://guides.neo4j.com/listings/img/datamodel_full.png" class="img-responsive">
 <div class="listingblock">
 <div class="title">Create constraint on User</div>
 <div class="content">
@@ -406,7 +402,7 @@ MERGE (h)-[:HOSTS]->(l);<!--/code--></pre>
 <div class="listingblock">
 <div class="content">
 <pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->USING PERIODIC COMMIT 10000
-LOAD CSV WITH HEADERS FROM "file:///reviews.csv" AS row
+LOAD CSV WITH HEADERS FROM "http://guides.neo4j.com/listings/data/reviews.csv" AS row
 
 // User
 MERGE (u:User {user_id: row.reviewer_id})

@@ -16,33 +16,72 @@ Next, let's introduce the dataset we'll be using today.
 
 == Short term housing rental data
 
-.Inside Airbnb
-image:{img}/inside_airbnb.png[
-"Inside Airbnb",width=500,
-link="//insideairbnb.com"]
+++++
+<div class="col-lg-6"
+++++
 
-Inside Airbnb has collected data on listings, hosts and reviews. We will use this data as an example to see how we can model and import data into Neo4j. We will learn the Cypher query language 
+.Inside Airbnb
+[subs=attributes]
+++++
+<img src="{img}/inside_airbnb.png" class="img-responsive">
+++++
+
+++++
+</div>
+++++
+
+++++
+<div class="col-lg-6">
+++++
+
+Inside Airbnb has collected data on listings, hosts and reviews. We will use this data as an example to see how we can model and import data into Neo4j. Along the way We will learn the Cypher query language.
+
+++++
+</div>
+++++
 
 == The Datamodel
 
 .Listings, reviews, hosts
-image:{img}/datamodel.png[
-"Listings datamodel",
-link="{img}/datamodel.png"
-] 
+[subs=attributes]
+++++
+<img src="{img}/datamodel.png" class="img-responsive">
+++++
 
 This is the full data model that we will build out using data from Inside Airbnb.
 
 == The Labeled Property Graph Model
 
-Neo4j implements the labeled property graph data model. The components of the labeled property graph model are:
+++++
+<div class="col-lg-6">
+++++
+
 
 .The Labeled Property Graph Model
-image:{img}/lpg.png[]
+[subs=attributes]
+++++
+<img src="{img}/lpg.png" class="img-responsive">
+++++
+
+++++
+</div>
+++++
+
+++++
+<div class="col-lg-6">
+++++
+
+Neo4j implements the labeled property graph data model. The components of the labeled property graph model are:
+
+
 
 * *Node* - The node is the entity or object. Each node can have one or more labels.
 * *Relationship* - Relationships connect Nodes in the graph. Each relationship has a single type.
 * *Properties* - Key-values pairs stored on either Nodes or Relationships
+
+++++
+</div>
+++++
 
 == An Introduction to Cypher
 
@@ -102,7 +141,11 @@ RETURN row LIMIT 10
 
 We see that by specifying `WITH HEADERS`, the `row` object becomes a map (or dictionary). `LOAD CSV` will allow us to iterate over each row in the file, creating data for each row. Let's start by importing listings, amenities, and neighborhoods:
 
-image:{img}/datamodel1.png[]
+[subs=attributes]
+++++
+<img src="{img}/datamodel1.png" class="img-responsive">
+++++
+
 
 [source,cypher,subs=attributes]
 ----
@@ -114,7 +157,7 @@ SET l.name = row.name,
     l.weekly_price = toFloat(substring(row.weekly_price, 1)),
     l.cleaning_fee = toFloat(substring(row.cleaning_fee, 1)),
     l.property_type = row.property_type,
-    l.accomodates = toInt(row.accomodates),
+    l.accommodates = toInt(row.accommodates),
     l.bedrooms = toInt(row.bedrooms),
     l.bathrooms = toInt(row.bathrooms),
     l.availabiliity_365 = toInt(row.availability_365)
@@ -138,7 +181,10 @@ CREATE INDEX ON :Listing(listing_id);
 
 Remember that this is the model we want to create initially:
 
-image:{img}/datamodel1.png[]
+[subs=attributes]
+++++
+<img src="{img}/datamodel1.png" class="img-responsive">
+++++
 
 We're missing amenities and neighborhoods so let's add those.
 
@@ -189,7 +235,11 @@ MERGE (l)-[:IN_NEIGHBORHOOD]->(n);
 
 == Host
 
-image:{img}/datamodel2.png[]
+[subs=attributes]
+++++
+<img src="{img}/datamodel2.png" class="img-responsive">
+++++
+
 
 [source,cypher]
 ----
@@ -213,7 +263,11 @@ MERGE (h)-[:HOSTS]->(l);
 
 == Reviews
 
-image:{img}/datamodel_full.png[]
+[subs=attributes]
+++++
+<img src="{img}/datamodel_full.png" class="img-responsive">
+++++
+
 
 .Create constraint on User
 [source,cypher]
