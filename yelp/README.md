@@ -2,6 +2,9 @@
 
 ![](img/datamodel.png)
 
+## Data Download
+Data can be downloaded from Yelp [here](https://www.yelp.com/dataset/download), as a series of JSON files.
+
 
 ### Interesting queries
 
