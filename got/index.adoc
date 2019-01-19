@@ -1,0 +1,109 @@
+= Graph of Thrones
+:icons: font
+:img: https://guides.neo4j.com/got/img
+
+== The Graph of Thrones
+
+
+Import character co-occurences:
+
+[source,cypher]
+----
+LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/mathbeveridge/asoiaf/master/data/asoiaf-all-edges.csv" AS row
+MERGE (src:Character {name: row.Source})
+MERGE (tgt:Character {name: row.Target})
+// global relationship
+MERGE (src)-[r:INTERACTS]->(tgt) ON CREATE SET r.weight = toInteger(row.weight)
+----
+
+[source,cypher]
+----
+MATCH p=(:Character)-[:INTERACTS]-(:Character)
+RETURN p
+LIMIT 50
+----
+
+== Label Propagation
+
+Run the algorithm:
+
+[source,cypher]
+----
+CALL algo.labelPropagation("Character", "Interacts", "OUTGOING", {partitionProperty:"labelProp"})
+----
+
+Find largest communities and group characters by member with the largest degree:
+
+[source,cypher]
+----
+MATCH (c:Character)
+WITH c, c.labelProp as community, size( (c)-[:INTERACTS]-() ) as degree ORDER BY community ASC, degree DESC
+WITH community, (head(collect(c))).name as main, count(*) as size, collect(c.name)[0..7] as characters, collect(c) as all
+ORDER BY size DESC
+RETURN community, main, size, characters
+----
+
+== Louvain
+
+Run the algorithm:
+
+[source,cypher]
+----
+CALL algo.louvain("Character", "INTERACTS", {writeProperty: "louvain"})
+----
+
+Find largest communities and group characters by member with the largest degree:
+
+[source,cypher]
+----
+MATCH (c:Character)
+WITH c, c.louvain as community, size( (c)-[:INTERACTS]-() ) as degree ORDER BY community ASC, degree DESC
+WITH community, (head(collect(c))).name as main, count(*) as size, collect(c.name)[0..7] as characters, collect(c) as all
+ORDER BY size DESC
+RETURN community, main, size, characters
+----
+
+== Union Find / Connected Components
+
+Run the algorithm:
+
+[source,cypher]
+----
+CALL algo.unionFind("Character", "INTERACTS", {partitionProperty: "unionFind", weightProperty: "weight", threshold: 100.0, concurrency: 1})
+----
+
+Find largest communities and group characters by member with the largest degree:
+
+[source,cypher]
+----
+MATCH (c:Character)
+WITH c, c.unionFind as community, size( (c)-[:INTERACTS]-() ) as degree ORDER BY community ASC, degree DESC
+WITH community, (head(collect(c))).name as main, count(*) as size, collect(c.name)[0..7] as characters, collect(c) as all
+ORDER BY size DESC
+RETURN community, main, size, characters
+----
+
+== Triadic Balance
+
+Treat each relationship as either positive or negative:
+
+[source,cypher]
+----
+MATCH ()-[r:INTERACTS]->()
+WITH r, CASE WHEN r.weight > 12 THEN 1 ELSE -1 END as balanceWeight
+SET r.weightScore = balanceWeight
+----
+
+Run the Balanced Triads algorithm:
+
+[source,cypher]
+----
+CALL algo.balancedTriads("Character", "INTERACTS", {weightProperty: "weightScore"})
+----
+
+Find characters who are in more unbalanced triads than balanced:
+[source,cypher]
+----
+MATCH (n:Character) WHERE n.unbalanced > n.balanced
+RETURN n.name, n.unbalanced, n.balanced ORDER BY n.unbalanced DESC LIMIT 100
+----
