@@ -1,0 +1,222 @@
+<style type="text/css" media="screen">
+/*
+.nodes-image {
+	margin:-100;
+}
+*/	
+@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css");
+
+.imageblock .content img, .image img {max-width: 900px;max-height: 300px;}
+.deck h3, .deck h4 {display: block !important;margin-bottom:8px;margin-top:5px;}
+.listingblock {margin:8px;}
+.pull-bottom {position:relative;bottom:1em;}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note:before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip:before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning:before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution:before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important:before{content:"\f06a";color:#bf0000}
+.admonitionblock.note.speaker { display:none; }
+</style>
+<style type="text/css" media="screen">
+/* #editor.maximize-editor .CodeMirror-code { font-size:24px; line-height:26px; } */
+</style>
+<article class="guide" ng-controller="AdLibDataController">
+  <carousel class="deck container-fluid">
+    <!--slide class="row-fluid">
+      <div class="col-sm-3">
+        <h3>Graph of Thrones</h3>
+        <p class="lead">Information</p>
+			<!dl>
+				
+				
+				
+				
+				
+			</dl>
+		</div>
+      <div class="col-sm-9">
+        <figure>
+          <img style="width:300px" src=""/>
+        </figure>
+      </div>
+    </slide-->
+    
+
+
+   <h4>Graph of Thrones</h4>
+   
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>The Graph of Thrones</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Import character co-occurences:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/mathbeveridge/asoiaf/master/data/asoiaf-all-edges.csv" AS row
+MERGE (src:Character {name: row.Source})
+MERGE (tgt:Character {name: row.Target})
+// global relationship
+MERGE (src)-[r:INTERACTS]-&gt;(tgt) ON CREATE SET r.weight = toInteger(row.weight)<!--/code--></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH p=(:Character)-[:INTERACTS]-(:Character)
+RETURN p
+LIMIT 50<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Label Propagation</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Run the algorithm:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CALL algo.labelPropagation("Character", "Interacts", "OUTGOING", {partitionProperty:"labelProp"})<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Find largest communities and group characters by member with the largest degree:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (c:Character)
+WITH c, c.labelProp as community, size( (c)-[:INTERACTS]-() ) as degree ORDER BY community ASC, degree DESC
+WITH community, (head(collect(c))).name as main, count(*) as size, collect(c.name)[0..7] as characters, collect(c) as all
+ORDER BY size DESC
+RETURN community, main, size, characters<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Louvain</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Run the algorithm:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CALL algo.louvain("Character", "INTERACTS", {writeProperty: "louvain", write:true, includeIntermediateCommunities: true, intermediateCommunitiesWriteProperty: "intermediateLouvain"})<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Find largest communities and group characters by member with the largest degree:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (c:Character)
+WITH c, c.louvain as community, size( (c)-[:INTERACTS]-() ) as degree ORDER BY community ASC, degree DESC
+WITH community, (head(collect(c))).name as main, count(*) as size, collect(c.name)[0..7] as characters, collect(c) as all
+ORDER BY size DESC
+RETURN community, main, size, characters<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Intermediate communities</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (c:Character)
+WITH c.intermediateLouvain AS intermediateCommunities, COLLECT(c.name) AS members
+RETURN * ORDER BY SIZE(members) DESC LIMIT 10<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Union Find / Connected Components</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Run the algorithm:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CALL algo.unionFind("Character", "INTERACTS", {partitionProperty: "unionFind", weightProperty: "weight", threshold: 100.0, concurrency: 1})<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Find largest communities and group characters by member with the largest degree:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (c:Character)
+WITH c, c.unionFind as community, size( (c)-[:INTERACTS]-() ) as degree ORDER BY community ASC, degree DESC
+WITH community, (head(collect(c))).name as main, count(*) as size, collect(c.name)[0..7] as characters, collect(c) as all
+ORDER BY size DESC
+RETURN community, main, size, characters<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Triadic Balance</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Treat each relationship as either positive or negative:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH ()-[r:INTERACTS]-&gt;()
+WITH avg(r.weight) AS mean
+MATCH ()-[r:INTERACTS]-&gt;()
+WITH r, CASE WHEN r.weight &gt; mean THEN 1 ELSE -1 END as balanceWeight
+SET r.weightScore = balanceWeight<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run the Balanced Triads algorithm:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CALL algo.balancedTriads("Character", "INTERACTS", {weightProperty: "weightScore"})<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Find characters who are in more unbalanced triads than balanced:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (n:Character) WHERE n.unbalanced &gt; n.balanced
+RETURN n.name, n.unbalanced, n.balanced ORDER BY n.unbalanced DESC LIMIT 100<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+  </carousel>
+</article>

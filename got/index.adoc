@@ -49,7 +49,7 @@ Run the algorithm:
 
 [source,cypher]
 ----
-CALL algo.louvain("Character", "INTERACTS", {writeProperty: "louvain"})
+CALL algo.louvain("Character", "INTERACTS", {writeProperty: "louvain", write:true, includeIntermediateCommunities: true, intermediateCommunitiesWriteProperty: "intermediateLouvain"})
 ----
 
 Find largest communities and group characters by member with the largest degree:
@@ -61,6 +61,16 @@ WITH c, c.louvain as community, size( (c)-[:INTERACTS]-() ) as degree ORDER BY c
 WITH community, (head(collect(c))).name as main, count(*) as size, collect(c.name)[0..7] as characters, collect(c) as all
 ORDER BY size DESC
 RETURN community, main, size, characters
+----
+
+
+Intermediate communities
+
+[source,cypher]
+----
+MATCH (c:Character)
+WITH c.intermediateLouvain AS intermediateCommunities, COLLECT(c.name) AS members
+RETURN * ORDER BY SIZE(members) DESC LIMIT 10
 ----
 
 == Union Find / Connected Components
@@ -90,7 +100,9 @@ Treat each relationship as either positive or negative:
 [source,cypher]
 ----
 MATCH ()-[r:INTERACTS]->()
-WITH r, CASE WHEN r.weight > 12 THEN 1 ELSE -1 END as balanceWeight
+WITH avg(r.weight) AS mean
+MATCH ()-[r:INTERACTS]->()
+WITH r, CASE WHEN r.weight > mean THEN 1 ELSE -1 END as balanceWeight
 SET r.weightScore = balanceWeight
 ----
 
