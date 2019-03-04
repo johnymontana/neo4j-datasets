@@ -1,0 +1,357 @@
+= UK Companies Data
+:icons: font
+:img: https://guides.neo4j.com/got/img
+
+== UK Companies Data
+
+++++
+<div class="col-md-8">
+++++
+This Neo4j Browser guide will walk you through the process of importing and querying UK company registration, land ownership, and political donation data. We'll learn Cypher along the way!
+
+Be sure to refer to the link:https://neo4j.com/docs/cypher-refcard/current/[Cypher Ref Card^] as you work through the examples
+
+Outline:
+
+* Data Import
+* Querying With `MATCH`
+* Using Relationships
+* Fuzzy Matches
+* Working With Numbers
+* Dates
+* Location Data
+* Graph Algorithms
+
+++++
+</div>
+++++
+
+++++
+<div class="col-md-4">
+<img src="https://guides.neo4j.com/ukcompanies/img/datamodel.png" width="100%">
+</div>
+++++
+
+== Import
+
+Be sure to enable multi statement query editor in Neo4j Browser, then run:
+
+[source,cypher]
+----
+CREATE CONSTRAINT ON (c:Company) ASSERT c.companyNumber IS UNIQUE;
+CREATE CONSTRAINT ON (p:Person) ASSERT (p.birthMonth, p.birthYear, p.name ) IS NODE KEY;
+CREATE CONSTRAINT ON (p:Property) ASSERT p.titleNumber IS UNIQUE;
+
+LOAD CSV WITH HEADERS FROM "https://guides.neo4j.com/ukcompanies/data/PSCAmericans.csv" AS row
+MERGE (c:Company {companyNumber: row.company_number})
+MERGE (p:Person {name: row.`data.name`, birthYear: row.`data.date_of_birth.year`, birthMonth: row.`data.date_of_birth.month`})
+ON CREATE SET p.nationality = row.`data.nationality`,
+              p.countryOfResidence = row.`data.country_of_residence`
+              // TODO: Address
+
+MERGE (p)-[r:HAS_CONTROL]->(c)
+SET r.nature = split(replace(replace(replace(row.`data.natures_of_control`, "[",""),"]",""),  '"', ""), ",")
+RETURN COUNT(*);
+
+LOAD CSV WITH HEADERS FROM "https://guides.neo4j.com/ukcompanies/data/CompanyDataAmericans.csv" AS row
+MATCH (c:Company {companyNumber: row.` CompanyNumber`})
+SET c.name = row.CompanyName,
+    c.mortgagesOutstanding = toInteger(row.`Mortgages.NumMortOutstanding`),
+    c.incorporationDate = Date(Datetime({epochSeconds: apoc.date.parse(row.IncorporationDate,'s','dd/MM/yyyy')})),
+    c.SIC = row.`SICCode.SicText_1`,
+    c.countryOfOrigin = row.CountryOfOrigin,
+    c.status = row.CompanyStatus,
+    c.category = row.CompanyCategory;
+    
+LOAD CSV WITH HEADERS FROM "https://guides.neo4j.com/ukcompanies/data/ElectionDonationsAmericans.csv" AS row
+MATCH (c:Company) WHERE c.companyNumber = row.CompanyRegistrationNumber
+MERGE (p:Recipient {name: row.RegulatedEntityName})
+SET p.entityType = row.RegulatedEntityType
+MERGE (c)-[r:DONATED {ref: row.ECRef}]->(p)
+SET r.date  = Date(Datetime({epochSeconds: apoc.date.parse(row.ReceivedDate,'s','dd/MM/yyyy')})),
+    r.value = toFloat(replace(replace(row.Value, "£", ""), ",", ""));
+    
+LOAD CSV WITH HEADERS FROM "https://guides.neo4j.com/ukcompanies/data/LandOwnershipAmericans.csv" AS row
+MATCH (c:Company {companyNumber: row.`Company Registration No. (1)`})
+MERGE (p:Property {titleNumber: row.`Title Number`})
+SET p.address = row.`Property Address`,
+    p.county  = row.County,
+    p.price   = row.`Price Paid`,
+    p.district = row.District
+MERGE (c)-[r:OWNS]->(p)
+SET r.date = row.`Date Proprietor Added`;
+----
+
+
+== Verify Data Import
+
+Verify the imported data model by running: 
+
+[source,cypher]
+----
+CALL db.schema();
+----
+
+++++
+<div class="col-md-3">
+++++
+
+*Person*
+
+* name
+* nationality
+* countryOfResidence
+* birthYear
+* birthMonth
+
+**Relationships**
+
+(:Person)-[:HAS_CONTROL]->(:Company)
+++++
+</div>
+++++
+
+++++
+<div class="col-md-4">
+++++
+
+*Company*
+
+* companyNumber
+* name
+* status
+* SIC
+* countryOfOrigin
+* incorporationDate
+* mortgagesOutstanding
+
+**Relationships**
+
+* (:Company)-[:OWNS]->(:Property)
+* (:Company)-[:DONATED]->(:Recipient)
+
+
+
+++++
+</div>
+++++
+
+
+++++
+<div class="col-md-2">
+++++
+
+*Property*
+
+* titleNumber
+* address
+* county
+* district
+* price
+
+++++
+</div>
+++++
+
+
+++++
+<div class="col-md-3">
+++++
+
+*Recipient*
+
+* name
+* entityType
+++++
+</div>
+++++
+
+
+
+== Querying With `MATCH`
+
+Now that we've imported our data it's time to query it!
+
+In Neo4j we use the `MATCH` command to query data. The syntax is `MATCH`, followed by a graph pattern. For example:
+
+[source,cypher]
+----
+MATCH (p:Person {name: "Margery Kraus"})
+RETURN p
+----
+
+
+* The `()` represent a node
+* `:Person` is the node label
+* `{}` indicate properties
+* `{name: ""}`
+* `p` becomes a variable that is bound to pieces of the graph that match the pattern
+* We use `RETURN` to return data and visualize the results
+
+== Querying With `MATCH` - Exercise
+
+Now it's your turn!
+
+* Find the `Person` node with the name `Michael Rubens Bloomberg`
+* Find the `Company` with the name `GRAPHIC PLC`
+
+Remember the basic format for `MATCH`:
+
+[source,cypher]
+----
+MATCH (variable:NodeLabel {property: "value"})
+RETURN variable
+----
+
+== Querying With `MATCH` - Answers
+
+Find the `Person` node with the name `Michael Rubens Bloomberg`
+
+[source,cypher]
+----
+MATCH (p:Person {name: "Michael Rubens Bloomberg"})
+RETURN p
+----
+
+Find the `Company` with the name `GRAPHIC PLC`
+
+[source,cypher]
+----
+MATCH (c:Company {name: "GRAPHIC PLC"})
+RETURN c
+----
+
+
+== Using Relationships
+
+Nodes are connected by relationships. We can define more complex graph patterns that include relationships in our `MATCH` statements using square brackets `[]` to define the relationship. For example:
+
+[source,cypher]
+----
+MATCH (p:Person {name: "Margery Kraus"})-[:HAS_CONTROL]->(c:Company)
+RETURN p, c
+----
+
+* Note the `-[:HAS_CONTROL]->` pattern
+
+
+== Using Relationships - Exercise
+
+* Can you find the companies connected to Michael Rubens Bloomberg?
+* Do these companies connected to Michael Ruben Bloomberg own any properties?
+* Did these companies connected to Michael Ruben Bloomberg make any political donations?
+
+== Using Relationships - Answers
+
+Companies connected to Michael Rubens Bloomberg?
+
+[source,cypher]
+----
+MATCH (p:Person {name: "Michael Rubens Bloomberg"})-[:HAS_CONTROL]->(c:Company)
+RETURN p, c
+----
+
+Do these companies own any properties?
+
+[source,cypher]
+----
+MATCH (p:Person {name: "Michael Rubens Bloomberg"})-[:HAS_CONTROL]->(c:Company)-[:OWNS]->(pr:Property)
+RETURN p, c, pr
+----
+
+Did these companies make any political donations?
+
+[source,cypher]
+----
+MATCH (p:Person {name: "Michael Rubens Bloomberg"})-[:HAS_CONTROL]->(c:Company)-[:DONATED]->(r:Recipient)
+RETURN p, c, r
+----
+
+== Fuzzy Matches
+
+We've seen how to do exact comparisons, but what about "fuzzy" matches? For example, what if we didn't know Michael Bloomberg's middle name? Or wanted to take slight misspellings into account?
+
+We have a few options for non-exact matches:
+
+* `CONTAINS`
+* Case in-sensitive
+* Regular expressions
+* True fuzzy match with a full text index
+
+== Fuzzy Matches - `CONTAINS`
+
+The `CONTAINS` string comparison operator can be used to match on strings that contain sub-strings.
+
+To take advantage of `CONTAINS` we need to introduce the `WHERE` clause. We can use any boolean expression in a `WHERE` clause to filter matches. For example:
+
+[source,cypher]
+----
+MATCH (p:Person)
+WHERE p.name CONTAINS "Bloomberg"
+RETURN p
+----
+
+== Fuzzy Matches - Regular Expression
+
+We can also use regular expressions 
+
+This is equivilent to using a `CONTAINS`:
+
+[source,cypher]
+----
+MATCH (p:Person)
+WHERE p.name =~ ".*Bloomberg.*"
+----
+
+We can also do case insensitive:
+
+[source,cypher]
+----
+MATCH (c:Company)
+WHERE c.name =~ "(?i)grahic.*"
+RETURN c
+----
+
+See the link:https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html[Regular Expression docs^] for more examples.
+
+== Fuzzy Matches - Full Text Index
+
+A full text index can help us make true fuzzy comparisons - taking into account mispellings.
+
+== Fuzzy Matches - Exercise
+
+1) Contains
+
+Find Abagail Johnson and any companies she is connected to. Hint: The data might contain title prefixing names (Mr, Mrs, Ms, etc) so we'll need to take that intro account.
+
+2) Regular expression
+
+
+
+3) Full text index
+
+== Fuzzy Matches - Answers
+
+
+
+== Working With Numbers
+
+Number properties
+
+Counting patterns
+
+== Working With Numbers - Exercise
+
+== Dates 
+
+Dates are treated as a special type in Neo4j and have their own functions in Cypher.
+
+== Dates - Exercise
+
+== Location Data
+
+== Location Data - Exercise
+
+== Graph Algorithms
+
+== Graph Algorithms - Exercise

@@ -1,0 +1,734 @@
+<style type="text/css" media="screen">
+/*
+.nodes-image {
+	margin:-100;
+}
+*/	
+@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css");
+
+.imageblock .content img, .image img {max-width: 900px;max-height: 300px;}
+.deck h3, .deck h4 {display: block !important;margin-bottom:8px;margin-top:5px;}
+.listingblock {margin:8px;}
+.pull-bottom {position:relative;bottom:1em;}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note:before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip:before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning:before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution:before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important:before{content:"\f06a";color:#bf0000}
+.admonitionblock.note.speaker { display:none; }
+</style>
+<style type="text/css" media="screen">
+/* #editor.maximize-editor .CodeMirror-code { font-size:24px; line-height:26px; } */
+</style>
+<article class="guide" ng-controller="AdLibDataController">
+  <carousel class="deck container-fluid">
+    <!--slide class="row-fluid">
+      <div class="col-sm-3">
+        <h3>UK Companies Data</h3>
+        <p class="lead">Information</p>
+			<!dl>
+				
+				
+				
+				
+				
+			</dl>
+		</div>
+      <div class="col-sm-9">
+        <figure>
+          <img style="width:300px" src=""/>
+        </figure>
+      </div>
+    </slide-->
+    
+
+
+   <h4>UK Companies Data</h4>
+   
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>UK Companies Data</h3>
+    <br/>
+    <div>
+      <div class="col-md-8">
+<div class="paragraph">
+<p>This Neo4j Browser guide will walk you through the process of importing and querying UK company registration, land ownership, and political donation data. We&#8217;ll learn Cypher along the way!</p>
+</div>
+<div class="paragraph">
+<p>Be sure to refer to the <a href="https://neo4j.com/docs/cypher-refcard/current/" target="_blank">Cypher Ref Card</a> as you work through the examples</p>
+</div>
+<div class="paragraph">
+<p>Outline:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Data Import</p>
+</li>
+<li>
+<p>Querying With <code>MATCH</code></p>
+</li>
+<li>
+<p>Using Relationships</p>
+</li>
+<li>
+<p>Fuzzy Matches</p>
+</li>
+<li>
+<p>Working With Numbers</p>
+</li>
+<li>
+<p>Dates</p>
+</li>
+<li>
+<p>Location Data</p>
+</li>
+<li>
+<p>Graph Algorithms</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="col-md-4">
+<img src="https://guides.neo4j.com/ukcompanies/img/datamodel.png" width="100%">
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Import</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Be sure to enable multi statement query editor in Neo4j Browser, then run:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CREATE CONSTRAINT ON (c:Company) ASSERT c.companyNumber IS UNIQUE;
+CREATE CONSTRAINT ON (p:Person) ASSERT (p.birthMonth, p.birthYear, p.name ) IS NODE KEY;
+CREATE CONSTRAINT ON (p:Property) ASSERT p.titleNumber IS UNIQUE;
+
+LOAD CSV WITH HEADERS FROM "https://guides.neo4j.com/ukcompanies/data/PSCAmericans.csv" AS row
+MERGE (c:Company {companyNumber: row.company_number})
+MERGE (p:Person {name: row.`data.name`, birthYear: row.`data.date_of_birth.year`, birthMonth: row.`data.date_of_birth.month`})
+ON CREATE SET p.nationality = row.`data.nationality`,
+              p.countryOfResidence = row.`data.country_of_residence`
+              // TODO: Address
+
+MERGE (p)-[r:HAS_CONTROL]-&gt;(c)
+SET r.nature = split(replace(replace(replace(row.`data.natures_of_control`, "[",""),"]",""),  '"', ""), ",")
+RETURN COUNT(*);
+
+LOAD CSV WITH HEADERS FROM "https://guides.neo4j.com/ukcompanies/data/CompanyDataAmericans.csv" AS row
+MATCH (c:Company {companyNumber: row.` CompanyNumber`})
+SET c.name = row.CompanyName,
+    c.mortgagesOutstanding = toInteger(row.`Mortgages.NumMortOutstanding`),
+    c.incorporationDate = Date(Datetime({epochSeconds: apoc.date.parse(row.IncorporationDate,'s','dd/MM/yyyy')})),
+    c.SIC = row.`SICCode.SicText_1`,
+    c.countryOfOrigin = row.CountryOfOrigin,
+    c.status = row.CompanyStatus,
+    c.category = row.CompanyCategory;
+
+LOAD CSV WITH HEADERS FROM "https://guides.neo4j.com/ukcompanies/data/ElectionDonationsAmericans.csv" AS row
+MATCH (c:Company) WHERE c.companyNumber = row.CompanyRegistrationNumber
+MERGE (p:Recipient {name: row.RegulatedEntityName})
+SET p.entityType = row.RegulatedEntityType
+MERGE (c)-[r:DONATED {ref: row.ECRef}]-&gt;(p)
+SET r.date  = Date(Datetime({epochSeconds: apoc.date.parse(row.ReceivedDate,'s','dd/MM/yyyy')})),
+    r.value = toFloat(replace(replace(row.Value, "£", ""), ",", ""));
+
+LOAD CSV WITH HEADERS FROM "https://guides.neo4j.com/ukcompanies/data/LandOwnershipAmericans.csv" AS row
+MATCH (c:Company {companyNumber: row.`Company Registration No. (1)`})
+MERGE (p:Property {titleNumber: row.`Title Number`})
+SET p.address = row.`Property Address`,
+    p.county  = row.County,
+    p.price   = row.`Price Paid`,
+    p.district = row.District
+MERGE (c)-[r:OWNS]-&gt;(p)
+SET r.date = row.`Date Proprietor Added`;<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Verify Data Import</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Verify the imported data model by running:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CALL db.schema();<!--/code--></pre>
+</div>
+</div>
+<div class="col-md-3">
+<div class="paragraph">
+<p><strong>Person</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>name</p>
+</li>
+<li>
+<p>nationality</p>
+</li>
+<li>
+<p>countryOfResidence</p>
+</li>
+<li>
+<p>birthYear</p>
+</li>
+<li>
+<p>birthMonth</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Relationships</strong></p>
+</div>
+<div class="paragraph">
+<p>(:Person)-[:HAS_CONTROL]&#8594;(:Company)</p>
+</div>
+</div>
+<div class="col-md-4">
+<div class="paragraph">
+<p><strong>Company</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>companyNumber</p>
+</li>
+<li>
+<p>name</p>
+</li>
+<li>
+<p>status</p>
+</li>
+<li>
+<p>SIC</p>
+</li>
+<li>
+<p>countryOfOrigin</p>
+</li>
+<li>
+<p>incorporationDate</p>
+</li>
+<li>
+<p>mortgagesOutstanding</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Relationships</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>(:Company)-[:OWNS]&#8594;(:Property)</p>
+</li>
+<li>
+<p>(:Company)-[:DONATED]&#8594;(:Recipient)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="col-md-2">
+<div class="paragraph">
+<p><strong>Property</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>titleNumber</p>
+</li>
+<li>
+<p>address</p>
+</li>
+<li>
+<p>county</p>
+</li>
+<li>
+<p>district</p>
+</li>
+<li>
+<p>price</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="col-md-3">
+<div class="paragraph">
+<p><strong>Recipient</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>name</p>
+</li>
+<li>
+<p>entityType</p>
+</li>
+</ul>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Querying With <code>MATCH</code></h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Now that we&#8217;ve imported our data it&#8217;s time to query it!</p>
+</div>
+<div class="paragraph">
+<p>In Neo4j we use the <code>MATCH</code> command to query data. The syntax is <code>MATCH</code>, followed by a graph pattern. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (p:Person {name: "Margery Kraus"})
+RETURN p<!--/code--></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The <code>()</code> represent a node</p>
+</li>
+<li>
+<p><code>:Person</code> is the node label</p>
+</li>
+<li>
+<p><code>{}</code> indicate properties</p>
+</li>
+<li>
+<p><code>{name: ""}</code></p>
+</li>
+<li>
+<p><code>p</code> becomes a variable that is bound to pieces of the graph that match the pattern</p>
+</li>
+<li>
+<p>We use <code>RETURN</code> to return data and visualize the results</p>
+</li>
+</ul>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Querying With <code>MATCH</code> - Exercise</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Now it&#8217;s your turn!</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Find the <code>Person</code> node with the name <code>Michael Rubens Bloomberg</code></p>
+</li>
+<li>
+<p>Find the <code>Company</code> with the name <code>GRAPHIC PLC</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Remember the basic format for <code>MATCH</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (variable:NodeLabel {property: "value"})
+RETURN variable<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Querying With <code>MATCH</code> - Answers</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Find the <code>Person</code> node with the name <code>Michael Rubens Bloomberg</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (p:Person {name: "Michael Rubens Bloomberg"})
+RETURN p<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Find the <code>Company</code> with the name <code>GRAPHIC PLC</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (c:Company {name: "GRAPHIC PLC"})
+RETURN c<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Using Relationships</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Nodes are connected by relationships. We can define more complex graph patterns that include relationships in our <code>MATCH</code> statements using square brackets <code>[]</code> to define the relationship. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (p:Person {name: "Margery Kraus"})-[:HAS_CONTROL]-&gt;(c:Company)
+RETURN p, c<!--/code--></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Note the <code>-[:HAS_CONTROL]&#8594;</code> pattern</p>
+</li>
+</ul>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Using Relationships - Exercise</h3>
+    <br/>
+    <div>
+      <div class="ulist">
+<ul>
+<li>
+<p>Can you find the companies connected to Michael Rubens Bloomberg?</p>
+</li>
+<li>
+<p>Do these companies connected to Michael Ruben Bloomberg own any properties?</p>
+</li>
+<li>
+<p>Did these companies connected to Michael Ruben Bloomberg make any political donations?</p>
+</li>
+</ul>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Using Relationships - Answers</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Companies connected to Michael Rubens Bloomberg?</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (p:Person {name: "Michael Rubens Bloomberg"})-[:HAS_CONTROL]-&gt;(c:Company)
+RETURN p, c<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Do these companies own any properties?</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (p:Person {name: "Michael Rubens Bloomberg"})-[:HAS_CONTROL]-&gt;(c:Company)-[:OWNS]-&gt;(pr:Property)
+RETURN p, c, pr<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Did these companies make any political donations?</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (p:Person {name: "Michael Rubens Bloomberg"})-[:HAS_CONTROL]-&gt;(c:Company)-[:DONATED]-&gt;(r:Recipient)
+RETURN p, c, r<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Fuzzy Matches</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>We&#8217;ve seen how to do exact comparisons, but what about "fuzzy" matches? For example, what if we didn&#8217;t know Michael Bloomberg&#8217;s middle name? Or wanted to take slight misspellings into account?</p>
+</div>
+<div class="paragraph">
+<p>We have a few options for non-exact matches:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>CONTAINS</code></p>
+</li>
+<li>
+<p>Case in-sensitive</p>
+</li>
+<li>
+<p>Regular expressions</p>
+</li>
+<li>
+<p>True fuzzy match with a full text index</p>
+</li>
+</ul>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Fuzzy Matches - <code>CONTAINS</code></h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>The <code>CONTAINS</code> string comparison operator can be used to match on strings that contain sub-strings.</p>
+</div>
+<div class="paragraph">
+<p>To take advantage of <code>CONTAINS</code> we need to introduce the <code>WHERE</code> clause. We can use any boolean expression in a <code>WHERE</code> clause to filter matches. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (p:Person)
+WHERE p.name CONTAINS "Bloomberg"
+RETURN p<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Fuzzy Matches - Regular Expression</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>We can also use regular expressions</p>
+</div>
+<div class="paragraph">
+<p>This is equivilent to using a <code>CONTAINS</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (p:Person)
+WHERE p.name =~ ".*Bloomberg.*"<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can also do case insensitive:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (c:Company)
+WHERE c.name =~ "(?i)grahic.*"
+RETURN c<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See the <a href="https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html" target="_blank">Regular Expression docs</a> for more examples.</p>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Fuzzy Matches - Full Text Index</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>A full text index can help us make true fuzzy comparisons - taking into account mispellings.</p>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Fuzzy Matches - Exercise</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>1) Contains</p>
+</div>
+<div class="paragraph">
+<p>Find Abagail Johnson and any companies she is connected to. Hint: The data might contain title prefixing names (Mr, Mrs, Ms, etc) so we&#8217;ll need to take that intro account.</p>
+</div>
+<div class="paragraph">
+<p>2) Regular expression</p>
+</div>
+<div class="paragraph">
+<p>3) Full text index</p>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Fuzzy Matches - Answers</h3>
+    <br/>
+    <div>
+      
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Working With Numbers</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Number properties</p>
+</div>
+<div class="paragraph">
+<p>Counting patterns</p>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Working With Numbers - Exercise</h3>
+    <br/>
+    <div>
+      
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Dates</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Dates are treated as a special type in Neo4j and have their own functions in Cypher.</p>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Dates - Exercise</h3>
+    <br/>
+    <div>
+      
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Location Data</h3>
+    <br/>
+    <div>
+      
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Location Data - Exercise</h3>
+    <br/>
+    <div>
+      
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Graph Algorithms</h3>
+    <br/>
+    <div>
+      
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Graph Algorithms - Exercise</h3>
+    <br/>
+    <div>
+      
+	</div>
+  </div>
+</slide>
+  </carousel>
+</article>
