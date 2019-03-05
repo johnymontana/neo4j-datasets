@@ -149,7 +149,7 @@ MATCH (c:Company {companyNumber: row.`Company Registration No. (1)`})
 MERGE (p:Property {titleNumber: row.`Title Number`})
 SET p.address = row.`Property Address`,
     p.county  = row.County,
-    p.price   = row.`Price Paid`,
+    p.price   = toInteger(row.`Price Paid`),
     p.district = row.District
 MERGE (c)-[r:OWNS]-&gt;(p)
 SET r.date = row.`Date Proprietor Added`;<!--/code--></pre>
@@ -502,10 +502,7 @@ RETURN p, c, r<!--/code--></pre>
 <div class="ulist">
 <ul>
 <li>
-<p><code>CONTAINS</code></p>
-</li>
-<li>
-<p>Case in-sensitive</p>
+<p>The <code>CONTAINS</code> string comparison operator</p>
 </li>
 <li>
 <p>Regular expressions</p>
@@ -559,7 +556,8 @@ RETURN p<!--/code--></pre>
 <div class="listingblock">
 <div class="content">
 <pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (p:Person)
-WHERE p.name =~ ".*Bloomberg.*"<!--/code--></pre>
+WHERE p.name =~ ".*Bloomberg.*"
+RETURN p<!--/code--></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -568,7 +566,7 @@ WHERE p.name =~ ".*Bloomberg.*"<!--/code--></pre>
 <div class="listingblock">
 <div class="content">
 <pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (c:Company)
-WHERE c.name =~ "(?i)grahic.*"
+WHERE c.name =~ "(?i)graphic.*"
 RETURN c<!--/code--></pre>
 </div>
 </div>
@@ -588,6 +586,25 @@ RETURN c<!--/code--></pre>
     <div>
       <div class="paragraph">
 <p>A full text index can help us make true fuzzy comparisons - taking into account mispellings.</p>
+</div>
+<div class="paragraph">
+<p>First we must create the full text index:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CALL db.index.fulltext.createNodeIndex("nameIndex", ["Person"], ["name"])<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then we can query it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CALL db.index.fulltext.queryNodes("nameIndex", "Peterson~")<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note the <code>~</code> in the name, this indicates we should match on slight misspellings of our search term. Read more about the query syntax for fuzzy matching <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html#Fuzzy%20Searches" target="_blank">here</a>.</p>
 </div>
 	</div>
   </div>
@@ -610,7 +627,7 @@ RETURN c<!--/code--></pre>
 <p>2) Regular expression</p>
 </div>
 <div class="paragraph">
-<p>3) Full text index</p>
+<p>We want to find all properties in London, however we notice that the <code>address</code> property on the <code>Property</code> nodes has both "London" and "LONDON". Write a query using a regular expression to find all <code>Property</code> nodes in London.</p>
 </div>
 	</div>
   </div>
@@ -623,7 +640,26 @@ RETURN c<!--/code--></pre>
     <h3>Fuzzy Matches - Answers</h3>
     <br/>
     <div>
-      
+      <div class="paragraph">
+<p>1) Contains</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (p:Person)-[:HAS_CONTROL]-&gt;(c:Company)
+WHERE p.name CONTAINS "Abagail Johnson"
+RETURN p,c<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>2) Regular expression</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (c:Company)
+WHERE c.name =~ "(?i).*london.*"
+RETURN c<!--/code--></pre>
+</div>
+</div>
 	</div>
   </div>
 </slide>
@@ -636,10 +672,43 @@ RETURN c<!--/code--></pre>
     <br/>
     <div>
       <div class="paragraph">
-<p>Number properties</p>
+<p>Storing property values as numbers is useful for answering questions like:</p>
 </div>
 <div class="paragraph">
-<p>Counting patterns</p>
+<p>Show me all political donations between 1000 and 10,000 pounds</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (c:Company)-[d:DONATED]-&gt;(r:Recipient)
+WHERE 1000 &lt; d.value &lt; 10000
+RETURN c,d,r<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Note that here we are accessing a property on a relationship!</strong></p>
+</div>
+<div class="paragraph">
+<p>Show me all properties in London with a value over 10 million pounds that are owned by a company controlled by an American:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH path=(prop:Property)&lt;-[:OWNS]-(:Company)&lt;-[:HAS_CONTROL]-(per:Person)
+WHERE prop.price &gt; 10000000 AND prop.address =~ "(?i).*London.*"
+    AND per.nationality = "American"
+RETURN path<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For a given individual, what is total amount of political donations made by companies they control?</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (p:Person {name: "Ms Abigail Johnson"})-[:HAS_CONTROL]-&gt;(c:Company)-[d:DONATED]-&gt;(:Recipient)
+RETURN sum(d.value) AS totalDonations, p.name AS person, c.name AS company<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>**Here we perform an aggregation, summing the <code>value</code> property of all <code>DONATED</code> relationships matched in our pattern. Read more about aggregation functions in Cypher <a href="https://neo4j.com/docs/cypher-manual/current/functions/aggregating/" target="_blank">here</a>.</p>
 </div>
 	</div>
   </div>
@@ -652,7 +721,11 @@ RETURN c<!--/code--></pre>
     <h3>Working With Numbers - Exercise</h3>
     <br/>
     <div>
-      
+      <div class="paragraph">
+<p>Find the total value of campaign donations made by companies controlled by Michael Bloomberg.
+What parties were those donations made to? How much in total to each party?
+Of the companies connected to Bloomberg, which made the most campaign donations?</p>
+</div>
 	</div>
   </div>
 </slide>
@@ -727,6 +800,32 @@ RETURN c<!--/code--></pre>
     <br/>
     <div>
       
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Merging Duplicates</h3>
+    <br/>
+    <div>
+      
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Open Ended Exercise</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Let&#8217;s say you are researching Stephen A. Schwarzman, the CEO of the Blackstone group. What can you find about him in the data?</p>
+</div>
 	</div>
   </div>
 </slide>

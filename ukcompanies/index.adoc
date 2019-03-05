@@ -76,7 +76,7 @@ MATCH (c:Company {companyNumber: row.`Company Registration No. (1)`})
 MERGE (p:Property {titleNumber: row.`Title Number`})
 SET p.address = row.`Property Address`,
     p.county  = row.County,
-    p.price   = row.`Price Paid`,
+    p.price   = toInteger(row.`Price Paid`),
     p.district = row.District
 MERGE (c)-[r:OWNS]->(p)
 SET r.date = row.`Date Proprietor Added`;
@@ -273,8 +273,7 @@ We've seen how to do exact comparisons, but what about "fuzzy" matches? For exam
 
 We have a few options for non-exact matches:
 
-* `CONTAINS`
-* Case in-sensitive
+* The `CONTAINS` string comparison operator
 * Regular expressions
 * True fuzzy match with a full text index
 
@@ -301,6 +300,7 @@ This is equivilent to using a `CONTAINS`:
 ----
 MATCH (p:Person)
 WHERE p.name =~ ".*Bloomberg.*"
+RETURN p
 ----
 
 We can also do case insensitive:
@@ -308,7 +308,7 @@ We can also do case insensitive:
 [source,cypher]
 ----
 MATCH (c:Company)
-WHERE c.name =~ "(?i)grahic.*"
+WHERE c.name =~ "(?i)graphic.*"
 RETURN c
 ----
 
@@ -318,6 +318,23 @@ See the link:https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.h
 
 A full text index can help us make true fuzzy comparisons - taking into account mispellings.
 
+First we must create the full text index:
+
+[source,cypher]
+----
+CALL db.index.fulltext.createNodeIndex("nameIndex", ["Person"], ["name"])
+----
+
+Then we can query it:
+
+[source,cypher]
+----
+CALL db.index.fulltext.queryNodes("nameIndex", "Peterson~")
+----
+
+Note the `~` in the name, this indicates we should match on slight misspellings of our search term. Read more about the query syntax for fuzzy matching link:https://lucene.apache.org/core/2_9_4/queryparsersyntax.html#Fuzzy%20Searches[here^].
+
+
 == Fuzzy Matches - Exercise
 
 1) Contains
@@ -326,21 +343,69 @@ Find Abagail Johnson and any companies she is connected to. Hint: The data might
 
 2) Regular expression
 
+We want to find all properties in London, however we notice that the `address` property on the `Property` nodes has both "London" and "LONDON". Write a query using a regular expression to find all `Property` nodes in London.
 
 
-3) Full text index
 
 == Fuzzy Matches - Answers
 
+1) Contains
 
+[source,cypher]
+----
+MATCH (p:Person)-[:HAS_CONTROL]->(c:Company)
+WHERE p.name CONTAINS "Abagail Johnson"
+RETURN p,c
+----
+
+2) Regular expression
+
+[source,cypher]
+----
+MATCH (c:Company)
+WHERE c.name =~ "(?i).*london.*"
+RETURN c
+----
 
 == Working With Numbers
 
-Number properties
+Storing property values as numbers is useful for answering questions like:
 
-Counting patterns
+Show me all political donations between 1000 and 10,000 pounds
+
+[source,cypher]
+----
+MATCH (c:Company)-[d:DONATED]->(r:Recipient)
+WHERE 1000 < d.value < 10000
+RETURN c,d,r
+----
+**Note that here we are accessing a property on a relationship!**
+
+Show me all properties in London with a value over 10 million pounds that are owned by a company controlled by an American:
+
+[source,cypher]
+----
+MATCH path=(prop:Property)<-[:OWNS]-(:Company)<-[:HAS_CONTROL]-(per:Person)
+WHERE prop.price > 10000000 AND prop.address =~ "(?i).*London.*" 
+    AND per.nationality = "American"
+RETURN path
+----
+
+For a given individual, what is total amount of political donations made by companies they control?
+
+[source,cypher]
+----
+MATCH (p:Person {name: "Ms Abigail Johnson"})-[:HAS_CONTROL]->(c:Company)-[d:DONATED]->(:Recipient)
+RETURN sum(d.value) AS totalDonations, p.name AS person, c.name AS company
+----
+**Here we perform an aggregation, summing the `value` property of all `DONATED` relationships matched in our pattern. Read more about aggregation functions in Cypher link:https://neo4j.com/docs/cypher-manual/current/functions/aggregating/[here^].
+
 
 == Working With Numbers - Exercise
+
+Find the total value of campaign donations made by companies controlled by Michael Bloomberg.
+What parties were those donations made to? How much in total to each party?
+Of the companies connected to Bloomberg, which made the most campaign donations?
 
 == Dates 
 
@@ -355,3 +420,9 @@ Dates are treated as a special type in Neo4j and have their own functions in Cyp
 == Graph Algorithms
 
 == Graph Algorithms - Exercise
+
+== Merging Duplicates
+
+== Open Ended Exercise
+
+Let's say you are researching Stephen A. Schwarzman, the CEO of the Blackstone group. What can you find about him in the data?
