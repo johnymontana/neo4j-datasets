@@ -152,7 +152,10 @@ SET p.address = row.`Property Address`,
     p.price   = toInteger(row.`Price Paid`),
     p.district = row.District
 MERGE (c)-[r:OWNS]-&gt;(p)
-SET r.date = row.`Date Proprietor Added`;<!--/code--></pre>
+WITH row, c,r,p WHERE row.`Date Proprietor Added` IS NOT NULL
+SET r.date = Date(Datetime({epochSeconds: apoc.date.parse(row.`Date Proprietor Added`,'s','dd-MM-yyyy')}));
+
+CREATE INDEX ON :Company(incorporationDate);<!--/code--></pre>
 </div>
 </div>
 	</div>
@@ -621,7 +624,7 @@ RETURN c<!--/code--></pre>
 <p>1) Contains</p>
 </div>
 <div class="paragraph">
-<p>Find Abagail Johnson and any companies she is connected to. Hint: The data might contain title prefixing names (Mr, Mrs, Ms, etc) so we&#8217;ll need to take that intro account.</p>
+<p>Find Abigail Johnson and any companies she is connected to. Hint: The data might contain title prefixing names (Mr, Mrs, Ms, etc) so we&#8217;ll need to take that intro account.</p>
 </div>
 <div class="paragraph">
 <p>2) Regular expression</p>
@@ -646,7 +649,7 @@ RETURN c<!--/code--></pre>
 <div class="listingblock">
 <div class="content">
 <pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (p:Person)-[:HAS_CONTROL]-&gt;(c:Company)
-WHERE p.name CONTAINS "Abagail Johnson"
+WHERE p.name CONTAINS "Abigail Johnson"
 RETURN p,c<!--/code--></pre>
 </div>
 </div>
@@ -721,10 +724,70 @@ RETURN sum(d.value) AS totalDonations, p.name AS person, c.name AS company<!--/c
     <h3>Working With Numbers - Exercise</h3>
     <br/>
     <div>
+      <div class="ulist">
+<ul>
+<li>
+<p>Find the total value of campaign donations made by companies controlled by Michael Bloomberg.</p>
+</li>
+<li>
+<p>What parties were those donations made to? How much in total to each party?</p>
+</li>
+<li>
+<p>Of the companies connected to Bloomberg, which made the most campaign donations?</p>
+</li>
+</ul>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Working With Numbers - Answers</h3>
+    <br/>
+    <div>
       <div class="paragraph">
-<p>Find the total value of campaign donations made by companies controlled by Michael Bloomberg.
-What parties were those donations made to? How much in total to each party?
-Of the companies connected to Bloomberg, which made the most campaign donations?</p>
+<p>Find the total value of campaign donations made by companies controlled by Michael Bloomberg.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->//Find the total value of campaign donations made by companies controlled by Michael Bloomberg.
+
+// First be sure to find all Michael Bloombergs in the data
+MATCH (p:Person)
+WHERE p.name =~  "(?i).*Michael.*Bloomberg.*"
+// Find all companies connected to Bloomberg and donations
+MATCH (p)-[:HAS_CONTROL]-&gt;(c:Company)-[r:DONATED]-&gt;(party:Recipient)
+// Aggregate the value property of all donations from these companies
+RETURN sum(r.value) AS total<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>What parties were those donations made to? How much in total to each party?</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (p:Person)
+WHERE p.name =~  "(?i).*Michael.*Bloomberg.*"
+MATCH (p)-[:HAS_CONTROL]-&gt;(c:Company)-[r:DONATED]-&gt;(party:Recipient)
+// When we add party.name to the RETURN clause we group our sum aggregation by party.name
+RETURN party.name, sum(r.value) AS total
+ORDER BY total DESC<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Of the companies connected to Bloomberg, which made the most campaign donations?</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (p:Person)
+WHERE p.name =~  "(?i).*Michael.*Bloomberg.*"
+MATCH (p)-[:HAS_CONTROL]-&gt;(c:Company)-[r:DONATED]-&gt;(party:Recipient)
+RETURN c.name, sum(r.value) AS total
+ORDER BY total DESC<!--/code--></pre>
+</div>
 </div>
 	</div>
   </div>
@@ -740,6 +803,24 @@ Of the companies connected to Bloomberg, which made the most campaign donations?
       <div class="paragraph">
 <p>Dates are treated as a special type in Neo4j and have their own functions in Cypher.</p>
 </div>
+<div class="paragraph">
+<p>For example, to construct a Date:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->RETURN Date("2019-03-06")<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can filter for events in a date range like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (c:Company)
+WHERE Date("2017-01-01") &lt; c.incorporationDate &lt; Date("2017-01-15")
+RETURN c<!--/code--></pre>
+</div>
+</div>
 	</div>
   </div>
 </slide>
@@ -751,7 +832,31 @@ Of the companies connected to Bloomberg, which made the most campaign donations?
     <h3>Dates - Exercise</h3>
     <br/>
     <div>
-      
+      <div class="ulist">
+<ul>
+<li>
+<p>Find all companies created after Jan 1, 2016 that made a campaign donation.</p>
+</li>
+</ul>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Dates - Answer</h3>
+    <br/>
+    <div>
+      <div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (c:Company)-[r:DONATED]-&gt;(party:Recipient)
+WHERE Date("2016-01-01") &lt; c.incorporationDate
+RETURN c<!--/code--></pre>
+</div>
+</div>
 	</div>
   </div>
 </slide>
@@ -763,7 +868,52 @@ Of the companies connected to Bloomberg, which made the most campaign donations?
     <h3>Location Data</h3>
     <br/>
     <div>
-      
+      <div class="paragraph">
+<p>The source data has addresses, if we are able to convert these addresses to longitude/latitude we could search for properties that are close together, within some range of a point, or polygon, or create <a href="https://www.lyonwj.com/2017/11/28/geocoding-paradise-papers-neo4j-spatial-visualization/" target="_blank">interactive geographic data visualizations.</a></p>
+</div>
+<div class="paragraph">
+<p>Fortunately we can accomplish this with use of Neo4j&#8217;s <a href="https://neo4j-contrib.github.io/neo4j-apoc-procedures/#spatial" target="_blank">geocoding procedures.</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CALL apoc.spatial.geocodeOnce("6 Anchorage Terrace, Durham (DH1 3DL)") YIELD location, latitude, longitude<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can update the <code>Property</code> nodes with a new property <code>location</code> that is a Point type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (p:Property) WITH p LIMIT 1
+CALL apoc.spatial.geocodeOnce(p.address) YIELD location, latitude, longitude, description
+SET p.location = Point({latitude: latitude, longitude: longitude})
+RETURN p<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Note: you&#8217;ll need to have write access to the database</strong></p>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Location Data - Search</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Find properties in the dataset within 10km of Neo4j&#8217;s London office:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH path=(p:Property)&lt;-[:OWNS]-(:Company)&lt;-[:HAS_CONTROL]-(:Person)
+WHERE distance(p.location, Point({latitude:51.5122338, longitude:-0.1180369})) &lt; 10000
+RETURN path<!--/code--></pre>
+</div>
+</div>
 	</div>
   </div>
 </slide>
@@ -773,42 +923,6 @@ Of the companies connected to Bloomberg, which made the most campaign donations?
 <slide class="row-fluid">
   <div class="col-sm-12">
     <h3>Location Data - Exercise</h3>
-    <br/>
-    <div>
-      
-	</div>
-  </div>
-</slide>
-
-
-
-<slide class="row-fluid">
-  <div class="col-sm-12">
-    <h3>Graph Algorithms</h3>
-    <br/>
-    <div>
-      
-	</div>
-  </div>
-</slide>
-
-
-
-<slide class="row-fluid">
-  <div class="col-sm-12">
-    <h3>Graph Algorithms - Exercise</h3>
-    <br/>
-    <div>
-      
-	</div>
-  </div>
-</slide>
-
-
-
-<slide class="row-fluid">
-  <div class="col-sm-12">
-    <h3>Merging Duplicates</h3>
     <br/>
     <div>
       
